@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "Auth0 Client",
+  title: "Book Repo",
 };
 
 const poppins = Poppins({
@@ -28,16 +28,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className="flex min-h-screen flex-col bg-white font-poppins">
-          <Header
-            logo={<JecfeLogo height="48" />}
-            title="JeCFe - Template"
-            user={<NextUser />}
-          />
+        <body className="flex min-h-screen flex-col bg-slate-900 font-poppins">
           <div className="container mx-auto flex-1">{children}</div>
-          <Footer logo={<JecfeLogoBlack height="32" />}>
-            <div className="flex justify-center"> JeCFe - Template</div>
-          </Footer>
         </body>
       </UserProvider>
     </html>

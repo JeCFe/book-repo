@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.3",
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^14.3.1",
