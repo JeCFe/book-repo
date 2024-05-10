@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint '*/**/*.{js,jsx,ts,tsx}' --quiet",
-    "build:client": "npx openapi-typescript ../server/ServerTests/_snapshots/api-spec.json -o server-client.d.ts",
+    "build:client": "npx openapi-typescript ../server/Server.Tests/_snapshots/api-spec.json -o server-client.d.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "cypress:e2e": "cypress run --browser chrome"

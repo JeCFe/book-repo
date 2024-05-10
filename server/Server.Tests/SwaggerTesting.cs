@@ -1,7 +1,7 @@
 using Snapper;
 using Snapper.Attributes;
 
-namespace ServerTests;
+namespace Server.Tests;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
