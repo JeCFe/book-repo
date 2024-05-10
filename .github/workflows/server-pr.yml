@@ -1,0 +1,68 @@
+name: Dotnet Server - PR
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  packages: read
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test-and-build-dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: "Echo in file"
+        env:
+          SECRETS_VARS: ${{ toJson(secrets) }}
+        run: echo "$SECRETS_VARS" > "./server/cypress.env.json"
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: Build server
+        working-directory: ./server/Server
+        run: dotnet build
+
+      - name: Publish server
+        working-directory: ./server/Server
+        run: dotnet publish --configuration Release
+
+      - name: Unit tests
+        working-directory: ./server
+        run: dotnet test
+
+      - name: Docker Compose
+        env:
+          Auth0__Domain: ${{ secrets.AUTH0_DOMAIN }}
+          Auth0__Audience: ${{ secrets.AUTH0_AUDIENCE }}
+          Auth0__ClientId: ${{ secrets.AUTH0_CLIENT_ID }}
+          Auth0__ClientSecret: ${{ secrets.AUTH0_CLIENT_SECRET }}
+        run: docker-compose up -d server
+
+      - name: Cypress run with env
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: ./server
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: ./server/cypress/screenshots
+
+      - name: Docker container
+        if: failure()
+        run: |
+          docker compose logs

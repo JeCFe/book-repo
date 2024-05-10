@@ -1,0 +1,9 @@
+*.idea
+*bin
+*obj
+
+next-dotnet-auth0.sln.DotSettings.user
+appsettings.development.json
+appsettings.development.json
+node_modules
+cypress.env.json
