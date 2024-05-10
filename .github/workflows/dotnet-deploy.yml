@@ -1,11 +1,10 @@
 name: Dotnet Azure Deployment
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "server/**"
-      - ".github/workflows/dotnet-deploy.yml"
+  workflow_run:
+    workflows: [Dotnet Server]
+    types:
+      - completed
 
   workflow_dispatch:
 
