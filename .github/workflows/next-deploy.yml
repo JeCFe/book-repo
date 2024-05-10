@@ -52,8 +52,8 @@ jobs:
           registryUrl: jecfeacr.azurecr.io
           registryUsername: ${{ secrets.REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
-          containerAppName: jecfe-next-template-container
+          containerAppName: jecfe-book-repo-container
           resourceGroup: rg-shared-resources
-          imageToBuild: jecfeacr.azurecr.io/jecfe-next-template-container:latest
+          imageToBuild: jecfeacr.azurecr.io/jecfe-book-repo-container:latest
           _buildArgumentsKey_: |
             _buildArgumentsValues_
