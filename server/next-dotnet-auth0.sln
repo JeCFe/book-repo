@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{3840C478-A43F-43D3-8710-3103B09A743D}"
 EndProject
-Project("{01FC7C27-E74D-40CB-A7E5-8C3D49E6F97F}") = "Server.Tests", "ServerTests\Server.Tests.csproj", "{90C1EC55-AF8C-46E0-BFFF-D929F62CD041}"
+Project("{01FC7C27-E74D-40CB-A7E5-8C3D49E6F97F}") = "Server.Tests", "Server.Tests\Server.Tests.csproj", "{90C1EC55-AF8C-46E0-BFFF-D929F62CD041}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Domain", "Server.Domain\Server.Domain.csproj", "{2A0CBC5E-E9F2-4797-907E-1FBE413E41D8}"
 EndProject
