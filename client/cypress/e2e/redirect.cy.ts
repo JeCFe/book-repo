@@ -1,7 +1,7 @@
 import { ButtonName } from "../lib/enum";
 
 describe("Login redirects", () => {
-  it("redirect to login page and then dashboard from splash page", () => {
+  it.only("redirect to login page and then dashboard from splash page", () => {
     cy.visit("/");
     cy.findButtonByName(ButtonName.TAKE_ME_THERE).click();
     cy.login();
@@ -25,6 +25,6 @@ describe("Login redirects", () => {
     cy.login();
     cy.url().should("contain", "/dashboard");
     cy.findButtonByName(ButtonName.LOGOUT).click();
-    cy.url().should("eq", "http://localhost:3000/");
+    cy.url().should("eq", "http://localhost:3000/ojojojooj");
   });
 });

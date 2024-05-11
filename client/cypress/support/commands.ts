@@ -1,3 +1,6 @@
+/// <reference types="@testing-library/cypress" />
+/// <reference types="cypress" />
+
 import "@testing-library/cypress/add-commands";
 import { AccordionText, AccordionTitle, ButtonName } from "../lib/enum";
 
@@ -6,7 +9,9 @@ Cypress.Commands.add("login", () => {
     cy.get('input[name="username"]').type(Cypress.env("CYPRESS_USERNAME"));
     cy.get('input[name="password"]').type(Cypress.env("CYPRESS_PASSWORD"));
     cy.get('button[name="action"]').click();
+    cy.get("button").should("contain.text", "Accept").click();
   });
+
   cy.findByText(Cypress.env("CYPRESS_USERNAME"));
 });
 
