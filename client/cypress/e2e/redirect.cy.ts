@@ -25,6 +25,6 @@ describe("Login redirects", () => {
     cy.login();
     cy.url().should("contain", "/dashboard");
     cy.findButtonByName(ButtonName.LOGOUT).click();
-    cy.url().should("eq", "http://localhost:3000/ojojojooj");
+    cy.url().should("eq", "http://localhost:3000/");
   });
 });
