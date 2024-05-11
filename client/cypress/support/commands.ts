@@ -1,32 +1,5 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-/// <reference types="@testing-library/cypress" />
-/// <reference types="cypress" />
-
 import "@testing-library/cypress/add-commands";
+import { AccordionText, AccordionTitle, ButtonName } from "../lib/enum";
 
 Cypress.Commands.add("login", () => {
   cy.visit("/");
@@ -38,4 +11,33 @@ Cypress.Commands.add("login", () => {
   });
   cy.findByRole("link", { name: "Logout" });
   cy.findByText(Cypress.env("CYPRESS_USERNAME"));
+});
+
+Cypress.Commands.add("toggleAccordionByTitle", (value: AccordionTitle) => {
+  cy.findAccordionByTitle(value)
+    .parent()
+    .within(() => {
+      cy.get("svg").should("exist").click();
+    });
+});
+
+Cypress.Commands.add(
+  "checkAccordionText",
+  (title: AccordionTitle, text: AccordionText) => {
+    cy.findAccordionByTitle(title)
+      .parent()
+      .parent()
+      .within(() => {
+        cy.toggleAccordionByTitle(title);
+      })
+      .contains(text);
+  },
+);
+
+Cypress.Commands.add("findAccordionByTitle", (value: AccordionTitle) => {
+  cy.findByText(value).should("exist");
+});
+
+Cypress.Commands.add("findButtonByName", (value: ButtonName) => {
+  cy.findByRole("button", { name: value }).should("exist");
 });
