@@ -24,9 +24,8 @@ export default function Home() {
             to organise, rate, and track what books you own.
           </Accordion>
           <Accordion title="What's the cost?">
-            Absolutely none! This is a free to use service (we don't sell your
-            data or show advertisments either), this is a tool made by a book
-            lover for book lovers.
+            Absolutely none! This is a tool made by a book lover for book
+            lovers.
           </Accordion>
           <Accordion title="What if the book details are wrong?">
             We are using a public open source API supplied by{" "}
