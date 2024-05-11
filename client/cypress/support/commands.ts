@@ -14,7 +14,6 @@ Cypress.Commands.add("login", () => {
     cy.get('input[name="username"]').type(Cypress.env("CYPRESS_USERNAME"));
     cy.get('input[name="password"]').type(Cypress.env("CYPRESS_PASSWORD"));
     cy.get('button[name="action"]').click();
-    cy.get('button[name="action"]').click();
   });
 
   cy.findByText(Cypress.env("CYPRESS_USERNAME"));
