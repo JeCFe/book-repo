@@ -10,8 +10,11 @@ export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
       <h1 className="flex flex-row pt-0 text-center text-5xl font-bold tracking-tight text-slate-200 md:pt-20 md:text-8xl">
-        Welcome {user?.name}
+        Welcome
       </h1>
+      <div className="mt-4 flex max-w-sm flex-row text-center text-xl font-bold tracking-tight text-slate-400 md:max-w-full md:text-3xl">
+        {user?.name}
+      </div>
       <Button
         onClick={() => {
           router.push("/api/auth/logout");
