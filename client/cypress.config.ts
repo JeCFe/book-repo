@@ -4,10 +4,11 @@ export default defineConfig({
   viewportWidth: 1600,
   viewportHeight: 900,
   video: false,
-  // retries: 1,
+  retries: 1,
 
   e2e: {
     specPattern: "cypress/e2e/**/*.cy.{ts,tsx}",
+    screenshotOnRunFailure: true,
     setupNodeEvents(on, config) {
       on("before:browser:launch", (browser, launchOptions) => {
         const mutatedLanuchOptions = launchOptions;

@@ -20,4 +20,6 @@ export enum AccordionText {
 
 export enum ButtonName {
   TAKE_ME_THERE = "Take me there!",
+  LOGOUT = "Logout",
+  ACCEPT = "Accept",
 }

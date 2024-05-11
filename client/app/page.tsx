@@ -1,9 +1,13 @@
 "use client";
 import { BookLogo, JecfeLogo } from "@/assets";
 import { AccordionManager } from "@/components";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system/dist/esm/";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div>
       <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
@@ -53,7 +57,9 @@ export default function Home() {
 
         <div className="flex w-full items-center justify-center">
           <Button
-            onClick={() => {}}
+            onClick={() => {
+              router.push("/dashboard");
+            }}
             variant="primary"
             size="large"
             className="my-12"
