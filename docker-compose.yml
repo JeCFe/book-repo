@@ -4,7 +4,7 @@ services:
   server:
     build:
       context: ./server
-    image: "template/server:${TAG:-latest}"
+    image: "book-repo/server:${TAG:-latest}"
     ports:
       - "5247:80"
     environment:
@@ -20,7 +20,7 @@ services:
   client:
     build:
       context: ./client
-    image: "template/client:${TAG:-latest}"
+    image: "book-repo/client:${TAG:-latest}"
     ports:
       - "3000:80"
     environment:
