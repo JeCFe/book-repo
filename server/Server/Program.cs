@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Server.Context;
 using Server.Domain;
 using Server.filters;
+using Server.Providers;
 using Server.Routes;
 
 public class Program
@@ -137,7 +138,9 @@ public class Program
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+
         builder.Services.AddScoped<IUserContext, UserContext>();
+        builder.Services.AddTransient<ICustomerProvider, CustomerProvider>();
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
