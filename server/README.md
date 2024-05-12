@@ -14,6 +14,9 @@ Inside an _appsettings.local.json_ or _appsettings.development.json_ include the
     "ClientId": ****,
     "ClientSecret": ****,
     "Audience": ****
+  },
+  "ConnectionStrings": {
+    "db": "Server=tcp:localhost,1433;Database=Server;User Id=sa;Password=Th1sI5&Str0ngPa44w0rd;Encrypt=False;"
   }
 ```
 
