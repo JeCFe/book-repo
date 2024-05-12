@@ -21,11 +21,8 @@ public class BookRepoContext : DbContext
 
         modelBuilder.Entity<Customer>().HasKey(x => x.Id);
         modelBuilder.Entity<Book>().HasKey(x => x.Isbn);
-
-        modelBuilder
-            .Entity<Customer>()
-            .HasMany(customer => customer.Bookshelves)
-            .WithOne(bookshelf => bookshelf.Customer)
-            .HasForeignKey(bookshelf => bookshelf.CustomerId);
+        modelBuilder.Entity<CustomerBook>().HasKey(x => new { x.CustomerId, x.Isbn });
+        modelBuilder.Entity<Bookshelf>().HasKey(x => x.Id);
+        modelBuilder.Entity<Bookshelf>().HasMany(x => x.Books).WithMany(y => y.Bookshelves);
     }
 }
