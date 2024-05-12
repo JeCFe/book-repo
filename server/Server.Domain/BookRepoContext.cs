@@ -8,7 +8,8 @@ public class BookRepoContext : DbContext
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Bookshelf> Bookshelves { get; set; }
-    public DbSet<Bookshelf> Customer { get; set; }
+    public DbSet<Customer> Customer { get; set; }
+    public DbSet<CustomerBook> CustomerBook { get; set; }
 
     public BookRepoContext() { }
 
