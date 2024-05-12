@@ -16,11 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: "Echo in file"
-        env:
-          SECRETS_VARS: ${{ toJson(secrets) }}
-        run: echo "$SECRETS_VARS" > "./server/cypress.env.json"
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
