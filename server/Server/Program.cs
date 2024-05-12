@@ -1,7 +1,14 @@
+namespace Server;
+
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Server.Context;
+using Server.Domain;
 using Server.filters;
+using Server.Helpers;
+using Server.Providers;
 using Server.Routes;
 
 public class Program
@@ -15,6 +22,7 @@ public class Program
         {
             builder.Configuration.AddJsonFile("appsettings.development.json", true);
         }
+        var dbConnectionString = configuration.GetConnectionString("db");
 
         builder
             .Services
@@ -27,6 +35,17 @@ public class Program
             {
                 options.Authority = $"https://{configuration["Auth0:Domain"]}";
                 options.Audience = configuration["Auth0:Audience"];
+            });
+        builder.Services.AddHttpContextAccessor();
+
+        builder
+            .Services
+            .AddDbContext<BookRepoContext>(options =>
+            {
+                options.UseSqlServer(
+                    dbConnectionString,
+                    b => b.MigrationsAssembly("Server.Domain")
+                );
             });
 
         builder.Services.AddHealthChecks();
@@ -120,9 +139,22 @@ public class Program
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+
+        builder.Services.AddScoped<IUserContext, UserContext>();
+        builder.Services.AddTransient<IClock, Clock>();
+        builder.Services.AddTransient<ICustomerProvider, CustomerProvider>();
+
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
+        if (app.Configuration.GetValue<bool>("migrateDB"))
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BookRepoContext>();
+                await dbContext.Database.MigrateAsync();
+            }
+        }
         app.UseSwagger();
         app.UseSwaggerUI(settings =>
         {
@@ -137,7 +169,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapHealthChecks("/healthz");
-        app.MapGroup("/auth").MapAuthEndpoints();
+        app.MapGroup("/customer").MapCustomerEndpoints();
 
         app.Run();
     }

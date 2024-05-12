@@ -5,10 +5,10 @@
     "version": "0.1.0"
   },
   "paths": {
-    "/auth": {
+    "/customer/get-customer-summary": {
       "get": {
         "tags": [
-          "Auth"
+          "Customer"
         ],
         "responses": {
           "200": {
@@ -16,7 +16,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/CustomerSummary"
                 }
               }
             }
@@ -26,6 +26,95 @@
     }
   },
   "components": {
+    "schemas": {
+      "Bookshelf": {
+        "required": [
+          "books",
+          "creationDate",
+          "id",
+          "name",
+          "updatedDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "books": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerBook"
+            },
+            "nullable": true
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerBook": {
+        "required": [
+          "bookshelves",
+          "customerId",
+          "isbn"
+        ],
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bookshelf"
+            },
+            "nullable": true
+          },
+          "rating": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerSummary": {
+        "required": [
+          "bookshelves",
+          "createdOn"
+        ],
+        "type": "object",
+        "properties": {
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bookshelf"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "securitySchemes": {
       "Bearer": {
         "type": "http",
