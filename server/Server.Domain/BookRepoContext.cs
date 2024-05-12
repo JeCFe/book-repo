@@ -21,6 +21,7 @@ public class BookRepoContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         modelBuilder.Entity<Customer>().HasKey(x => x.Id);
+        modelBuilder.Entity<Customer>().HasIndex(X => X.CustomerId).IsUnique();
         modelBuilder.Entity<Book>().HasKey(x => x.Isbn);
         modelBuilder.Entity<CustomerBook>().HasKey(x => new { x.CustomerId, x.Isbn });
         modelBuilder.Entity<Bookshelf>().HasKey(x => x.Id);
