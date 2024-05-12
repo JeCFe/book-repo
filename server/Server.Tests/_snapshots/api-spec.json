@@ -5,6 +5,28 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/action/forget-me": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgetMeCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/customer/get-customer-summary": {
       "get": {
         "tags": [
@@ -96,10 +118,15 @@
       "CustomerSummary": {
         "required": [
           "bookshelves",
-          "createdOn"
+          "createdOn",
+          "id"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
           "createdOn": {
             "type": "string",
             "format": "date-time"
@@ -109,6 +136,19 @@
             "items": {
               "$ref": "#/components/schemas/Bookshelf"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgetMeCommand": {
+        "required": [
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
             "nullable": true
           }
         },

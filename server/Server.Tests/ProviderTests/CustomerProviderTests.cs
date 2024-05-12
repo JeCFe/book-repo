@@ -65,5 +65,6 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         Assert.NotNull(actual);
         Assert.Equal(clockMock.Object.UtcNow, actual.CreatedOn);
         Assert.Single(actual.Bookshelves);
+        Assert.Equal(customerId, actual.Id);
     }
 }

@@ -25,6 +25,7 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
             var newCustomer = await SetupNewCustomerAccount(userId, cancellationToken);
             return new()
             {
+                Id = newCustomer.CustomerId,
                 CreatedOn = newCustomer.CreationDate,
                 Bookshelves =  [ .. newCustomer.Bookshelves ]
             };
@@ -32,6 +33,7 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
 
         return new()
         {
+            Id = customer.CustomerId,
             CreatedOn = customer.CreationDate,
             Bookshelves =  [ .. customer.Bookshelves ]
         };
