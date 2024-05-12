@@ -33,7 +33,7 @@ services:
 
   db:
     image: mcr.microsoft.com/azure-sql-edge
-    container_name: example_sql
+    container_name: sql
     environment:
       ACCEPT_EULA: Y
       MSSQL_SA_PASSWORD: Th1sI5&Str0ngPa44w0rd

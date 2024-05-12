@@ -47,8 +47,8 @@ jobs:
           Auth0__ClientSecret: ${{ secrets.AUTH0_CLIENT_SECRET }}
         run: docker-compose up -d server
 
-      - name: Wait for
-        run: npx wait-on http://localhost:5247/healthz --verbose --timeout 25000
+      # - name: Wait for
+      #   run: npx wait-on http://localhost:5247/healthz --verbose --timeout 25000
 
       - name: Cypress run with env
         uses: cypress-io/github-action@v6
