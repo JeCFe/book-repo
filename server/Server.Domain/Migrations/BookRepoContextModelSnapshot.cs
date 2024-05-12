@@ -89,7 +89,7 @@ namespace Server.Domain.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Bookshelf");
+                    b.ToTable("Bookshelves");
                 });
 
             modelBuilder.Entity("Server.Domain.Models.Customer", b =>

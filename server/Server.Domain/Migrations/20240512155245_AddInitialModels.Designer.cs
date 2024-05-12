@@ -12,7 +12,7 @@ using Server.Domain;
 namespace Server.Domain.Migrations
 {
     [DbContext(typeof(BookRepoContext))]
-    [Migration("20240512151835_AddInitialModels")]
+    [Migration("20240512155245_AddInitialModels")]
     partial class AddInitialModels
     {
         /// <inheritdoc />
@@ -92,7 +92,7 @@ namespace Server.Domain.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Bookshelf");
+                    b.ToTable("Bookshelves");
                 });
 
             modelBuilder.Entity("Server.Domain.Models.Customer", b =>

@@ -52,7 +52,7 @@ namespace Server.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bookshelf",
+                name: "Bookshelves",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -63,9 +63,9 @@ namespace Server.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bookshelf", x => x.Id);
+                    table.PrimaryKey("PK_Bookshelves", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bookshelf_Customer_CustomerId",
+                        name: "FK_Bookshelves_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
                         principalColumn: "Id");
@@ -83,9 +83,9 @@ namespace Server.Domain.Migrations
                 {
                     table.PrimaryKey("PK_BookshelfCustomerBook", x => new { x.BookshelvesId, x.BooksCustomerId, x.BooksIsbn });
                     table.ForeignKey(
-                        name: "FK_BookshelfCustomerBook_Bookshelf_BookshelvesId",
+                        name: "FK_BookshelfCustomerBook_Bookshelves_BookshelvesId",
                         column: x => x.BookshelvesId,
-                        principalTable: "Bookshelf",
+                        principalTable: "Bookshelves",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -97,14 +97,14 @@ namespace Server.Domain.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookshelf_CustomerId",
-                table: "Bookshelf",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BookshelfCustomerBook_BooksCustomerId_BooksIsbn",
                 table: "BookshelfCustomerBook",
                 columns: new[] { "BooksCustomerId", "BooksIsbn" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookshelves_CustomerId",
+                table: "Bookshelves",
+                column: "CustomerId");
         }
 
         /// <inheritdoc />
@@ -117,7 +117,7 @@ namespace Server.Domain.Migrations
                 name: "BookshelfCustomerBook");
 
             migrationBuilder.DropTable(
-                name: "Bookshelf");
+                name: "Bookshelves");
 
             migrationBuilder.DropTable(
                 name: "CustomerBook");
