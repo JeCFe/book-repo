@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Server.Context;
 using Server.Domain;
 using Server.Domain.Models;
@@ -13,7 +14,9 @@ public class CustomerProvider(IUserContext userContext, IClock clock, BookRepoCo
     public async Task<CustomerSummary> GetCustomerSummary(CancellationToken cancellationToken)
     {
         var userId = userContext.UserId ?? throw new InvalidUserException();
-        var customer = await dbContext.Customer.FindAsync([ userId ], cancellationToken);
+        var customer = await dbContext
+            .Customer
+            .SingleOrDefaultAsync(x => x.CustomerId == userId, cancellationToken);
 
         if (customer is not { })
         {
