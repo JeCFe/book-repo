@@ -8,14 +8,16 @@ using Server.Models;
 
 namespace Server.Providers;
 
-public class CustomerProvider(IUserContext userContext, IClock clock, BookRepoContext dbContext)
-    : ICustomerProvider
+public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustomerProvider
 {
-    public async Task<CustomerSummary> GetCustomerSummary(CancellationToken cancellationToken)
+    public async Task<CustomerSummary> GetCustomerSummary(
+        string userId,
+        CancellationToken cancellationToken
+    )
     {
-        var userId = userContext.UserId ?? throw new InvalidUserException();
         var customer = await dbContext
             .Customer
+            .Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.CustomerId == userId, cancellationToken);
 
         if (customer is not { })

@@ -4,5 +4,5 @@ using Server.Models;
 
 public interface ICustomerProvider
 {
-    Task<CustomerSummary> GetCustomerSummary(CancellationToken cancellationToken);
+    Task<CustomerSummary> GetCustomerSummary(string userId, CancellationToken cancellationToken);
 }

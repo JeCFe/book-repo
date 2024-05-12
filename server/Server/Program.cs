@@ -169,7 +169,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapHealthChecks("/healthz");
-        app.MapGroup("/auth").MapAuthEndpoints();
+        app.MapGroup("/customer").MapCustomerEndpoints();
 
         app.Run();
     }

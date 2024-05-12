@@ -1,28 +1,31 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Server.Context;
 using Server.Exceptions;
 using Server.Models;
 using Server.Providers;
 
 namespace Server.Routes;
 
-public static class BookshelfRouter
+public static class CustomerRouter
 {
     private static async Task<Results<Ok<CustomerSummary>, ForbidHttpResult>> GetCustomerSummary(
-        ICustomerProvider bookshelfProvider,
+        IUserContext userContext,
+        ICustomerProvider customerProvider,
         CancellationToken cancellationToken
     )
     {
-        try
-        {
-            return TypedResults.Ok(await bookshelfProvider.GetCustomerSummary(cancellationToken));
-        }
-        catch (InvalidUserException)
+        var userId = userContext.UserId;
+        if (userId is not { })
         {
             return TypedResults.Forbid();
         }
+
+        return TypedResults.Ok(
+            await customerProvider.GetCustomerSummary(userId, cancellationToken)
+        );
     }
 
-    public static RouteGroupBuilder MapAuthEndpoints(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Customer");
         group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
