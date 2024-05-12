@@ -1,6 +1,6 @@
 # Dotnet server
 
-Simple Dotnet mininal API backed boilerplate.
+Book repo dotnet backend
 
 ## Local run
 
@@ -34,6 +34,14 @@ http://localhost:SOMEPORT/swagger/index.html
 ```bash
 cd server/Server
 dotnet publish --configuration Release
+```
+
+## Creating new database migrations
+
+Running the following command will utalise `Dotnet Entity Framework` to generate a new database migration schema, existing and new schemas can be found `Server.Domain/Migrations`
+
+```bash
+dotnet ef migrations add InitialAdd --project Server.Domain --startup-project Server
 ```
 
 ## Local Tests
