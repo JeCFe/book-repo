@@ -17,7 +17,6 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
     {
         var customer = await dbContext
             .Customer
-            .Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.CustomerId == userId, cancellationToken);
 
         if (customer is not { })
@@ -44,26 +43,38 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
         CancellationToken cancellationToken
     )
     {
+        var isbn = "123";
+        Book book = new Book()
+        {
+            Isbn = isbn,
+            Name = "Tester",
+            Author = "Me",
+            Release = "Now",
+            Picture = "No"
+        };
+
+        var thisShelf = Guid.NewGuid();
+        var id = Guid.NewGuid();
         Customer customer =
             new()
             {
-                Id = Guid.NewGuid(),
+                Id = id,
                 CustomerId = customerId,
                 CreationDate = clock.UtcNow,
                 Bookshelves =
                 [
                     new (){
-                    Id = Guid.NewGuid(),
+                    Id = thisShelf,
                     Name = "Wanting to read",
-                    Books = [],
+                                  Books = [book],
                     CreationDate = clock.UtcNow,
                     UpdatedDate = clock.UtcNow,
                     
                 },
                     new (){
                     Id = Guid.NewGuid(),
-                    Name = "Currently Reading",
-                    Books = [],
+                    Name = "Currently Reading",  
+                    Books = [book],
                     CreationDate = clock.UtcNow,
                     UpdatedDate = clock.UtcNow,
                     
@@ -71,14 +82,17 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
                     new (){
                     Id = Guid.NewGuid(),
                     Name = "Read",
-                    Books = [],
+                                  Books = [book],
                     CreationDate = clock.UtcNow,
                     UpdatedDate = clock.UtcNow,
                     
                 },
                 ]
             };
+        dbContext.Books.Add(book);
+
         dbContext.Customer.Add(customer);
+
         await dbContext.SaveChangesAsync(cancellationToken);
         return customer;
     }
