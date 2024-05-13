@@ -17,6 +17,7 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
     {
         var customer = await dbContext
             .Customer
+            .Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.CustomerId == userId, cancellationToken);
 
         if (customer is not { })
@@ -26,7 +27,16 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
             {
                 Id = newCustomer.CustomerId,
                 CreatedOn = newCustomer.CreationDate,
-                Bookshelves =  [ .. newCustomer.Bookshelves ]
+                Bookshelves =
+                [
+                    ..newCustomer.Bookshelves.Select(x => new Models.Bookshelf() {
+                        Name = x.Name,
+                        Id = x.Id,
+                        CreationDate = x.CreationDate,
+                        UpdatedDate = x.UpdatedDate,
+                        Books = []
+                })
+                ]
             };
         }
 
@@ -34,7 +44,19 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
         {
             Id = customer.CustomerId,
             CreatedOn = customer.CreationDate,
-            Bookshelves =  [ .. customer.Bookshelves ]
+            Bookshelves =
+            [
+                ..customer.Bookshelves.Select(x => new Models.Bookshelf() {
+                        Name = x.Name,
+                        Id = x.Id,
+                        CreationDate = x.CreationDate,
+                        UpdatedDate = x.UpdatedDate,
+                        Books = [..dbContext.BookshelfBook.Where(y => y.Bookshelf.Id == x.Id).Select(z => new BooktoShelf(){
+                            Order = z.Order,
+                            Book = z.Book
+                        })]
+                        })
+            ]
         };
     }
 
@@ -43,30 +65,18 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
         CancellationToken cancellationToken
     )
     {
-        var isbn = "123";
-        Book book = new Book()
-        {
-            Isbn = isbn,
-            Name = "Tester",
-            Author = "Me",
-            Release = "Now",
-            Picture = "No"
-        };
-
-        var thisShelf = Guid.NewGuid();
-        var id = Guid.NewGuid();
         Customer customer =
             new()
             {
-                Id = id,
+                Id = Guid.NewGuid(),
                 CustomerId = customerId,
                 CreationDate = clock.UtcNow,
                 Bookshelves =
                 [
                     new (){
-                    Id = thisShelf,
+                    Id = Guid.NewGuid(),
                     Name = "Wanting to read",
-                                  Books = [book],
+             
                     CreationDate = clock.UtcNow,
                     UpdatedDate = clock.UtcNow,
                     
@@ -74,7 +84,7 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
                     new (){
                     Id = Guid.NewGuid(),
                     Name = "Currently Reading",  
-                    Books = [book],
+               
                     CreationDate = clock.UtcNow,
                     UpdatedDate = clock.UtcNow,
                     
@@ -82,14 +92,13 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
                     new (){
                     Id = Guid.NewGuid(),
                     Name = "Read",
-                                  Books = [book],
+             
                     CreationDate = clock.UtcNow,
                     UpdatedDate = clock.UtcNow,
                     
                 },
                 ]
             };
-        dbContext.Books.Add(book);
 
         dbContext.Customer.Add(customer);
 

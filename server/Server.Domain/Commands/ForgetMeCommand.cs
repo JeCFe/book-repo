@@ -14,9 +14,20 @@ public class ForgetMeCommand : ICommand
         CancellationToken cancellationToken
     )
     {
+        var customer = context.Customer.SingleOrDefault(x => x.CustomerId == CustomerId);
+        if (customer is not { })
+        {
+            return;
+        }
+
+        await context
+            .Bookshelves
+            .Where(x => x.CustomerId == customer.Id)
+            .ExecuteDeleteAsync(cancellationToken);
+
         await context
             .Customer
-            .Where(x => x.CustomerId == CustomerId)
+            .Where(x => x.CustomerId == customer.CustomerId)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }
