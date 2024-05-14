@@ -1,5 +1,8 @@
 describe("Customer", () => {
   describe("get-customer-summary", () => {
+    it("test", () => {
+      cy.login();
+    });
     it("should return a customer summary and 200", () => {
       cy.login().then((res) => {
         cy.request({
