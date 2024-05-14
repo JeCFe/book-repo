@@ -5,6 +5,28 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/action/forget-me": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgetMeCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/customer/get-customer-summary": {
       "get": {
         "tags": [
@@ -27,6 +49,39 @@
   },
   "components": {
     "schemas": {
+      "Book": {
+        "required": [
+          "author",
+          "isbn",
+          "name",
+          "picture",
+          "release"
+        ],
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          },
+          "release": {
+            "type": "string",
+            "nullable": true
+          },
+          "picture": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Bookshelf": {
         "required": [
           "books",
@@ -48,7 +103,7 @@
           "books": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CustomerBook"
+              "$ref": "#/components/schemas/BooktoShelf"
             },
             "nullable": true
           },
@@ -63,30 +118,17 @@
         },
         "additionalProperties": false
       },
-      "CustomerBook": {
+      "BooktoShelf": {
         "required": [
-          "bookshelves",
-          "customerId",
-          "isbn"
+          "book",
+          "order"
         ],
         "type": "object",
         "properties": {
-          "customerId": {
-            "type": "string",
-            "format": "uuid"
+          "book": {
+            "$ref": "#/components/schemas/Book"
           },
-          "isbn": {
-            "type": "string",
-            "nullable": true
-          },
-          "bookshelves": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Bookshelf"
-            },
-            "nullable": true
-          },
-          "rating": {
+          "order": {
             "type": "integer",
             "format": "int32"
           }
@@ -96,10 +138,15 @@
       "CustomerSummary": {
         "required": [
           "bookshelves",
-          "createdOn"
+          "createdOn",
+          "id"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
           "createdOn": {
             "type": "string",
             "format": "date-time"
@@ -109,6 +156,19 @@
             "items": {
               "$ref": "#/components/schemas/Bookshelf"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgetMeCommand": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
             "nullable": true
           }
         },

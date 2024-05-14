@@ -1,13 +1,17 @@
 namespace Server.Domain.Tests.Fixtures;
 
+using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Server.Domain;
+using Server.Domain.Commands;
 
 public class DbFixture : IDisposable
 {
     protected readonly SqliteConnection _connection;
     protected readonly DbContextOptions<BookRepoContext> _contextOptions;
+    private readonly IPublisher _publisher = new Mock<IMediator>().Object;
 
     public DbFixture()
     {
@@ -22,6 +26,11 @@ public class DbFixture : IDisposable
     }
 
     public BookRepoContext CreateContext() => new BookRepoContext(_contextOptions);
+
+    public Task Execute(BookRepoContext dbContext, ICommand command)
+    {
+        return command.Execute(dbContext, _publisher, CancellationToken.None);
+    }
 
     public void Dispose()
     {

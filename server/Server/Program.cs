@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Server.Context;
 using Server.Domain;
+using Server.Domain.Commands;
 using Server.filters;
 using Server.Helpers;
 using Server.Providers;
@@ -146,6 +147,14 @@ public class Program
 
         builder.Services.AddAuthorization();
 
+        builder
+            .Services
+            .AddMediatR(
+                config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
+            )
+            .RegisterCommandHandlers<BookRepoContext>();
+        builder.Services.AddAutoMapper(typeof(Program));
+
         var app = builder.Build();
         if (app.Configuration.GetValue<bool>("migrateDB"))
         {
@@ -170,6 +179,7 @@ public class Program
 
         app.MapHealthChecks("/healthz");
         app.MapGroup("/customer").MapCustomerEndpoints();
+        app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
 
         app.Run();
     }
