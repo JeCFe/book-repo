@@ -27,15 +27,15 @@
 Cypress.Commands.add("login", () => {
   cy.request({
     method: "POST",
-    url: Cypress.env("AUTH0_OAUTH_URL"),
+    url: Cypress.env("CYPRESS_AUTH0_OAUTH_URL"),
     body: {
       grant_type: "password",
       username: Cypress.env("CYPRESS_USERNAME"),
       password: Cypress.env("CYPRESS_PASSWORD"),
-      audience: Cypress.env("AUTH0_AUDIENCE"),
+      audience: Cypress.env("CYPRESS_AUTH0_AUDIENCE"),
 
-      client_id: Cypress.env("AUTH0_CLIENT_ID"),
-      client_secret: Cypress.env("AUTH0_CLIENT_SECRET"),
+      client_id: Cypress.env("CYPRESS_AUTH0_CLIENT_ID"),
+      client_secret: Cypress.env("CYPRESS_AUTH0_CLIENT_SECRET"),
     },
   });
 });
