@@ -21,6 +21,11 @@ jobs:
         with:
           node-version: "18"
 
+      - name: "Setup Cypress values"
+        env:
+          SECRETS_VARS: ${{ toJson(secrets) }}
+        run: echo "$SECRETS_VARS" > "./server/cypress.env.json"
+
       - name: Install dependencies
         working-directory: ./server
         run: npm install
