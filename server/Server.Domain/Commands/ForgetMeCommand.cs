@@ -6,7 +6,7 @@ using Server.Domain;
 
 public class ForgetMeCommand : ICommand
 {
-    public required string CustomerId { get; init; }
+    public required string Id { get; init; }
 
     public async Task Execute(
         BookRepoContext context,
@@ -14,20 +14,19 @@ public class ForgetMeCommand : ICommand
         CancellationToken cancellationToken
     )
     {
-        var customer = context.Customer.SingleOrDefault(x => x.CustomerId == CustomerId);
-        if (customer is not { })
+        if (await context.Customer.FindAsync([ Id ], cancellationToken) is not { } customer)
         {
             return;
         }
 
-        await context
+        var x = await context
             .Bookshelves
-            .Where(x => x.CustomerId == customer.Id)
+            .Where(x => x.CustomerId == Id)
             .ExecuteDeleteAsync(cancellationToken);
 
-        await context
+        var y = await context
             .Customer
-            .Where(x => x.CustomerId == customer.CustomerId)
+            .Where(x => x.Id == customer.Id)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }

@@ -22,7 +22,7 @@ public class BookRepoContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         modelBuilder.Entity<Customer>().HasKey(x => x.Id);
-        modelBuilder.Entity<Customer>().HasIndex(X => X.CustomerId).IsUnique();
+        modelBuilder.Entity<Bookshelf>().Property(x => x.CustomerId).IsRequired();
         modelBuilder.Entity<Book>().HasKey(x => x.Isbn);
         modelBuilder.Entity<BookshelfBook>().HasKey(x => new { x.BookshelfId, x.Isbn });
         modelBuilder.Entity<Bookshelf>().HasKey(x => x.Id);

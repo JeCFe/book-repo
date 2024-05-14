@@ -15,7 +15,7 @@ public static class ActionRouter
     )
     {
         var userId = userContext.UserId;
-        if (userId is not { } && command.CustomerId != userId)
+        if (userId is not { } && command.Id != userId)
         {
             return TypedResults.Forbid();
         }

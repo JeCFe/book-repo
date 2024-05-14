@@ -18,14 +18,14 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
         var customer = await dbContext
             .Customer
             .Include(x => x.Bookshelves)
-            .SingleOrDefaultAsync(x => x.CustomerId == userId, cancellationToken);
+            .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
 
         if (customer is not { })
         {
             var newCustomer = await SetupNewCustomerAccount(userId, cancellationToken);
             return new()
             {
-                Id = newCustomer.CustomerId,
+                Id = newCustomer.Id,
                 CreatedOn = newCustomer.CreationDate,
                 Bookshelves =
                 [
@@ -42,7 +42,7 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
 
         return new()
         {
-            Id = customer.CustomerId,
+            Id = customer.Id,
             CreatedOn = customer.CreationDate,
             Bookshelves =
             [
@@ -68,8 +68,7 @@ public class CustomerProvider(IClock clock, BookRepoContext dbContext) : ICustom
         Customer customer =
             new()
             {
-                Id = Guid.NewGuid(),
-                CustomerId = customerId,
+                Id = customerId,
                 CreationDate = clock.UtcNow,
                 Bookshelves =
                 [

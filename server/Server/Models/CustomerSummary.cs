@@ -15,7 +15,7 @@ public record Bookshelf()
     public required string Name { get; init; }
     public required List<BooktoShelf> Books { get; init; } = [ ];
     public required DateTimeOffset CreationDate { get; init; }
-    public DateTimeOffset UpdatedDate { get; set; }
+    public required DateTimeOffset UpdatedDate { get; set; }
 }
 
 public record BooktoShelf()
