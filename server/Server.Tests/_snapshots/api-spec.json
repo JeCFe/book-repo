@@ -163,11 +163,11 @@
       },
       "ForgetMeCommand": {
         "required": [
-          "customerId"
+          "id"
         ],
         "type": "object",
         "properties": {
-          "customerId": {
+          "id": {
             "type": "string",
             "nullable": true
           }
