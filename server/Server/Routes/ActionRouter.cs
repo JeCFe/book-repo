@@ -2,6 +2,7 @@ namespace Server.Routes;
 
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Server.Context;
 using Server.Domain.Commands;
 
@@ -15,7 +16,7 @@ public static class ActionRouter
     )
     {
         var userId = userContext.UserId;
-        if (userId is not { } && command.Id != userId)
+        if (userId is not { } || command.Id != userId)
         {
             return TypedResults.Forbid();
         }
