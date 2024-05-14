@@ -49,7 +49,6 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
                     new (){
                     Id = Guid.NewGuid(),
                     Name = "Wanting to read",
-                    Books = [],
                     CreationDate = clockMock.Object.UtcNow,
                     UpdatedDate = clockMock.Object.UtcNow,
                     
