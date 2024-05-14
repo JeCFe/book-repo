@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Domain;
 
@@ -11,9 +12,11 @@ using Server.Domain;
 namespace Server.Domain.Migrations
 {
     [DbContext(typeof(BookRepoContext))]
-    partial class BookRepoContextModelSnapshot : ModelSnapshot
+    [Migration("20240513231648_AddReworkOfRelationship")]
+    partial class AddReworkOfRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,9 +60,8 @@ namespace Server.Domain.Migrations
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -99,13 +101,21 @@ namespace Server.Domain.Migrations
 
             modelBuilder.Entity("Server.Domain.Models.Customer", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.ToTable("Customer");
                 });
@@ -114,9 +124,7 @@ namespace Server.Domain.Migrations
                 {
                     b.HasOne("Server.Domain.Models.Customer", null)
                         .WithMany("Bookshelves")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("Server.Domain.Models.BookshelfBook", b =>

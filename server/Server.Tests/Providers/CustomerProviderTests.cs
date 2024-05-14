@@ -17,7 +17,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         var customerId = Guid.NewGuid().ToString();
 
-        var existingCustomer = context.Customer.SingleOrDefault(x => x.CustomerId == customerId);
+        var existingCustomer = context.Customer.SingleOrDefault(x => x.Id == customerId);
         Assert.Null(existingCustomer);
 
         var provider = new CustomerProvider(clockMock.Object, context);
@@ -27,7 +27,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         Assert.Equal(clockMock.Object.UtcNow, actual.CreatedOn);
         Assert.Equal(3, actual.Bookshelves.Count);
 
-        var savedCustomer = context.Customer.SingleOrDefault(x => x.CustomerId == customerId);
+        var savedCustomer = context.Customer.SingleOrDefault(x => x.Id == customerId);
         Assert.NotNull(savedCustomer);
     }
 
@@ -41,15 +41,13 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         Customer customer =
             new()
             {
-                Id = Guid.NewGuid(),
-                CustomerId = customerId,
+                Id = customerId,
                 CreationDate = clockMock.Object.UtcNow,
                 Bookshelves =
                 [
                     new (){
                     Id = Guid.NewGuid(),
                     Name = "Wanting to read",
-                    Books = [],
                     CreationDate = clockMock.Object.UtcNow,
                     UpdatedDate = clockMock.Object.UtcNow,
                     
@@ -65,5 +63,6 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         Assert.NotNull(actual);
         Assert.Equal(clockMock.Object.UtcNow, actual.CreatedOn);
         Assert.Single(actual.Bookshelves);
+        Assert.Equal(customerId, actual.Id);
     }
 }
