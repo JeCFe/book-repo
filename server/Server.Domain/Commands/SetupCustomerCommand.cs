@@ -3,18 +3,53 @@ namespace Server.Domain.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Domain.Models;
 
-public class SetupCustomerCommand : ICommand
+public class SetupCustomerCommand : ICommand<BookRepoContext>
 {
     public required string Id { get; init; }
-    public bool HasDefaultBookshelves { get; init; }
+    public bool IncludeDefaultBookshelves { get; init; }
 
     public async Task Execute(
         BookRepoContext context,
-        IPublisher publisher,
+        CommandContext publisher,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        var dateTimeNow = DateTimeOffset.UtcNow;
+        Customer customer = new() { Id = Id, CreationDate = dateTimeNow, };
+
+        if (IncludeDefaultBookshelves)
+        {
+            customer.Bookshelves =
+            [
+                new (){
+                    Id = Guid.NewGuid(),
+                    Name = "Wanting to read",
+                    CreationDate = dateTimeNow,
+                    UpdatedDate = dateTimeNow,
+                    
+                },
+                new (){
+                    Id = Guid.NewGuid(),
+                    Name = "Currently Reading",  
+                    CreationDate = dateTimeNow,
+                    UpdatedDate = dateTimeNow,
+                    
+                },
+                new (){
+                    Id = Guid.NewGuid(),
+                    Name = "Read",
+             
+                    CreationDate = dateTimeNow,
+                    UpdatedDate = dateTimeNow,
+                    
+                },
+            ];
+        }
+
+        context.Customer.Add(customer);
+
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

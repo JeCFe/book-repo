@@ -1,22 +1,38 @@
 ﻿namespace Server.Domain.Commands;
 
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-public class CommandHandler<TDBContext, TCommand> : IRequestHandler<TCommand>
-    where TCommand : ICommand<TDBContext>
-    where TDBContext : BookRepoContext
+public class CommandHandler<TDbContext, TCommand> : IRequestHandler<TCommand>
+    where TCommand : ICommand<TDbContext>
+    where TDbContext : DbContext
 {
-    private readonly TDBContext _dbContext;
-    private readonly IPublisher _publisher;
+    private readonly TDbContext _dbContext;
+    private readonly IPublisher _mediator;
 
-    public CommandHandler(TDBContext dBContext, IPublisher publisher)
+    public CommandHandler(TDbContext dbContext, IPublisher mediator)
     {
-        _dbContext = dBContext;
-        _publisher = publisher;
+        _dbContext = dbContext;
+        _mediator = mediator;
     }
 
-    public Task Handle(TCommand request, CancellationToken cancellationToken)
+    public Task Handle(TCommand cmd, CancellationToken cancellationToken) =>
+        cmd.Execute(_dbContext, new(_mediator), cancellationToken);
+}
+
+public class CommandHandler<TDbContext, TCommand, TResult> : IRequestHandler<TCommand, TResult>
+    where TCommand : ICommand<TDbContext, TResult>
+    where TDbContext : DbContext
+{
+    private readonly TDbContext _dbContext;
+    private readonly IPublisher _mediator;
+
+    public CommandHandler(TDbContext dbContext, IPublisher mediator)
     {
-        return request.Execute(_dbContext, _publisher, cancellationToken);
+        _dbContext = dbContext;
+        _mediator = mediator;
     }
+
+    public Task<TResult> Handle(TCommand cmd, CancellationToken cancellationToken) =>
+        cmd.Execute(_dbContext, new(_mediator), cancellationToken);
 }

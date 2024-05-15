@@ -4,13 +4,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 
-public class ForgetMeCommand : ICommand
+public class ForgetMeCommand : ICommand<BookRepoContext>
 {
     public required string Id { get; init; }
 
     public async Task Execute(
         BookRepoContext context,
-        IPublisher publisher,
+        CommandContext ctx,
         CancellationToken cancellationToken
     )
     {
