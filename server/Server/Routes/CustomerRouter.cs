@@ -8,7 +8,9 @@ namespace Server.Routes;
 
 public static class CustomerRouter
 {
-    private static async Task<Results<Ok<CustomerSummary>, ForbidHttpResult>> GetCustomerSummary(
+    private static async Task<
+        Results<Ok<CustomerSummary>, ForbidHttpResult, NotFound>
+    > GetCustomerSummary(
         IUserContext userContext,
         ICustomerProvider customerProvider,
         CancellationToken cancellationToken
@@ -20,9 +22,16 @@ public static class CustomerRouter
             return TypedResults.Forbid();
         }
 
-        return TypedResults.Ok(
-            await customerProvider.GetCustomerSummary(userId, cancellationToken)
-        );
+        try
+        {
+            return TypedResults.Ok(
+                await customerProvider.GetCustomerSummary(userId, cancellationToken)
+            );
+        }
+        catch (UserNotFoundException)
+        {
+            return TypedResults.NotFound();
+        }
     }
 
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)

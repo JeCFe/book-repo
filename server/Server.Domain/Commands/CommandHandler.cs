@@ -3,36 +3,26 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-public class CommandHandler<TDbContext, TCommand> : IRequestHandler<TCommand>
+public class CommandHandler<TDbContext, TCommand>(
+    TDbContext dbContext,
+    IPublisher mediator,
+    TimeProvider time
+) : IRequestHandler<TCommand>
     where TCommand : ICommand<TDbContext>
     where TDbContext : DbContext
 {
-    private readonly TDbContext _dbContext;
-    private readonly IPublisher _mediator;
-
-    public CommandHandler(TDbContext dbContext, IPublisher mediator)
-    {
-        _dbContext = dbContext;
-        _mediator = mediator;
-    }
-
     public Task Handle(TCommand cmd, CancellationToken cancellationToken) =>
-        cmd.Execute(_dbContext, new(_mediator), cancellationToken);
+        cmd.Execute(dbContext, new(mediator, time), cancellationToken);
 }
 
-public class CommandHandler<TDbContext, TCommand, TResult> : IRequestHandler<TCommand, TResult>
+public class CommandHandler<TDbContext, TCommand, TResult>(
+    TDbContext dbContext,
+    IPublisher mediator,
+    TimeProvider time
+) : IRequestHandler<TCommand, TResult>
     where TCommand : ICommand<TDbContext, TResult>
     where TDbContext : DbContext
 {
-    private readonly TDbContext _dbContext;
-    private readonly IPublisher _mediator;
-
-    public CommandHandler(TDbContext dbContext, IPublisher mediator)
-    {
-        _dbContext = dbContext;
-        _mediator = mediator;
-    }
-
     public Task<TResult> Handle(TCommand cmd, CancellationToken cancellationToken) =>
-        cmd.Execute(_dbContext, new(_mediator), cancellationToken);
+        cmd.Execute(dbContext, new(mediator, time), cancellationToken);
 }

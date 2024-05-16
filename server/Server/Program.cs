@@ -8,7 +8,6 @@ using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
 using Server.filters;
-using Server.Helpers;
 using Server.Providers;
 using Server.Routes;
 
@@ -142,7 +141,6 @@ public class Program
             });
 
         builder.Services.AddScoped<IUserContext, UserContext>();
-        builder.Services.AddTransient<IClock, Clock>();
         builder.Services.AddTransient<ICustomerProvider, CustomerProvider>();
         builder.Services.RegisterCommandHandlers<BookRepoContext>();
 

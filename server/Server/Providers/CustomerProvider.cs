@@ -2,6 +2,7 @@ namespace Server.Providers;
 
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Exceptions;
 using Server.Models;
 
 public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
@@ -16,7 +17,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                 .Customer
                 .Include(x => x.Bookshelves)
                 .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken)
-            ?? throw new Exception();
+            ?? throw new UserNotFoundException();
 
         return new()
         {

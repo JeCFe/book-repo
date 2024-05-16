@@ -11,13 +11,19 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
     public bool IncludeDefaultBookshelves { get; init; }
 
     public async Task Execute(
-        BookRepoContext context,
-        CommandContext publisher,
+        BookRepoContext dbContext,
+        CommandContext ctx,
         CancellationToken cancellationToken
     )
     {
-        var dateTimeNow = DateTimeOffset.UtcNow;
-        Customer customer = new() { Id = Id, CreationDate = dateTimeNow, };
+        if (
+            await dbContext.Customer.SingleOrDefaultAsync(x => x.Id == Id, cancellationToken) is { }
+        )
+        {
+            return;
+        }
+
+        Customer customer = new() { Id = Id, CreationDate = ctx.time.GetUtcNow(), };
 
         if (IncludeDefaultBookshelves)
         {
@@ -26,30 +32,30 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
                 new (){
                     Id = Guid.NewGuid(),
                     Name = "Wanting to read",
-                    CreationDate = dateTimeNow,
-                    UpdatedDate = dateTimeNow,
+                    CreationDate = ctx.time.GetUtcNow(),
+                    UpdatedDate = ctx.time.GetUtcNow(),
                     
                 },
                 new (){
                     Id = Guid.NewGuid(),
                     Name = "Currently Reading",  
-                    CreationDate = dateTimeNow,
-                    UpdatedDate = dateTimeNow,
+                    CreationDate = ctx.time.GetUtcNow(),
+                    UpdatedDate = ctx.time.GetUtcNow(),
                     
                 },
                 new (){
                     Id = Guid.NewGuid(),
                     Name = "Read",
              
-                    CreationDate = dateTimeNow,
-                    UpdatedDate = dateTimeNow,
+                    CreationDate = ctx.time.GetUtcNow(),
+                    UpdatedDate = ctx.time.GetUtcNow(),
                     
                 },
             ];
         }
 
-        context.Customer.Add(customer);
+        dbContext.Customer.Add(customer);
 
-        await context.SaveChangesAsync(cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

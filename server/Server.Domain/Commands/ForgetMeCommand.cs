@@ -9,22 +9,22 @@ public class ForgetMeCommand : ICommand<BookRepoContext>
     public required string Id { get; init; }
 
     public async Task Execute(
-        BookRepoContext context,
+        BookRepoContext dbContext,
         CommandContext ctx,
         CancellationToken cancellationToken
     )
     {
-        if (await context.Customer.FindAsync([ Id ], cancellationToken) is not { } customer)
+        if (await dbContext.Customer.FindAsync([ Id ], cancellationToken) is not { } customer)
         {
             return;
         }
 
-        var x = await context
+        var x = await dbContext
             .Bookshelves
             .Where(x => x.CustomerId == Id)
             .ExecuteDeleteAsync(cancellationToken);
 
-        var y = await context
+        var y = await dbContext
             .Customer
             .Where(x => x.Id == customer.Id)
             .ExecuteDeleteAsync(cancellationToken);

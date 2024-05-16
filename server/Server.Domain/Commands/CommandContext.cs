@@ -2,7 +2,7 @@ namespace Server.Domain.Commands;
 
 using MediatR;
 
-public record struct CommandContext(IPublisher Publisher)
+public record struct CommandContext(IPublisher Publisher, TimeProvider time)
 {
     public readonly Task Publish<TNotification>(
         TNotification notification,
