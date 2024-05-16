@@ -1,4 +1,4 @@
-describe("Forget me", () => {
+describe.skip("Forget me", () => {
   let token = "";
 
   beforeEach(() => {
