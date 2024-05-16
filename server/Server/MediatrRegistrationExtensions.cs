@@ -13,8 +13,16 @@ public static class MediatrRegistrationExtensions
             Type serviceType;
             Type handlerType;
 
-            serviceType = typeof(IRequestHandler<>).MakeGenericType(type);
-            handlerType = typeof(CommandHandler<,>).MakeGenericType(typeof(TDbContext), type);
+            if (response is not { })
+            {
+                serviceType = typeof(IRequestHandler<>).MakeGenericType(type);
+                handlerType = typeof(CommandHandler<,>).MakeGenericType(typeof(TDbContext), type);
+            }
+            else
+            {
+                serviceType = typeof(IRequestHandler<,>).MakeGenericType(type, response);
+                handlerType = typeof(CommandHandler<,>).MakeGenericType(typeof(TDbContext), type);
+            }
 
             services.AddTransient(serviceType, handlerType);
         }
@@ -37,6 +45,13 @@ public static class MediatrRegistrationExtensions
                 )
                 {
                     yield return (item, null);
+                }
+                else if (
+                    ginterface.GetGenericTypeDefinition() == typeof(ICommand<,>)
+                    && ginterface.GenericTypeArguments[0] == typeof(TDbContext)
+                )
+                {
+                    yield return (item, ginterface.GenericTypeArguments[1]);
                 }
                 continue;
             }

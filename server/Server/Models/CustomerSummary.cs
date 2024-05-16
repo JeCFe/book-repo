@@ -1,6 +1,6 @@
-using Server.Domain.Models;
-
 namespace Server.Models;
+
+using Server.Domain.Models;
 
 public record CustomerSummary
 {
