@@ -1,9 +1,13 @@
-describe.skip("Forget me", () => {
-  let token = "";
+import { decode } from "jsonwebtoken";
 
-  beforeEach(() => {
-    cy.login().then((response) => {
-      token = `${response.body.token_type} ${response.body.access_token}`;
+describe("Forget me", () => {
+  let sub = "";
+  let token = "";
+  before(() => {
+    cy.login().then((res) => {
+      sub = decode(res.body.access_token)?.sub as string;
+      token = `${res.body.token_type} ${res.body.access_token}`;
+      console.log(res);
     });
   });
 
@@ -21,44 +25,23 @@ describe.skip("Forget me", () => {
     });
   });
 
-  it("returns 200 when customer has been deleted", () => {
-    cy.request({
-      method: "GET",
-      url: "/customer/get-customer-summary",
-      headers: {
-        authorization: token,
-      },
-    })
-      .then((response) => {
+  it("returns 200 when customer has been deleted -> asking for customer summary will then result in 404", () => {
+    cy.setupCustomer({ token, sub }).then(() => {
+      cy.request({
+        method: "POST",
+        url: "/action/forget-me",
+        headers: {
+          authorization: token,
+        },
+        body: { id: sub },
+      }).then((response) => {
         expect(response.status).to.equal(200);
-        expect(response.body).to.not.be.null;
-        return response.body;
-      })
-      .then((customerData) => {
-        cy.request({
-          method: "POST",
-          url: "/action/forget-me",
-          headers: {
-            authorization: token,
-          },
-          body: { id: customerData.id },
-        }).then((response) => {
-          expect(response.status).to.equal(200); // More specific assertion on status code
-        });
+        cy.getCustomerSummary({ token, failOnStatusCode: false }).then(
+          (res) => {
+            assert.equal(res.status, 404);
+          }
+        );
       });
-
-    // it("should return 200 and deleted all day help", () => {
-    //   cy.login().then((res) => {
-    //     cy.request({
-    //       method: "POST",
-    //       url: "/actions/forget-me",
-    //       headers: {
-    //         authorization: `${res.body.token_type} ${res.body.access_token}`,
-    //       },
-    //     }).then((res) => {
-    //       assert.isTrue(res.isOkStatusCode);
-    //     });
-    //   });
-    // });
+    });
   });
 });
