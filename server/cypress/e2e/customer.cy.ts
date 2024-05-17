@@ -1,15 +1,30 @@
-describe.skip("Customer", () => {
+import { decode } from "jsonwebtoken";
+
+describe("Customer", () => {
+  let sub = "";
+  let bearerToken = "";
+  before(() => {
+    cy.login().then((res) => {
+      sub = decode(res.body.access_token)?.sub as string;
+      bearerToken = `${res.body.token_type} ${res.body.access_token}`;
+      console.log(res);
+    });
+  });
   describe("get-customer-summary", () => {
     it("should return a customer summary and 200", () => {
       cy.login().then((res) => {
+        const sub = decode(res.body.access_token)?.sub;
+        const bearerToken = `${res.body.token_type} ${res.body.access_token}`;
+        console.log(res);
+
         cy.request({
-          method: "GET",
+          method: "POST",
           url: "/action/setup-customer",
           headers: {
-            authorization: `${res.body.token_type} ${res.body.access_token}`,
+            authorization: bearerToken,
           },
           body: {
-            id: "sign_me_up",
+            id: sub,
             includeDefaultBookshelves: true,
           },
         }).then((res) => {
@@ -18,7 +33,7 @@ describe.skip("Customer", () => {
             method: "GET",
             url: "/customer/get-customer-summary",
             headers: {
-              authorization: `${res.body.token_type} ${res.body.access_token}`,
+              authorization: bearerToken,
             },
           }).then((res) => {
             assert.isTrue(res.isOkStatusCode);
