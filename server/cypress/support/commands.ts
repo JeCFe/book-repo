@@ -39,3 +39,39 @@ Cypress.Commands.add("login", () => {
     },
   });
 });
+
+Cypress.Commands.add("forgetMe", (token: string, sub: string) => {
+  cy.request({
+    method: "POST",
+    url: "/action/forget-me",
+    headers: {
+      authorization: token,
+    },
+    body: { id: sub },
+  });
+});
+
+Cypress.Commands.add(
+  "setupCustomer",
+  ({
+    token,
+    sub,
+    includeDefaultBookshelves = true,
+  }: {
+    token: string;
+    sub: string;
+    includeDefaultBookshelves?: boolean;
+  }) => {
+    cy.request({
+      method: "POST",
+      url: "/action/setup-customer",
+      headers: {
+        authorization: token,
+      },
+      body: {
+        id: sub,
+        includeDefaultBookshelves,
+      },
+    });
+  }
+);

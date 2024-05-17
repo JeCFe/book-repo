@@ -5,5 +5,15 @@ declare namespace Cypress {
      * @example cy.dataCy('greeting')
      */
     login(): Chainable<Cypress.Response<any>>;
+    forgetMe(token: string, sub: string): Chainable<Cypress.Response<any>>;
+    setupCustomer({
+      token,
+      sub,
+      includeDefaultBookshelves = true,
+    }: {
+      token: string;
+      sub: string;
+      includeDefaultBookshelves?: boolean;
+    }): Chainable<Cypress.Response<any>>;
   }
 }
