@@ -1,9 +1,13 @@
-describe.skip("Forget me", () => {
-  let token = "";
+import { decode } from "jsonwebtoken";
 
-  beforeEach(() => {
-    cy.login().then((response) => {
-      token = `${response.body.token_type} ${response.body.access_token}`;
+describe("Forget me", () => {
+  let sub = "";
+  let bearerToken = "";
+  before(() => {
+    cy.login().then((res) => {
+      sub = decode(res.body.access_token)?.sub as string;
+      bearerToken = `${res.body.token_type} ${res.body.access_token}`;
+      console.log(res);
     });
   });
 
@@ -12,7 +16,7 @@ describe.skip("Forget me", () => {
       method: "POST",
       url: "/action/forget-me",
       headers: {
-        authorization: token,
+        authorization: bearerToken,
       },
       body: { id: "InvalidCustomer" },
       failOnStatusCode: false,
@@ -26,7 +30,7 @@ describe.skip("Forget me", () => {
       method: "GET",
       url: "/customer/get-customer-summary",
       headers: {
-        authorization: token,
+        authorization: bearerToken,
       },
     })
       .then((response) => {
@@ -34,14 +38,14 @@ describe.skip("Forget me", () => {
         expect(response.body).to.not.be.null;
         return response.body;
       })
-      .then((customerData) => {
+      .then(() => {
         cy.request({
           method: "POST",
           url: "/action/forget-me",
           headers: {
-            authorization: token,
+            authorization: bearerToken,
           },
-          body: { id: customerData.id },
+          body: { id: sub },
         }).then((response) => {
           expect(response.status).to.equal(200); // More specific assertion on status code
         });
