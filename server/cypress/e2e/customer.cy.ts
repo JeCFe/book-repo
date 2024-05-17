@@ -2,33 +2,26 @@ import { decode } from "jsonwebtoken";
 
 describe("Customer", () => {
   let sub = "";
-  let bearerToken = "";
+  let token = "";
   before(() => {
     cy.login().then((res) => {
       sub = decode(res.body.access_token)?.sub as string;
-      bearerToken = `${res.body.token_type} ${res.body.access_token}`;
+      token = `${res.body.token_type} ${res.body.access_token}`;
       console.log(res);
     });
   });
+  beforeEach(() => {
+    cy.forgetMe(token, sub);
+  });
   describe("get-customer-summary", () => {
     it("should return a customer summary and 200", () => {
-      cy.request({
-        method: "POST",
-        url: "/action/setup-customer",
-        headers: {
-          authorization: bearerToken,
-        },
-        body: {
-          id: sub,
-          includeDefaultBookshelves: true,
-        },
-      }).then((res) => {
+      cy.setupCustomer({ token, sub }).then((res) => {
         assert.isTrue(res.isOkStatusCode);
         cy.request({
           method: "GET",
           url: "/customer/get-customer-summary",
           headers: {
-            authorization: bearerToken,
+            authorization: token,
           },
         }).then((res) => {
           assert.isTrue(res.isOkStatusCode);

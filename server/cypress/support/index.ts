@@ -6,6 +6,13 @@ declare namespace Cypress {
      */
     login(): Chainable<Cypress.Response<any>>;
     forgetMe(token: string, sub: string): Chainable<Cypress.Response<any>>;
+    getCustomerSummary({
+      token,
+      failOnStatusCode = false,
+    }: {
+      token: string;
+      failOnStatusCode?: boolean;
+    }): Chainable<Cypress.Response<any>>;
     setupCustomer({
       token,
       sub,

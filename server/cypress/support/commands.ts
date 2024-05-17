@@ -48,8 +48,28 @@ Cypress.Commands.add("forgetMe", (token: string, sub: string) => {
       authorization: token,
     },
     body: { id: sub },
-  });
+  }).then((res) => assert.isTrue(res.isOkStatusCode));
 });
+
+Cypress.Commands.add(
+  "getCustomerSummary",
+  ({
+    token,
+    failOnStatusCode = false,
+  }: {
+    token: string;
+    failOnStatusCode?: boolean;
+  }) => {
+    cy.request({
+      method: "GET",
+      url: "/customer/get-customer-summary",
+      headers: {
+        authorization: token,
+      },
+      failOnStatusCode,
+    });
+  }
+);
 
 Cypress.Commands.add(
   "setupCustomer",
@@ -72,6 +92,6 @@ Cypress.Commands.add(
         id: sub,
         includeDefaultBookshelves,
       },
-    });
+    }).then((res) => assert.isTrue(res.isOkStatusCode));
   }
 );
