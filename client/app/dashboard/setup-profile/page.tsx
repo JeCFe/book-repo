@@ -61,10 +61,10 @@ export default function Dashboard() {
             <RadioButton
               {...register("radio", { required: "A selection is required" })}
               value="express"
+              theme="pink"
               size="large"
               hintClassName="max-w-sm md:max-w-lg"
               hint="The quickest way for you to get organising. We will setup your account using all our defaults - this included 3 default bookshelves for all your read books, currently reading, and wanting to read. You can add all your custom bookshelves and add books later."
-              radioClassName="border-pink-500/80 after:checked:bg-cyan-500/80 focus:ring-cyan-500/80"
             >
               Express
             </RadioButton>
@@ -76,7 +76,7 @@ export default function Dashboard() {
               value="express"
               hint="Want to control how we set your account up? This paths allows you to choose which defaults you want, add as many bookshelves you want, and even start adding books!"
               hintClassName="max-w-sm md:max-w-lg"
-              radioClassName="border-cyan-500/80 after:checked:bg-pink-500/80 focus:ring-pink-500/80"
+              theme="cyan"
             >
               Advanced
             </RadioButton>
