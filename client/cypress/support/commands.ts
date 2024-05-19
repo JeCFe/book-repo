@@ -9,13 +9,13 @@ To get around this for test, a not so great thing can be done
 cy.get('button[name="action"]').click({ multiple: true });
 Will accept the consent initially, will need to be removed as additional runs will then fail
 */
-Cypress.Commands.add("login", () => {
+Cypress.Commands.add("login", (waitFor: string) => {
   cy.origin(Cypress.env("CYPRESS_DOMAIN"), () => {
     cy.get('input[name="username"]').type(Cypress.env("CYPRESS_USERNAME"));
     cy.get('input[name="password"]').type(Cypress.env("CYPRESS_PASSWORD"));
     cy.get('button[name="action"]').click();
   });
-
+  cy.wait(waitFor);
   cy.findByText(Cypress.env("CYPRESS_USERNAME"));
 });
 
