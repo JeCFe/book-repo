@@ -8,7 +8,7 @@ declare global {
        * @example cy.dataCy('greeting')
        */
 
-      login(): void;
+      login(waitFor: string): void;
       toggleAccordionByTitle(value: AccordionTitle): Chainable<any>;
       findAccordionByTitle(value: AccordionTitle): Chainable<any>;
       findButtonByName(value: ButtonName): Chainable<any>;
