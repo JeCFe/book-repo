@@ -1,10 +1,10 @@
 "use client";
 
-import { RadioButton } from "@/components";
+import { Checkbox, Modal, RadioButton } from "@/components";
 import { useGetCustomerSummary } from "@/hooks";
 import { Anchor, Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -13,6 +13,7 @@ type FormValues = {
 
 export default function Dashboard() {
   const { isLoading, data } = useGetCustomerSummary();
+  const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,8 +30,42 @@ export default function Dashboard() {
 
   const onSubmit = (data: FormValues) => console.log(data); //Can use this to form the reducer
 
+  const onConfirm = () => {
+    router.push("/"); //goal will be to eventuall call BE managment api if they selected to delete auth account
+  };
+
   return (
     <div>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={onConfirm}
+      >
+        <>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-800">
+            Are you sure?
+          </h1>
+          <h2 className="mt-1 max-w-sm text-base font-bold tracking-tight text-slate-600">
+            You haven't yet setup your account, this action will take you back
+            to the homepage and cancel any setup actions you have already taken.
+          </h2>
+          <div className="pt-8 md:pt-12">
+            <Checkbox
+              size="small"
+              hint="Remove authetnication account"
+              theme="standard"
+            >
+              Delete Auth0 account
+            </Checkbox>
+          </div>
+        </>
+      </Modal>
+      <Anchor
+        onClick={() => setShowModal(true)}
+        className="cursor-pointer pb-4"
+      >
+        Cancel
+      </Anchor>
       <h1 className="flex flex-row text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         Setup your account
       </h1>
@@ -74,7 +109,7 @@ export default function Dashboard() {
             Advanced
           </RadioButton>
         </div>
-        <Button size="large" type="submit" className="my-20">
+        <Button size="large" type="submit" className="mb-10 mt-20">
           Continue
         </Button>
       </form>
