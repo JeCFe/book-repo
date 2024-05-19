@@ -13,7 +13,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isLoading && !data) {
-      router.push("/dashboard/setup-profile");
+      router.push("/dashboard/setup");
     }
   }, [data, error]);
 
