@@ -28,14 +28,15 @@ export default function Dashboard() {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => console.log(data); //Can use this to form the reducer
+  const onSubmit = (data: FormValues) => console.log(data); //TODO: Can use this to form the reducer
 
   const onConfirm = () => {
-    router.push("/"); //goal will be to eventuall call BE managment api if they selected to delete auth account
+    router.push("/"); //TODO: goal will be to eventuall call BE managment api if they selected to delete auth account
   };
 
   return (
     <div>
+      {/* TODO: Can make this and the anchor into a share page comp */}
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
