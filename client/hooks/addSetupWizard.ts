@@ -46,8 +46,14 @@ export const reducer = ({
 }): NewCustomer => {
   switch (action.type) {
     case "set-config-option": {
+      if (action.option == "express") {
+        return {
+          ...getDefaultState(),
+          config: action.option,
+        };
+      }
       return {
-        ...getDefaultState(),
+        ...state,
         config: action.option,
       };
     }
