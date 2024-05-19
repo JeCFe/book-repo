@@ -6,7 +6,7 @@ import { AccordionText, AccordionTitle, ButtonName } from "../lib/enum";
 
 /* Auth0 has a consent pattern where it will require the user to give consent to use data when signin 
 To get around this for test, a not so great thing can be done
-cy.get("button").should("contain.text", "Accept").click();
+cy.get('button[name="action"]').click({ multiple: true });
 Will accept the consent initially, will need to be removed as additional runs will then fail
 */
 Cypress.Commands.add("login", () => {
@@ -14,7 +14,6 @@ Cypress.Commands.add("login", () => {
     cy.get('input[name="username"]').type(Cypress.env("CYPRESS_USERNAME"));
     cy.get('input[name="password"]').type(Cypress.env("CYPRESS_PASSWORD"));
     cy.get('button[name="action"]').click();
-    cy.get('button[name="action"]').click({ multiple: true });
   });
 
   cy.findByText(Cypress.env("CYPRESS_USERNAME"));
