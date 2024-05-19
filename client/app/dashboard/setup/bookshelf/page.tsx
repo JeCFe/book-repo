@@ -1,0 +1,131 @@
+"use client";
+
+import { AccordionManager } from "@/components";
+import { SetupBookshelf, useSetupWizard } from "@/hooks";
+import { Button } from "@jecfe/react-design-system";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { SetupModal } from "../../SetupModal";
+
+export default function Dashboard() {
+  const { config, bookshelves, updateCustomer } = useSetupWizard();
+  const router = useRouter();
+  const [setupbookshelves, setSetupBookshelves] = useState<SetupBookshelf[]>(
+    bookshelves ?? [],
+  );
+  const [currentBookshelf, setCurrentBookshelf] = useState<
+    SetupBookshelf | undefined
+  >({
+    name: "",
+  });
+
+  useEffect(() => {
+    if (config === undefined) {
+      router.push("/dashboard/setup");
+    }
+  }, []);
+
+  const onContinue = () => {
+    console.log(setupbookshelves);
+    updateCustomer({ type: "add-bookshelves", bookshelves: setupbookshelves });
+    router.push("/dashboard/setup/books");
+  };
+
+  const addBookshelf = () => {
+    if (currentBookshelf === undefined) {
+      return;
+    }
+    setSetupBookshelves((prev) => [
+      ...prev,
+      { name: currentBookshelf.name.trim() },
+    ]);
+    setCurrentBookshelf(undefined);
+  };
+
+  return (
+    <div className="flex flex-col">
+      <SetupModal />
+      <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
+        Setup your bookshelves
+      </h1>
+      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
+        You can add as many initial bookshelves as you want, fear not you can
+        always do this later.
+      </div>
+
+      <div className="pt-20">
+        <div className="mb-4 text-xl text-slate-500">
+          Enter the name you wish the bookshelf to be called.
+        </div>
+        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
+          <input
+            type="text"
+            value={currentBookshelf?.name ?? ""}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setCurrentBookshelf({ name: e.target.value });
+            }}
+            placeholder="Enter bookshelf name..."
+            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
+          />
+          <Button size="large" variant="primary" onClick={addBookshelf}>
+            Add bookshelf
+          </Button>
+        </div>
+
+        {setupbookshelves && setupbookshelves.length > 0 && (
+          <AccordionManager
+            className="space-y-3 pt-12"
+            accordions={[
+              {
+                title: "Proposed bookshelves",
+                children: (
+                  <div className="space-y-1 divide-y divide-slate-500 pb-1">
+                    {setupbookshelves.map((bookshelf, index) => (
+                      <div
+                        key={`${bookshelf}-${index}`}
+                        className="item-center flex flex-row justify-center pr-2 pt-1 text-slate-300"
+                      >
+                        <div className="flex items-center justify-center">
+                          {bookshelf.name}
+                        </div>
+
+                        <div className="flex flex-grow" />
+                        <div className="flex h-full items-center justify-center">
+                          <Button
+                            onClick={() =>
+                              setSetupBookshelves((prevItems) =>
+                                prevItems.filter((_, i) => i !== index),
+                              )
+                            }
+                            size="small"
+                            variant="destructive"
+                            className="flex text-slate-900"
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ),
+              },
+            ]}
+          />
+        )}
+      </div>
+      <div className="mb-10 mt-20 flex flex-row space-x-6">
+        <Button
+          size="large"
+          variant="secondary"
+          onClick={() => router.push("/dashboard/setup")}
+        >
+          Back
+        </Button>
+        <Button size="large" onClick={() => onContinue()}>
+          Continue
+        </Button>
+      </div>
+    </div>
+  );
+}
