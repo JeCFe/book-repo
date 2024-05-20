@@ -14,14 +14,15 @@ type FormValues = {
 
 export default function Dashboard() {
   const { config, updateCustomer } = useSetupWizard();
-  const { isLoading, data } = useGetCustomerSummary();
+  const { isLoading, data, mutate } = useGetCustomerSummary();
   const router = useRouter();
 
   useEffect(() => {
+    mutate();
     if (!isLoading && data) {
       router.push("/dashboard");
     }
-  }, []);
+  }, [data]);
 
   const {
     register,

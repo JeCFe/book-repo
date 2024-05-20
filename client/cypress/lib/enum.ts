@@ -1,5 +1,6 @@
 export enum Title {
   SPLASH = "The Book Repository",
+  SETUP_ACCOUNT = "Setup your account",
 }
 
 export enum Subtitle {

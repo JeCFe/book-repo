@@ -16,7 +16,6 @@ Cypress.Commands.add("login", (waitFor: string) => {
     cy.get('button[name="action"]').click();
   });
   cy.wait(waitFor);
-  cy.findByText(Cypress.env("CYPRESS_USERNAME"));
 });
 
 Cypress.Commands.add("toggleAccordionByTitle", (value: AccordionTitle) => {
