@@ -24,6 +24,7 @@ export enum ButtonName {
   LOGOUT = "Logout",
   ACCEPT = "Accept",
   CONTINUE = "Continue",
+  BACK = "Back",
 }
 
 export enum ValidationTitle {

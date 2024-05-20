@@ -32,13 +32,21 @@ describe("Setup pages", () => {
       cy.url().should("contain", "/dashboard/setup/preview");
     });
 
+    it.skip("Selection is saved when travelling back from preview", () => {
+      cy.get('[type="radio"]').eq(0).check();
+      cy.findButtonByName(ButtonName.CONTINUE).click();
+      cy.url().should("contain", "/dashboard/setup/preview");
+      cy.findButtonByName(ButtonName.BACK).click();
+      cy.get('[type="radio"]').eq(0).should("be.checked");
+    });
+
     it("Continues to bookshelf when advanced selected", () => {
       cy.get('[type="radio"]').eq(1).check();
       cy.findButtonByName(ButtonName.CONTINUE).click();
       cy.url().should("contain", "/dashboard/setup/bookshelf");
     });
 
-    it.only("Shows validation warning if a checkbox is not selected and disappear when option selected", () => {
+    it("Shows validation warning if a checkbox is not selected and disappear when option selected", () => {
       cy.findButtonByName(ButtonName.CONTINUE).click();
       cy.findByText(ValidationTitle.IMPORTANT).should("exist");
       cy.findByText(ValidationMessage.SELECTION).should("exist");
@@ -46,6 +54,14 @@ describe("Setup pages", () => {
       cy.get('[type="radio"]').eq(1).check();
       cy.findByText(ValidationTitle.IMPORTANT).should("not.be.exist");
       cy.findByText(ValidationMessage.SELECTION).should("not.be.exist");
+    });
+
+    it("Selection is saved when travelling back from bookshelf", () => {
+      cy.get('[type="radio"]').eq(1).check();
+      cy.findButtonByName(ButtonName.CONTINUE).click();
+      cy.url().should("contain", "/dashboard/setup/bookshelf");
+      cy.findButtonByName(ButtonName.BACK).click();
+      cy.get('[type="radio"]').eq(1).should("be.checked");
     });
   });
 });
