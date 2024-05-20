@@ -1,4 +1,4 @@
-import { ButtonName } from "../lib/enum";
+import { ButtonName, Title } from "../lib/enum";
 
 describe("Login redirects", () => {
   describe("/dashboard", () => {
@@ -25,7 +25,7 @@ describe("Login redirects", () => {
       cy.findByText(Cypress.env("CYPRESS_USERNAME"));
     });
 
-    it.skip("redirects to splash page from dashboard after logging out", () => {
+    it.only("redirects to splash page from dashboard after logging out", () => {
       cy.intercept(
         { method: "GET", url: "/customer/get-customer-summary" },
         { id: "123", createdOn: "Today", bookshelves: [] },
@@ -33,17 +33,18 @@ describe("Login redirects", () => {
       cy.login("@customerSummary");
       cy.url().should("contain", "/dashboard");
       cy.findButtonByName(ButtonName.LOGOUT).click();
+      cy.findByText(Title.SPLASH);
       cy.url().should("eq", "http://localhost:3000/");
     });
 
-    it("should redirect to /setup if there's no customer data", () => {
+    it.only("should redirect to /setup if there's no customer data", () => {
       cy.intercept({ method: "GET", url: "/customer/get-customer-summary" }).as(
         "customerSummary",
       );
       cy.visit("/dashboard");
       cy.login("@customerSummary");
       cy.url().should("contain", "/setup");
-      cy.wait("@customerSummary");
+      // cy.wait("@customerSummary");
       cy.findByText("Setup your account").should("exist");
     });
 

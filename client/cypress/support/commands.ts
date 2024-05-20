@@ -13,6 +13,7 @@ Cypress.Commands.add("login", (waitFor: string) => {
   cy.visit("/");
   cy.findButtonByName(ButtonName.TAKE_ME_THERE).click();
   cy.origin(Cypress.env("CYPRESS_DOMAIN"), () => {
+    cy.url({ timeout: 20000 }).should("contain", Cypress.env("CYPRESS_DOMAIN"));
     cy.get('input[name="username"]').type(Cypress.env("CYPRESS_USERNAME"));
     cy.get('input[name="password"]').type(Cypress.env("CYPRESS_PASSWORD"));
     cy.get('button[name="action"]').click();
