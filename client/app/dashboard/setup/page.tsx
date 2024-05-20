@@ -18,7 +18,6 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    mutate();
     if (!isLoading && data) {
       router.push("/dashboard");
     }

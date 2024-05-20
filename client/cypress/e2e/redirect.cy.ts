@@ -7,8 +7,7 @@ describe("Login redirects", () => {
         { method: "GET", url: "/customer/get-customer-summary" },
         { id: "123", createdOn: "Today", bookshelves: [] },
       ).as("customerSummary");
-      cy.visit("/");
-      cy.findButtonByName(ButtonName.TAKE_ME_THERE).click();
+
       cy.login("@customerSummary");
       cy.url().should("contain", "/dashboard");
     });
@@ -18,8 +17,6 @@ describe("Login redirects", () => {
         { method: "GET", url: "/customer/get-customer-summary" },
         { id: "123", createdOn: "Today", bookshelves: [] },
       ).as("customerSummary");
-      cy.visit("/");
-      cy.findButtonByName(ButtonName.TAKE_ME_THERE).click();
       cy.login("@customerSummary");
       cy.url().should("contain", "/dashboard");
       cy.visit("/");
@@ -33,8 +30,6 @@ describe("Login redirects", () => {
         { method: "GET", url: "/customer/get-customer-summary" },
         { id: "123", createdOn: "Today", bookshelves: [] },
       ).as("customerSummary");
-      cy.visit("/");
-      cy.findButtonByName(ButtonName.TAKE_ME_THERE).click();
       cy.login("@customerSummary");
       cy.url().should("contain", "/dashboard");
       cy.findButtonByName(ButtonName.LOGOUT).click();
@@ -52,7 +47,7 @@ describe("Login redirects", () => {
       cy.findByText("Setup your account").should("exist");
     });
 
-    it.only("should redirect to dashbaord if has existing customer data from setup", () => {
+    it("should redirect to dashbaord if has existing customer data from setup", () => {
       cy.intercept(
         {
           method: "GET",

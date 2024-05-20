@@ -23,4 +23,14 @@ export enum ButtonName {
   TAKE_ME_THERE = "Take me there!",
   LOGOUT = "Logout",
   ACCEPT = "Accept",
+  CONTINUE = "Continue",
+  BACK = "Back",
+}
+
+export enum ValidationTitle {
+  IMPORTANT = "Important!",
+}
+
+export enum ValidationMessage {
+  SELECTION = "A selection is required",
 }
