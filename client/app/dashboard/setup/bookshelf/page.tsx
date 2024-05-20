@@ -1,6 +1,6 @@
 "use client";
 
-import { AccordionManager } from "@/components";
+import { AccordionManager, Checkbox } from "@/components";
 import { SetupBookshelf, useSetupWizard } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
@@ -10,14 +10,12 @@ import { SetupModal } from "../../SetupModal";
 export default function Dashboard() {
   const { config, bookshelves, updateCustomer } = useSetupWizard();
   const router = useRouter();
-  const [setupbookshelves, setSetupBookshelves] = useState<SetupBookshelf[]>(
-    bookshelves ?? [],
-  );
-  const [currentBookshelf, setCurrentBookshelf] = useState<
+  const [setupBookshelves, setSetupBookshelves] = useState<
     SetupBookshelf | undefined
-  >({
-    name: "",
-  });
+  >(undefined);
+  const [currentBookshelf, setCurrentBookshelf] = useState<
+    string | undefined
+  >();
 
   useEffect(() => {
     if (config === undefined) {
@@ -25,9 +23,16 @@ export default function Dashboard() {
     }
   }, []);
 
+  useEffect(() => {
+    setSetupBookshelves(bookshelves);
+  }, [bookshelves]);
+
+  useEffect(() => {
+    console.log(setupBookshelves);
+  }, [setupBookshelves]);
+
   const onContinue = () => {
-    console.log(setupbookshelves);
-    updateCustomer({ type: "add-bookshelves", bookshelves: setupbookshelves });
+    updateCustomer({ type: "add-bookshelves", bookshelves: setupBookshelves });
     router.push("/dashboard/setup/books");
   };
 
@@ -35,11 +40,18 @@ export default function Dashboard() {
     if (currentBookshelf === undefined) {
       return;
     }
-    setSetupBookshelves((prev) => [
-      ...prev,
-      { name: currentBookshelf.name.trim() },
-    ]);
+    var updatedBookshelf: SetupBookshelf = {
+      names: [...(setupBookshelves?.names ?? []), currentBookshelf],
+      includeDefaults: setupBookshelves?.includeDefaults ?? false,
+    };
+    setSetupBookshelves(updatedBookshelf);
     setCurrentBookshelf(undefined);
+  };
+
+  const changeDefaults = (toggle: boolean) => {
+    setSetupBookshelves((prev) => {
+      return { names: prev?.names ?? [], includeDefaults: toggle };
+    });
   };
 
   return (
@@ -53,17 +65,30 @@ export default function Dashboard() {
         always do this later.
       </div>
 
-      <div className="pt-20">
-        <div className="mb-4 text-xl text-slate-500">
+      <Checkbox
+        className="mt-10 md:mt-20"
+        size="medium"
+        theme="dark"
+        checked={setupBookshelves?.includeDefaults}
+        onChange={() =>
+          changeDefaults(!setupBookshelves?.includeDefaults ?? false)
+        }
+        hint="This will include all default bookshelves"
+      >
+        Include default shelves
+      </Checkbox>
+
+      <div className="mt-10">
+        <div className="mb-4 text-xl text-slate-300">
           Enter the name you wish the bookshelf to be called.
         </div>
         <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
           <input
             type="text"
-            value={currentBookshelf?.name ?? ""}
+            value={currentBookshelf ?? ""}
             onChange={(e) => {
               console.log(e.target.value);
-              setCurrentBookshelf({ name: e.target.value });
+              setCurrentBookshelf(e.target.value);
             }}
             placeholder="Enter bookshelf name..."
             className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
@@ -73,7 +98,7 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        {setupbookshelves && setupbookshelves.length > 0 && (
+        {setupBookshelves?.names && setupBookshelves.names.length > 0 && (
           <AccordionManager
             className="space-y-3 pt-12"
             accordions={[
@@ -81,22 +106,29 @@ export default function Dashboard() {
                 title: "Proposed bookshelves",
                 children: (
                   <div className="space-y-1 divide-y divide-slate-500 pb-1">
-                    {setupbookshelves.map((bookshelf, index) => (
+                    {setupBookshelves.names.map((bookshelf, index) => (
                       <div
                         key={`${bookshelf}-${index}`}
                         className="item-center flex flex-row justify-center pr-2 pt-1 text-slate-300"
                       >
                         <div className="flex items-center justify-center">
-                          {bookshelf.name}
+                          {bookshelf}
                         </div>
 
                         <div className="flex flex-grow" />
                         <div className="flex h-full items-center justify-center">
                           <Button
                             onClick={() =>
-                              setSetupBookshelves((prevItems) =>
-                                prevItems.filter((_, i) => i !== index),
-                              )
+                              setSetupBookshelves((prevItems) => {
+                                return {
+                                  names:
+                                    prevItems?.names.filter(
+                                      (_, i) => i !== index,
+                                    ) ?? [],
+                                  includeDefaults:
+                                    setupBookshelves.includeDefaults ?? false,
+                                };
+                              })
                             }
                             size="small"
                             variant="destructive"

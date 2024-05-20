@@ -25,7 +25,7 @@ const checkbox = cva(
       theme: {
         standard:
           "border-slate-900 focus:before:border-slate-900 focus:before:ring-pink-400 checked:after:border-pink-400",
-        dark: "border-black focus:before:border-slate-300 focus:before:ring-pink-400 checked:after:border-pink-slate-300",
+        dark: "border-slate-200 focus:before:border-slate-300 focus:before:ring-pink-400 checked:after:border-pink-400",
       },
     },
     defaultVariants: {

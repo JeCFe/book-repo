@@ -14,7 +14,7 @@ type FormValues = {
 
 export default function Dashboard() {
   const { config, updateCustomer } = useSetupWizard();
-  const { isLoading, data, mutate } = useGetCustomerSummary();
+  const { isLoading, data } = useGetCustomerSummary();
   const router = useRouter();
 
   useEffect(() => {

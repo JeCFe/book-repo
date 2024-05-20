@@ -13,6 +13,7 @@ export function AccordionManager({ accordions, className }: Props) {
     <div className={className ? className : ""}>
       {accordions.map(({ title, children }, index) => (
         <ManagedAccordion
+          key={`${title}-${index}`}
           title={title}
           isOpen={isOpen === index ? true : false}
           setIsOpen={() =>
