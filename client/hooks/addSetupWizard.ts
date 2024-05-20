@@ -3,7 +3,7 @@ import { useSessionStorage } from "usehooks-ts";
 export const SESSION_STORAGE_KEY = "setup-account";
 
 export type Config = "express" | "advanced";
-export type SetupBookshelf = { names: string[]; includeDefaults: boolean };
+export type SetupBookshelf = string[];
 export type IncludeDefaultShelves = boolean;
 export type SetupBook = {
   bookshelfName: string;
@@ -20,6 +20,7 @@ type Action =
   | {
       type: "add-bookshelves";
       bookshelves?: SetupBookshelf;
+      defaults: IncludeDefaultShelves;
     }
   | {
       type: "add-books";
@@ -30,12 +31,14 @@ export type NewCustomer = {
   config?: Config;
   bookshelves?: SetupBookshelf;
   books?: SetupBook[];
+  includeDefaults: IncludeDefaultShelves;
 };
 
 export const getDefaultState = (): NewCustomer => ({
   config: undefined,
   bookshelves: undefined,
   books: undefined,
+  includeDefaults: false,
 });
 
 export const reducer = ({
@@ -62,8 +65,10 @@ export const reducer = ({
       return {
         ...state,
         bookshelves: action.bookshelves,
+        includeDefaults: action.defaults,
       };
     }
+
     case "add-books": {
       return {
         ...state,
@@ -103,6 +108,7 @@ export const useSetupWizard = () => {
     config: newSetupCustomerData.config,
     books: newSetupCustomerData.books,
     bookshelves: newSetupCustomerData.bookshelves,
+    includeDefaults: newSetupCustomerData.includeDefaults,
     updateCustomer,
     isComplete,
     completeNewRegistration,

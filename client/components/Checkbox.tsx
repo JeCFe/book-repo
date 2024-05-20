@@ -21,6 +21,11 @@ const checkbox = cva(
           "focus:before:h-10 focus:before:w-10",
           "checked:after:left-3 checked:after:top-[3px] checked:after:h-[25px] checked:after:w-3 checked:after:border-b-[5px] checked:after:border-r-[5px]",
         ],
+        large: [
+          "h-12 min-h-12 w-12 min-w-12",
+          "focus:before:h-12 focus:before:w-12",
+          "checked:after:left-4 checked:after:top-[5px] checked:after:h-[30px] checked:after:w-3 checked:after:border-b-[5px] checked:after:border-r-[5px]",
+        ],
       },
       theme: {
         standard:
@@ -36,7 +41,7 @@ const checkbox = cva(
 
 const label = cva(["flex flex-col w-fit"], {
   variants: {
-    size: { medium: "text-lg", small: "text-base" },
+    size: { medium: "text-lg", small: "text-base", large: "text-xl" },
     theme: {
       standard: "text-slate-800",
       dark: "text-slate-300",
@@ -47,7 +52,11 @@ const label = cva(["flex flex-col w-fit"], {
 
 const hintCva = cva("", {
   variants: {
-    size: { medium: "text-base ml-14", small: "text-sm ml-12" },
+    size: {
+      medium: "text-base ml-14",
+      small: "text-sm ml-12",
+      large: "text-lg ml-16",
+    },
     theme: {
       standard: "text-slate-500",
       dark: "text-slate-400",
