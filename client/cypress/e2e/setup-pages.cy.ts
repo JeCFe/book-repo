@@ -1,4 +1,9 @@
-import { Title } from "../lib/enum";
+import {
+  ButtonName,
+  Title,
+  ValidationMessage,
+  ValidationTitle,
+} from "../lib/enum";
 
 describe("Setup pages", () => {
   beforeEach(() => {
@@ -17,6 +22,30 @@ describe("Setup pages", () => {
         cy.url().should("contain", "/dashboard");
         cy.findByText(Title.SETUP_ACCOUNT);
       });
+    });
+  });
+  describe("/dashboard/setup", () => {
+    //Page not set up yet
+    it.skip("Continues to preview when express selected", () => {
+      cy.get('[type="radio"]').first().should("exist").check();
+      cy.findButtonByName(ButtonName.CONTINUE).click();
+      cy.url().should("contain", "/dashboard/setup/preview");
+    });
+
+    it("Continues to bookshelf when advanced selected", () => {
+      cy.get('[type="radio"]').eq(1).check();
+      cy.findButtonByName(ButtonName.CONTINUE).click();
+      cy.url().should("contain", "/dashboard/setup/bookshelf");
+    });
+
+    it.only("Shows validation warning if a checkbox is not selected and disappear when option selected", () => {
+      cy.findButtonByName(ButtonName.CONTINUE).click();
+      cy.findByText(ValidationTitle.IMPORTANT).should("exist");
+      cy.findByText(ValidationMessage.SELECTION).should("exist");
+      cy.findButtonByName(ButtonName.CONTINUE).should("be.disabled");
+      cy.get('[type="radio"]').eq(1).check();
+      cy.findByText(ValidationTitle.IMPORTANT).should("not.be.exist");
+      cy.findByText(ValidationMessage.SELECTION).should("not.be.exist");
     });
   });
 });
