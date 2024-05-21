@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Server.Auth0;
 using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
@@ -139,10 +140,15 @@ public class Program
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
-
+        builder.Services.AddHttpClient();
         builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddTransient<ICustomerProvider, CustomerProvider>();
         builder.Services.RegisterCommandHandlers<BookRepoContext>();
+        builder
+            .Services
+            .Configure<Auth0Options>(builder.Configuration.GetSection("Auth0Management"));
+        builder.Services.AddTransient<IAuth0Token, Auth0Token>();
+        builder.Services.AddTransient<IAuth0Client, Auth0Client>();
 
         builder.Services.AddAuthorization();
 
