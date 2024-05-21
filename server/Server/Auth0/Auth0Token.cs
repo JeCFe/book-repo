@@ -6,27 +6,34 @@ using Microsoft.Extensions.Options;
 
 namespace Server.Auth0;
 
-public class Auth0Token(IOptions<Auth0Options> options) : IAuth0Token
+public class Auth0Token : IAuth0Token
 {
+    private readonly HttpClient _httpClient;
+    private readonly IOptions<Auth0Options> _options;
+
+    public Auth0Token(IOptions<Auth0Options> options, IHttpClientFactory httpClientFactory)
+    {
+        _httpClient = httpClientFactory.CreateClient();
+        _options = options;
+    }
+
     public async Task<string> GetAccessToken(CancellationToken cancellationToken)
     {
-        HttpRequestMessage request = new HttpRequestMessage(
-            HttpMethod.Post,
-            $"https://{options.Value.Domain}/oauth/token"
-        );
+        HttpRequestMessage request =
+            new(HttpMethod.Post, $"https://{_options.Value.Domain}/oauth/token");
         var contentHeader = new MediaTypeHeaderValue("application/json")
         {
             CharSet = Encoding.UTF8.WebName
         };
         var content = new ManagementTokenRequestContent()
         {
-            client_id = options.Value.ClientId,
-            client_secret = options.Value.ClientSecret,
-            audience = options.Value.Audience,
-            grant_type = options.Value.GrantType
+            client_id = _options.Value.ClientId,
+            client_secret = _options.Value.ClientSecret,
+            audience = _options.Value.Audience,
+            grant_type = _options.Value.GrantType
         };
         request.Content = JsonContent.Create(content, contentHeader);
-        var response = await new HttpClient().SendAsync(request, cancellationToken);
+        var response = await _httpClient.SendAsync(request, cancellationToken);
 
         var token = await response.Content.ReadFromJsonAsync<ManagementTokenResponse>();
 
