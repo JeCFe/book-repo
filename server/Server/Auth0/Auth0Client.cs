@@ -1,5 +1,6 @@
 using Auth0.ManagementApi;
 using Microsoft.Extensions.Options;
+using Server.Exceptions;
 
 namespace Server.Auth0;
 
@@ -15,5 +16,14 @@ public class Auth0Client : IAuth0Client
         _client = new ManagementApiClient(accessToken, options.Value.Domain);
     }
 
-    public async Task Delete(string id) => await _client.Users.DeleteAsync(id);
+    public async Task Delete(string id)
+    {
+        await _client.Users.DeleteAsync(id);
+        var user = await _client.Users.GetAsync(id);
+        if (user is { })
+        {
+            throw new UnableToDeleteUserException();
+        }
+        return;
+    }
 }
