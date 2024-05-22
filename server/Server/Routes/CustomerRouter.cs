@@ -39,7 +39,8 @@ public static class CustomerRouter
     public static async Task<Results<ForbidHttpResult, Ok, ProblemHttpResult>> Delete(
         IUserContext userContext,
         IAuth0Client client,
-        DeleteRequest request
+        DeleteRequest request,
+        CancellationToken cancellationToken
     )
     {
         var userId = userContext.UserId;
@@ -49,7 +50,7 @@ public static class CustomerRouter
         }
         try
         {
-            await client.Delete(request.Id);
+            await client.Delete(request.Id, cancellationToken);
         }
         catch (UnableToDeleteUserException)
         {
