@@ -5,11 +5,20 @@ import { Checkbox } from ".";
 type Props = {
   children: ReactNode;
   isOpen?: boolean;
+  actioning: boolean;
+  error?: string;
   onClose: () => void;
   onConfirm: () => void;
 };
 
-export function Modal({ children, isOpen, onClose, onConfirm }: Props) {
+export function Modal({
+  children,
+  isOpen,
+  onClose,
+  onConfirm,
+  actioning,
+  error,
+}: Props) {
   return (
     <>
       {isOpen && (
@@ -19,12 +28,23 @@ export function Modal({ children, isOpen, onClose, onConfirm }: Props) {
             <div className="flex h-full w-full flex-col">
               {children}
               <div className="flex flex-grow" />
+              {error && (
+                <div className="flex pb-4 text-sm text-red-600">{error}</div>
+              )}
               <div className="flex flex-row items-center">
-                <Anchor className="cursor-pointer" onClick={() => onClose()}>
+                <Anchor
+                  className="cursor-pointer"
+                  onClick={() => onClose()}
+                  aria-disabled={actioning}
+                >
                   Cancel
                 </Anchor>
                 <div className="flex flex-grow" />
-                <Button onClick={() => onConfirm()} size="small">
+                <Button
+                  onClick={() => onConfirm()}
+                  size="small"
+                  isLoading={actioning}
+                >
                   Confirm
                 </Button>
               </div>
