@@ -64,7 +64,7 @@ public static class CustomerRouter
     {
         group.WithTags("Customer");
         group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
-        group.MapDelete("/delete", Delete);
+        group.MapPost("/delete", Delete);
         return group;
     }
 }

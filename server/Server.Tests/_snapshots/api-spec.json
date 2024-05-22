@@ -72,7 +72,7 @@
       }
     },
     "/customer/delete": {
-      "delete": {
+      "post": {
         "tags": [
           "Customer"
         ],
