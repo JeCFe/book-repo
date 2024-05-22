@@ -1,14 +1,40 @@
 import { Checkbox, Modal } from "@/components";
+import { getApiClient } from "@/services";
 import { Anchor } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function SetupModal() {
+export function SetupModal({ id }: { id: string }) {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [deleteAuth, setDeleteAuth] = useState<boolean>(true);
+  const [actioning, setActioning] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const router = useRouter();
 
-  const onConfirm = () => {
-    router.push("/");
+  const deleteCustomer = getApiClient()
+    .path("/customer/delete")
+    .method("post")
+    .create();
+
+  const onConfirm = async () => {
+    setActioning(true);
+    if (!deleteAuth) {
+      setActioning(false);
+      router.push("/");
+      return;
+    }
+
+    await deleteCustomer({ id })
+      .then(() => {
+        setActioning(false);
+        setError(false);
+        router.push("/api/auth/logout");
+        return;
+      })
+      .catch(() => {
+        setActioning(false);
+        setError(true);
+      });
   };
   return (
     <>
@@ -16,6 +42,12 @@ export function SetupModal() {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onConfirm={onConfirm}
+        error={
+          error
+            ? "Unable to confirm successful deletion of account. Please contact an admin."
+            : undefined
+        }
+        actioning={actioning}
       >
         <>
           <h1 className="text-3xl font-bold tracking-tight text-slate-800">
@@ -30,6 +62,8 @@ export function SetupModal() {
               size="small"
               hint="Remove authetnication account"
               theme="standard"
+              checked={deleteAuth}
+              onChange={(e) => setDeleteAuth(e.currentTarget.checked)}
             >
               Delete Auth0 account
             </Checkbox>

@@ -9,7 +9,7 @@ const getCustomerSummary = getApiClient()
 export const useGetCustomerSummary = () => {
   const { data, error, isLoading, mutate } = useSWR(
     "getCustomerSummary",
-    async () => await getCustomerSummary({}),
+    async () => (await getCustomerSummary({})).data,
     {
       refreshInterval: 10000,
       onErrorRetry: (error) => {
