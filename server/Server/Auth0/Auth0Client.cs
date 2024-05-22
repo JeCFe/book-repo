@@ -1,3 +1,4 @@
+using Auth0.Core.Exceptions;
 using Auth0.ManagementApi;
 using Microsoft.Extensions.Options;
 using Server.Exceptions;
@@ -19,11 +20,11 @@ public class Auth0Client : IAuth0Client
     public async Task Delete(string id)
     {
         await _client.Users.DeleteAsync(id);
-        var user = await _client.Users.GetAsync(id);
-        if (user is { })
+        try
         {
+            await _client.Users.GetAsync(id);
             throw new UnableToDeleteUserException();
         }
-        return;
+        catch (ErrorApiException) { }
     }
 }
