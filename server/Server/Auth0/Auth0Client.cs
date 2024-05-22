@@ -1,5 +1,6 @@
 using Auth0.Core.Exceptions;
 using Auth0.ManagementApi;
+using Auth0.ManagementApi.Models;
 using Microsoft.Extensions.Options;
 using Server.Exceptions;
 
@@ -17,12 +18,13 @@ public class Auth0Client : IAuth0Client
         _client = new ManagementApiClient(accessToken, options.Value.Domain);
     }
 
-    public async Task Delete(string id)
+    public async Task Delete(string id, CancellationToken cancellationToken)
     {
+        //Question: Why does DeleteAsync not take a cancellation token
         await _client.Users.DeleteAsync(id);
         try
         {
-            await _client.Users.GetAsync(id);
+            await _client.Users.GetAsync(id, cancellationToken: cancellationToken);
             throw new UnableToDeleteUserException();
         }
         catch (ErrorApiException) { }
