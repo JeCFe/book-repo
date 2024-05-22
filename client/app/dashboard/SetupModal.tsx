@@ -1,10 +1,12 @@
 import { Checkbox, Modal } from "@/components";
 import { getApiClient } from "@/services";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function SetupModal({ id }: { id: string }) {
+export function SetupModal() {
+  const { user, isLoading } = useUser();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [deleteAuth, setDeleteAuth] = useState<boolean>(true);
   const [actioning, setActioning] = useState<boolean>(false);
@@ -17,6 +19,9 @@ export function SetupModal({ id }: { id: string }) {
     .create();
 
   const onConfirm = async () => {
+    if (user?.sub == undefined) {
+      return;
+    }
     setActioning(true);
     if (!deleteAuth) {
       setActioning(false);
@@ -24,7 +29,7 @@ export function SetupModal({ id }: { id: string }) {
       return;
     }
 
-    await deleteCustomer({ id })
+    await deleteCustomer({ id: user.sub })
       .then(() => {
         setActioning(false);
         setError(false);
@@ -47,7 +52,7 @@ export function SetupModal({ id }: { id: string }) {
             ? "Unable to confirm successful deletion of account. Please contact an admin."
             : undefined
         }
-        actioning={actioning}
+        actioning={actioning || isLoading}
       >
         <>
           <h1 className="text-3xl font-bold tracking-tight text-slate-800">

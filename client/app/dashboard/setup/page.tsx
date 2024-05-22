@@ -2,7 +2,6 @@
 
 import { RadioButton } from "@/components";
 import { Config, useGetCustomerSummary, useSetupWizard } from "@/hooks";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -16,7 +15,6 @@ type FormValues = {
 export default function Dashboard() {
   const { config, updateCustomer } = useSetupWizard();
   const { isLoading, data } = useGetCustomerSummary();
-  const { user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -43,7 +41,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <SetupModal id={user?.sub as string} />
+      <SetupModal />
       <h1 className="flex flex-row text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         Setup your account
       </h1>

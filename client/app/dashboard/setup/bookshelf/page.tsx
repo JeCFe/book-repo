@@ -1,8 +1,7 @@
 "use client";
 
 import { AccordionManager, Checkbox } from "@/components";
-import { IncludeDefaultShelves, SetupBookshelf, useSetupWizard } from "@/hooks";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { SetupBookshelf, useSetupWizard } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ export type FormValues = {
 };
 
 export default function Dashboard() {
-  const { user } = useUser();
   const { config, bookshelves, includeDefaults, updateCustomer } =
     useSetupWizard();
 
@@ -61,7 +59,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col">
-      <SetupModal id={user?.sub as string} />
+      <SetupModal />
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         Setup your bookshelves
       </h1>
