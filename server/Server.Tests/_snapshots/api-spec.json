@@ -76,16 +76,16 @@
         "tags": [
           "Customer"
         ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteRequest"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success"
@@ -203,6 +203,19 @@
             "items": {
               "$ref": "#/components/schemas/Bookshelf"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeleteRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
             "nullable": true
           }
         },
