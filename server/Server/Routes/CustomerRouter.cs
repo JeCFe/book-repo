@@ -36,7 +36,7 @@ public static class CustomerRouter
         }
     }
 
-    public static async Task<Results<ForbidHttpResult, Ok>> Delete(
+    public static async Task<Results<ForbidHttpResult, Ok, ProblemHttpResult>> Delete(
         IUserContext userContext,
         IAuth0Client client,
         string id
@@ -47,7 +47,16 @@ public static class CustomerRouter
         {
             return TypedResults.Forbid();
         }
-        await client.Delete(id);
+        try
+        {
+            await client.Delete(id);
+        }
+        catch (UnableToDeleteUserException)
+        {
+            return TypedResults.Problem(
+                new() { Title = "User unable to be deleted", Status = 422, }
+            );
+        }
         return TypedResults.Ok();
     }
 
