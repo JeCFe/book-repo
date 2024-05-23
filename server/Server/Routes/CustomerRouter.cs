@@ -1,3 +1,4 @@
+using Auth0.ManagementApi.Models;
 using Azure.Core;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Server.Auth0;
@@ -36,7 +37,7 @@ public static class CustomerRouter
         }
     }
 
-    public static async Task<Results<ForbidHttpResult, Ok, ProblemHttpResult>> Delete(
+    public static async Task<Results<ForbidHttpResult, NoContent, ProblemHttpResult>> Delete(
         IUserContext userContext,
         IAuth0Client client,
         DeleteRequest request,
@@ -58,14 +59,40 @@ public static class CustomerRouter
                 new() { Title = "User unable to be deleted", Status = 422, }
             );
         }
-        return TypedResults.Ok();
+        return TypedResults.NoContent();
+    }
+
+    public static async Task<
+        Results<Ok<User>, BadRequest<string>, ForbidHttpResult, NotFound>
+    > Update(
+        IUserContext userContext,
+        IAuth0Client client,
+        CustomerUpdateRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { })
+        {
+            return TypedResults.Forbid();
+        }
+        try
+        {
+            var user = await client.Update(request, cancellationToken);
+            return TypedResults.Ok(user);
+        }
+        catch (BadRequestException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
     }
 
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Customer");
         group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
-        group.MapPost("/delete", Delete);
+        group.MapPost("/delete", Delete).RequireAuthorization();
+        group.MapPost("/update", Update).RequireAuthorization();
         return group;
     }
 }
