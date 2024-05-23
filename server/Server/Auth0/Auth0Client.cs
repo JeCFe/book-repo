@@ -39,11 +39,14 @@ public class Auth0Client : IAuth0Client
         catch (ErrorApiException) { }
     }
 
-    public async Task Update(CustomerUpdateRequest request, CancellationToken cancellationToken)
+    public async Task<User> Update(
+        CustomerUpdateRequest request,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
-            await _client
+            return await _client
                 .Users
                 .UpdateAsync(request.Id, new() { NickName = request.Nickname }, cancellationToken);
         }

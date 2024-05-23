@@ -1,3 +1,4 @@
+using Auth0.ManagementApi.Models;
 using Azure.Core;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Server.Auth0;
@@ -62,7 +63,7 @@ public static class CustomerRouter
     }
 
     public static async Task<
-        Results<NoContent, BadRequest<string>, ForbidHttpResult, NotFound>
+        Results<Ok<User>, BadRequest<string>, ForbidHttpResult, NotFound>
     > Update(
         IUserContext userContext,
         IAuth0Client client,
@@ -77,13 +78,13 @@ public static class CustomerRouter
         }
         try
         {
-            await client.Update(request, cancellationToken);
+            var user = await client.Update(request, cancellationToken);
+            return TypedResults.Ok(user);
         }
         catch (BadRequestException ex)
         {
             return TypedResults.BadRequest(ex.Message);
         }
-        return TypedResults.NoContent();
     }
 
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
