@@ -36,7 +36,7 @@ public static class CustomerRouter
         }
     }
 
-    public static async Task<Results<ForbidHttpResult, Ok, ProblemHttpResult>> Delete(
+    public static async Task<Results<ForbidHttpResult, NoContent, ProblemHttpResult>> Delete(
         IUserContext userContext,
         IAuth0Client client,
         DeleteRequest request,
@@ -58,14 +58,40 @@ public static class CustomerRouter
                 new() { Title = "User unable to be deleted", Status = 422, }
             );
         }
-        return TypedResults.Ok();
+        return TypedResults.NoContent();
+    }
+
+    public static async Task<
+        Results<NoContent, BadRequest<string>, ForbidHttpResult, NotFound>
+    > Update(
+        IUserContext userContext,
+        IAuth0Client client,
+        CustomerUpdateRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { })
+        {
+            return TypedResults.Forbid();
+        }
+        try
+        {
+            await client.Update(request, cancellationToken);
+        }
+        catch (BadRequestException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+        return TypedResults.NoContent();
     }
 
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Customer");
         group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
-        group.MapPost("/delete", Delete);
+        group.MapPost("/delete", Delete).RequireAuthorization();
+        group.MapPost("/update", Update).RequireAuthorization();
         return group;
     }
 }

@@ -1,8 +1,11 @@
+using System.Net;
 using Auth0.Core.Exceptions;
 using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
 using Server.Exceptions;
+using Server.Models;
 
 namespace Server.Auth0;
 
@@ -28,5 +31,30 @@ public class Auth0Client : IAuth0Client
             throw new UnableToDeleteUserException();
         }
         catch (ErrorApiException) { }
+    }
+
+    public async Task Update(CustomerUpdateRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _client
+                .Users
+                .UpdateAsync(request.Id, new() { NickName = request.Nickname }, cancellationToken);
+        }
+        catch (ErrorApiException ex)
+        {
+            if (ex.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException(ex.Message);
+            }
+            else if (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new UserNotFoundException(ex.Message);
+            }
+            else
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
