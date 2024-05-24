@@ -347,6 +347,18 @@
             "type": "string",
             "nullable": true
           },
+          "bookshelvesNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "books": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Book"
+            }
+          },
           "includeDefaultBookshelves": {
             "type": "boolean"
           }
