@@ -188,7 +188,7 @@ public class Program
         app.MapHealthChecks("/healthz");
         app.MapGroup("/customer").MapCustomerEndpoints();
         app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
-
+        app.MapGroup("/book").MapBookEndpoints();
         app.Run();
     }
 }

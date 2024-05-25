@@ -24,6 +24,21 @@ public class OpenLibraryClient : IOpenLibraryCient
         {
             return null;
         }
+        List<string> authors =  [ ];
+        foreach (var i in book.AuthorKeys)
+        {
+            var author = await _client.Author.GetDataAsync(i);
+            if (author is not null)
+            {
+                authors.Add(author.Name);
+            }
+        }
+        var publishDate = "";
+        try
+        {
+            publishDate = book.ExtensionData?["publish_date"].ToString();
+        }
+        catch { }
 
         var pictureUri = OpenLibraryUtility.BuildCoversUri(
             CoverIdType.ISBN,
@@ -35,10 +50,11 @@ public class OpenLibraryClient : IOpenLibraryCient
         {
             Isbn = isbn,
             Name = book.Title,
-            Release = "Unknown",
+            Release = publishDate ?? "Unknown",
             Picture = pictureUri.ToString(),
             Subjects =  [ .. book.Subjects ],
-            PageCount = book.PageCount
+            PageCount = book.PageCount,
+            Authors =  [ ..authors ]
         };
     }
 }

@@ -12,6 +12,6 @@ public class OpenLibraryClientDecorator(BookRepoContext context, OpenLibraryClie
         {
             return book;
         }
-        throw new NotImplementedException();
+        return await client.GetBook(isbn, cancellationToken);
     }
 }
