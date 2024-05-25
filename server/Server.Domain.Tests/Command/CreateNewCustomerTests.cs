@@ -51,7 +51,7 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
             {
                 Isbn = Guid.NewGuid().ToString(),
                 Name = "Jess' Adventure",
-                Author = "Jess",
+                Authors =  [ "Jess" ],
                 Release = "Today",
                 Picture = "None"
             };
@@ -61,7 +61,7 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
             {
                 Isbn = Guid.NewGuid().ToString(),
                 Name = "Jess' Adventure",
-                Author = "Jess",
+                Authors =  [ "Jess" ],
                 Release = "Today",
                 Picture = "None"
             };
@@ -77,10 +77,10 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
         var dbBookTwo = context2.Books.Find(bookTwo.Isbn);
 
         Assert.NotNull(dbBookOne);
-        Assert.Equal(bookOne, dbBookOne);
+        Assert.Equivalent(bookOne, dbBookOne);
 
         Assert.NotNull(dbBookTwo);
-        Assert.Equal(bookTwo, dbBookTwo);
+        Assert.Equivalent(bookTwo, dbBookTwo);
 
         var homelessBookShelf = context2
             .Bookshelves
