@@ -49,6 +49,38 @@
         }
       }
     },
+    "/book/{isbn}": {
+      "get": {
+        "tags": [
+          "Book"
+        ],
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/customer/get-customer-summary": {
       "get": {
         "tags": [
@@ -140,11 +172,13 @@
     "schemas": {
       "Book": {
         "required": [
-          "author",
+          "authors",
           "isbn",
           "name",
+          "pageCount",
           "picture",
-          "release"
+          "release",
+          "subjects"
         ],
         "type": "object",
         "properties": {
@@ -156,8 +190,18 @@
             "type": "string",
             "nullable": true
           },
-          "author": {
-            "type": "string",
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "subjects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           },
           "release": {
@@ -167,6 +211,10 @@
           "picture": {
             "type": "string",
             "nullable": true
+          },
+          "pageCount": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

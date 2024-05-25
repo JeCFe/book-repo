@@ -6,11 +6,13 @@ export type Config = "express" | "advanced";
 export type SetupBookshelf = string[];
 export type IncludeDefaultShelves = boolean;
 export type SetupBook = {
-  bookshelfName: string;
+  isbn: string;
   name: string;
-  picture: string;
-  author: string;
   release: string;
+  picture: string;
+  pageCount?: number;
+  authors?: string[];
+  subjects?: string[];
 };
 type Action =
   | {

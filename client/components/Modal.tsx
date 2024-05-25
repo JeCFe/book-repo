@@ -9,6 +9,7 @@ type Props = {
   error?: string;
   onClose: () => void;
   onConfirm: () => void;
+  disabled: boolean;
 };
 
 export function Modal({
@@ -18,6 +19,7 @@ export function Modal({
   onConfirm,
   actioning,
   error,
+  disabled,
 }: Props) {
   return (
     <>
@@ -31,7 +33,7 @@ export function Modal({
               {error && (
                 <div className="flex pb-4 text-sm text-red-600">{error}</div>
               )}
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center pb-2">
                 <Anchor
                   className="cursor-pointer"
                   onClick={() => onClose()}
@@ -44,6 +46,7 @@ export function Modal({
                   onClick={() => onConfirm()}
                   size="small"
                   isLoading={actioning}
+                  disabled={disabled}
                 >
                   Confirm
                 </Button>

@@ -25,6 +25,16 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+        port: "",
+        pathname: "/b/ISBN/**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
