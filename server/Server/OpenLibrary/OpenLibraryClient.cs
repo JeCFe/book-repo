@@ -40,11 +40,7 @@ public class OpenLibraryClient : IOpenLibraryCient
         }
         catch { }
 
-        var pictureUri = OpenLibraryUtility.BuildCoversUri(
-            CoverIdType.ISBN,
-            isbn,
-            ImageSize.Medium
-        );
+        var pictureUri = OpenLibraryUtility.BuildCoversUri(CoverIdType.ISBN, isbn, ImageSize.Large);
 
         return new Book()
         {
