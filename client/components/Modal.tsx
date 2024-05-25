@@ -9,6 +9,7 @@ type Props = {
   error?: string;
   onClose: () => void;
   onConfirm: () => void;
+  disabled: boolean;
 };
 
 export function Modal({
@@ -18,6 +19,7 @@ export function Modal({
   onConfirm,
   actioning,
   error,
+  disabled,
 }: Props) {
   return (
     <>
@@ -44,6 +46,7 @@ export function Modal({
                   onClick={() => onConfirm()}
                   size="small"
                   isLoading={actioning}
+                  disabled={disabled}
                 >
                   Confirm
                 </Button>
