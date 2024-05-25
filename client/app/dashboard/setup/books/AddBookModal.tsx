@@ -101,7 +101,7 @@ export function AddBookModal({
                 </RenderSection>
               )}
 
-              {setupBook.authors && (
+              {setupBook.authors && setupBook.authors.length > 0 && (
                 <RenderSection title="Authors">
                   <div className="max-w-sm">
                     {setupBook.authors?.join(", ")}
