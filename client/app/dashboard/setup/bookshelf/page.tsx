@@ -35,7 +35,6 @@ export default function Dashboard() {
   }, [bookshelves]);
 
   const onSubmit = (data: FormValues) => {
-    console.log("Here", data.checkBox);
     updateCustomer({
       type: "add-bookshelves",
       bookshelves: setupBookshelves,

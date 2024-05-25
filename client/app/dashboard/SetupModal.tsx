@@ -53,6 +53,7 @@ export function SetupModal() {
             : undefined
         }
         actioning={actioning || isLoading}
+        disabled={false}
       >
         <>
           <h1 className="text-3xl font-bold tracking-tight text-slate-800">
