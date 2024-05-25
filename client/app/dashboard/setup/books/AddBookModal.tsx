@@ -2,8 +2,8 @@ import { Modal } from "@/components";
 import { SetupBook } from "@/hooks";
 import { useGetBook } from "@/hooks/useGetBook";
 import { Spinner } from "@jecfe/react-design-system";
-import Image from "next/image";
-import { Dispatch, ReactNode, SetStateAction, useEffect, useMemo } from "react";
+import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
+import { Picture } from "./Picture";
 
 type Props = {
   isbn?: string;
@@ -40,7 +40,6 @@ export function AddBookModal({
     };
   }, [data]);
 
-  useEffect(() => console.log(setupBook), [setupBook]);
   return (
     <Modal
       isOpen={showModal}
@@ -79,16 +78,9 @@ export function AddBookModal({
 
         {!isLoading && setupBook === undefined && "Unable to find that book"}
         {setupBook !== undefined && (
-          <div className="mt-4 flex flex-col space-x-2 md:flex-row ">
-            <div className="">
-              <Image
-                alt={"test"}
-                src={setupBook.picture ?? ""}
-                width={192}
-                height={256}
-                onError={() => "Oops"}
-                className="flex items-center justify-center rounded border-2 border-cyan-500 shadow-2xl md:min-h-[256px] md:min-w-[192px]"
-              />
+          <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+            <div>
+              <Picture pictureUrl={setupBook.picture} title={setupBook.name} />
             </div>
             <div className="flex flex-col space-y-2">
               <RenderSection title="Book Title">{setupBook.name}</RenderSection>
