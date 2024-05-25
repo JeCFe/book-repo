@@ -33,7 +33,7 @@ export function Modal({
               {error && (
                 <div className="flex pb-4 text-sm text-red-600">{error}</div>
               )}
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center pb-2">
                 <Anchor
                   className="cursor-pointer"
                   onClick={() => onClose()}

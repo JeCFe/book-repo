@@ -65,6 +65,7 @@ export function AddBookModal({
         <h1 className="text-3xl font-bold tracking-tight text-slate-800">
           Is this the book?
         </h1>
+
         {isLoading && (
           <div className="flex flex-col items-center justify-center md:flex-row">
             <div className="flex items-center justify-center rounded border border-cyan-500 shadow-2xl md:min-h-[256px] md:min-w-[192px]">
@@ -118,6 +119,10 @@ export function AddBookModal({
             </div>
           </div>
         )}
+        <h2 className="mb-2 mt-2 text-sm font-bold tracking-tight text-slate-600">
+          This data is supplied from OpenLibrary, you will be able to raise any
+          inaccuracies or missing data with an admin when your account is setup.
+        </h2>
       </>
     </Modal>
   );
