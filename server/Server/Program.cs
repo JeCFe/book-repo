@@ -9,6 +9,7 @@ using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
 using Server.filters;
+using Server.OpenLibrary;
 using Server.Providers;
 using Server.Routes;
 
@@ -149,6 +150,9 @@ public class Program
             .Configure<Auth0Options>(builder.Configuration.GetSection("Auth0Management"));
         builder.Services.AddTransient<IAuth0Token, Auth0Token>();
         builder.Services.AddTransient<IAuth0Client, Auth0Client>();
+
+        builder.Services.AddTransient<IOpenLibraryCient, OpenLibraryClient>();
+        builder.Services.Decorate<IOpenLibraryCient, OpenLibraryClientDecorator>();
 
         builder.Services.AddAuthorization();
 
