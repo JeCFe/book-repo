@@ -68,10 +68,10 @@ export function AddBookModal({
         {isLoading && (
           <div className="flex flex-col items-center justify-center md:flex-row">
             <div className="flex items-center justify-center rounded border border-cyan-500 shadow-2xl md:min-h-[256px] md:min-w-[192px]">
-              <Spinner className="flex" />
+              <Spinner className="flex" fast={isLoading} />
             </div>
             <div className="flex h-full w-full items-center justify-center">
-              <Spinner className="flex" />
+              <Spinner className="flex" fast={isLoading} />
             </div>
           </div>
         )}

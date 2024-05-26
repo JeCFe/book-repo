@@ -14,7 +14,7 @@ export function Picture({
     <>
       {loading && (
         <div className="flex items-center justify-center rounded border border-cyan-500 shadow-2xl md:min-h-[256px] md:min-w-[192px]">
-          <Spinner className="flex" />
+          <Spinner className="flex" fast={loading} />
         </div>
       )}
 
