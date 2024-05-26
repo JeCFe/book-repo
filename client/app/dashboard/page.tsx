@@ -34,7 +34,7 @@ export default function Dashboard() {
           Welcome
         </h1>
         <div className="mt-4 flex max-w-sm flex-row text-center text-xl font-bold tracking-tight text-slate-400 md:max-w-full md:text-3xl">
-          {user?.name}
+          {user?.nickname}
         </div>
         <Button
           onClick={() => {

@@ -395,10 +395,10 @@
               "type": "string"
             }
           },
-          "books": {
+          "isbns": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Book"
+              "type": "string"
             }
           },
           "includeDefaultBookshelves": {

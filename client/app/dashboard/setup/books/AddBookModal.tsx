@@ -23,20 +23,18 @@ export function AddBookModal({
   setCurrentIsbn,
 }: Props) {
   const { data, isLoading } = useGetBook(isbn);
-  const setupBook: SetupBook | undefined = useMemo(():
-    | SetupBook
-    | undefined => {
+  const setupBook = useMemo(() => {
     if (data === undefined) {
       return undefined;
     }
     return {
       isbn: data.isbn as string,
       name: data.name as string,
-      release: data.release as string,
+      release: data.release,
       picture: data.picture as string,
       pageCount: data.pageCount,
-      authors: data.authors as string[] | undefined,
-      subjects: data.subjects as string[] | undefined,
+      authors: data.authors,
+      subjects: data.subjects,
     };
   }, [data]);
 

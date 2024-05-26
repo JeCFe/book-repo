@@ -1,3 +1,4 @@
+"use client";
 import { useSessionStorage } from "usehooks-ts";
 
 export const SESSION_STORAGE_KEY = "setup-account";
@@ -8,13 +9,10 @@ export type IncludeDefaultShelves = boolean;
 export type SetupBook = {
   isbn: string;
   name: string;
-  release: string;
-  picture: string;
-  pageCount?: number;
-  authors?: string[];
-  subjects?: string[];
 };
+export type Nickname = string;
 type Action =
+  | { type: "set-nickanme"; nickname: Nickname }
   | {
       type: "set-config-option";
       option: Config;
@@ -30,6 +28,7 @@ type Action =
     };
 
 export type NewCustomer = {
+  nickname?: Nickname;
   config?: Config;
   bookshelves?: SetupBookshelf;
   books?: SetupBook[];
@@ -37,6 +36,7 @@ export type NewCustomer = {
 };
 
 export const getDefaultState = (): NewCustomer => ({
+  nickname: undefined,
   config: undefined,
   bookshelves: undefined,
   books: undefined,
@@ -51,6 +51,9 @@ export const reducer = ({
   action: Action;
 }): NewCustomer => {
   switch (action.type) {
+    case "set-nickanme": {
+      return { ...state, nickname: action.nickname };
+    }
     case "set-config-option": {
       if (action.option == "express") {
         return {
@@ -85,17 +88,18 @@ export const useSetupWizard = () => {
     useSessionStorage<NewCustomer>(SESSION_STORAGE_KEY, getDefaultState());
 
   const updateCustomer = (action: Action) => {
-    setNewSetupCustomerData(
-      reducer({ state: { ...newSetupCustomerData }, action }),
-    );
+    var newState = reducer({ state: { ...newSetupCustomerData }, action });
+    setNewSetupCustomerData(newState);
+    return newState;
   };
 
-  const complete = () => {
+  const complete = (customer: NewCustomer) => {
     if (
-      (newSetupCustomerData.config === "advanced" &&
-        newSetupCustomerData.books !== undefined &&
-        newSetupCustomerData.bookshelves !== undefined) ||
-      newSetupCustomerData.config === "express"
+      (customer.nickname !== undefined &&
+        customer.config === "advanced" &&
+        customer.books !== undefined &&
+        customer.bookshelves !== undefined) ||
+      (customer.nickname !== undefined && customer.config === "express")
     ) {
       return true;
     }
@@ -103,15 +107,17 @@ export const useSetupWizard = () => {
     return false;
   };
 
-  const completeNewRegistration = complete();
+  const completeNewRegistration = complete(newSetupCustomerData);
   const isComplete = completeNewRegistration != null;
 
   return {
+    nickname: newSetupCustomerData.nickname,
     config: newSetupCustomerData.config,
     books: newSetupCustomerData.books,
     bookshelves: newSetupCustomerData.bookshelves,
     includeDefaults: newSetupCustomerData.includeDefaults,
     updateCustomer,
+    complete,
     isComplete,
     completeNewRegistration,
   } as const;

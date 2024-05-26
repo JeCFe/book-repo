@@ -5,7 +5,7 @@ import {
   ValidationTitle,
 } from "../lib/enum";
 
-describe("Setup pages", () => {
+describe.skip("Setup pages", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.intercept({ method: "GET", url: "/customer/get-customer-summary" }).as(

@@ -65,30 +65,25 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
                 Release = "Today",
                 Picture = "None"
             };
+        context.Books.AddRange([ bookOne, bookTwo ]);
+        context.SaveChanges();
+
+        using var contextAct = fixture.CreateContext();
 
         await fixture.Execute(
-            context,
-            new SetupCustomerCommand() { Id = id, Books =  [ bookOne, bookTwo ] }
+            contextAct,
+            new SetupCustomerCommand() { Id = id, Isbns =  [ bookOne.Isbn, bookTwo.Isbn ] }
         );
 
-        using var context2 = fixture.CreateContext();
+        using var contextAssert = fixture.CreateContext();
 
-        var dbBookOne = context2.Books.Find(bookOne.Isbn);
-        var dbBookTwo = context2.Books.Find(bookTwo.Isbn);
-
-        Assert.NotNull(dbBookOne);
-        Assert.Equivalent(bookOne, dbBookOne);
-
-        Assert.NotNull(dbBookTwo);
-        Assert.Equivalent(bookTwo, dbBookTwo);
-
-        var homelessBookShelf = context2
+        var homelessBookShelf = contextAssert
             .Bookshelves
             .SingleOrDefault(x => x.CustomerId == id && x.Name == "Homeless Books");
 
         Assert.NotNull(homelessBookShelf);
 
-        var bookshelfBooks = context2
+        var bookshelfBooks = contextAssert
             .BookshelfBook
             .Where(x => x.BookshelfId == homelessBookShelf.Id)
             .ToList();

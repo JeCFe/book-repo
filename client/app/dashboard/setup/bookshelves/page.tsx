@@ -12,8 +12,8 @@ export type FormValues = {
   checkBox: boolean;
 };
 
-export default function Dashboard() {
-  const { config, bookshelves, includeDefaults, updateCustomer } =
+export default function Bookshelves() {
+  const { config, bookshelves, includeDefaults, complete, updateCustomer } =
     useSetupWizard();
 
   const [setupBookshelves, setSetupBookshelves] = useState<SetupBookshelf>([]);
@@ -25,7 +25,7 @@ export default function Dashboard() {
   >();
 
   useEffect(() => {
-    if (config === undefined) {
+    if (config === undefined || config === "express") {
       router.push("/dashboard/setup");
     }
   }, []);
@@ -35,11 +35,16 @@ export default function Dashboard() {
   }, [bookshelves]);
 
   const onSubmit = (data: FormValues) => {
-    updateCustomer({
+    var updatedCustomer = updateCustomer({
       type: "add-bookshelves",
       bookshelves: setupBookshelves,
       defaults: data.checkBox,
     });
+
+    if (complete(updatedCustomer)) {
+      router.push("/dashboard/setup/preview");
+      return;
+    }
 
     router.push("/dashboard/setup/books");
   };
@@ -147,7 +152,7 @@ export default function Dashboard() {
             type="button"
             size="large"
             variant="secondary"
-            onClick={() => router.push("/dashboard/setup")}
+            onClick={() => router.push("/dashboard/setup/nickname")}
           >
             Back
           </Button>

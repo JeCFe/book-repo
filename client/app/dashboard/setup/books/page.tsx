@@ -1,11 +1,10 @@
 "use client";
 
-import { AccordionManager, Checkbox } from "@/components";
-import { SetupBook, SetupBookshelf, useSetupWizard } from "@/hooks";
+import { AccordionManager } from "@/components";
+import { SetupBook, useSetupWizard } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { SetStateAction, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { SetupModal } from "../../SetupModal";
 import { AddBookModal } from "./AddBookModal";
 
@@ -13,8 +12,8 @@ export type FormValues = {
   checkBox: boolean;
 };
 
-export default function Dashboard() {
-  const { config, books, includeDefaults, updateCustomer } = useSetupWizard();
+export default function Books() {
+  const { config, books, updateCustomer } = useSetupWizard();
 
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
 
@@ -48,7 +47,6 @@ export default function Dashboard() {
     if (book === undefined) {
       return;
     }
-
     setSetupBooks((prev) => [...prev, book]);
   };
 
@@ -144,7 +142,7 @@ export default function Dashboard() {
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard/setup/bookshelf")}
+          onClick={() => router.push("/dashboard/setup/bookshelves")}
         >
           Back
         </Button>
