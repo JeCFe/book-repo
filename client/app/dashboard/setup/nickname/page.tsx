@@ -42,7 +42,7 @@ export default function Nickname() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { nickname: nickname ?? user!.nickname ?? "" },
+    defaultValues: { nickname: nickname ?? user?.nickname ?? "" },
   });
 
   return (
