@@ -10,6 +10,7 @@ using Server.Domain;
 using Server.Domain.Commands;
 using Server.filters;
 using Server.OpenLibrary;
+using Server.OpenLibrary.Blob;
 using Server.Providers;
 using Server.Routes;
 
@@ -153,6 +154,9 @@ public class Program
 
         builder.Services.AddTransient<IOpenLibraryCient, OpenLibraryClient>();
         builder.Services.Decorate<IOpenLibraryCient, OpenLibraryClientDecorator>();
+
+        builder.Services.Configure<BlobOptions>(builder.Configuration.GetSection("Blob"));
+        builder.Services.AddSingleton<IBlobClient, BlobClient>();
 
         builder.Services.AddAuthorization();
 
