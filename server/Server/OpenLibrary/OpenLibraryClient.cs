@@ -1,31 +1,50 @@
 namespace Server.OpenLibrary;
 
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using OpenLibraryNET;
 using OpenLibraryNET.Data;
 using OpenLibraryNET.Utility;
 using Server.Domain.Models;
+using Server.OpenLibrary.Blob;
 
 public class OpenLibraryClient : IOpenLibraryCient
 {
     private OpenLibraryNET.OpenLibraryClient _client;
+    private IBlobClient _blobClient;
 
-    public OpenLibraryClient()
+    public OpenLibraryClient(IBlobClient blobClient)
     {
         _client = new OpenLibraryNET.OpenLibraryClient();
+        _blobClient = blobClient;
     }
 
-    public async Task<Book?> GetBook(string isbn, CancellationToken cancellationToken)
+    public async Task<string?> GetBookCover(string isbn)
     {
-        OLEditionData? book = await _client.Edition.GetDataByISBNAsync(isbn);
-
-        if (book is null)
+        try
+        {
+            var image = await _client.Image.GetCoverAsync(CoverIdType.ISBN, isbn, ImageSize.Large);
+            return await _blobClient.UploadImageToBlobStorage(image, isbn);
+        }
+        catch
         {
             return null;
         }
+    }
+
+    public string? GetReleaseDate(OLEditionData data)
+    {
+        try
+        {
+            return data.ExtensionData?["publish_date"].ToString();
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task<List<string>?> GetAuthors(List<string> authorKeys)
+    {
         List<string> authors =  [ ];
-        foreach (var i in book.AuthorKeys)
+        foreach (var i in authorKeys)
         {
             var author = await _client.Author.GetDataAsync(i);
             if (author is not null)
@@ -33,24 +52,25 @@ public class OpenLibraryClient : IOpenLibraryCient
                 authors.Add(author.Name);
             }
         }
-        var publishDate = "";
-        try
-        {
-            publishDate = book.ExtensionData?["publish_date"].ToString();
-        }
-        catch { }
+        return authors;
+    }
 
-        var pictureUri = OpenLibraryUtility.BuildCoversUri(CoverIdType.ISBN, isbn, ImageSize.Large);
+    public async Task<Book?> GetBook(string isbn, CancellationToken cancellationToken)
+    {
+        if ((await _client.Edition.GetDataByISBNAsync(isbn)) is not { } book)
+        {
+            return null;
+        }
 
         return new Book()
         {
             Isbn = isbn,
             Name = book.Title,
-            Release = publishDate ?? "Unknown",
-            Picture = pictureUri.ToString(),
+            Release = GetReleaseDate(book),
+            Picture = await GetBookCover(isbn),
             Subjects =  [ .. book.Subjects ],
             PageCount = book.PageCount,
-            Authors =  [ ..authors ]
+            Authors = await GetAuthors([ .. book.AuthorKeys ])
         };
     }
 }
