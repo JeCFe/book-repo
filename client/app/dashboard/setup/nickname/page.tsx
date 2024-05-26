@@ -2,27 +2,22 @@
 
 import { AccordionManager, Checkbox } from "@/components";
 import { SetupBook, SetupBookshelf, useSetupWizard } from "@/hooks";
-import { Button } from "@jecfe/react-design-system";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SetupModal } from "../../SetupModal";
 
 export type FormValues = {
-  checkBox: boolean;
+  nickname: string;
 };
 
 export default function Books() {
-  const { config, books, includeDefaults, updateCustomer } = useSetupWizard();
-
-  const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
-
-  const [open, setOpen] = useState<boolean>(false);
+  const { config, isComplete, updateCustomer } = useSetupWizard();
+  const { user } = useUser();
 
   const router = useRouter();
-
-  const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
-  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
 
   useEffect(() => {
     if (config === undefined) {
@@ -30,127 +25,77 @@ export default function Books() {
     }
   }, []);
 
-  useEffect(() => {
-    setSetupBooks(books ?? []);
-  }, [books]);
-
-  const onContinue = () => {
+  const onSubmit = (data: FormValues) => {
     updateCustomer({
-      type: "add-books",
-      setupBooks,
+      type: "set-nickanme",
+      nickname: data.nickname,
     });
-
-    router.push("/dashboard/setup/preview");
-  };
-
-  const addBook = (book: SetupBook) => {
-    if (book === undefined) {
-      return;
+    if (isComplete || config === "express") {
+      router.push("/dashboard/setup/preview");
     }
-
-    setSetupBooks((prev) => [...prev, book]);
+    router.push("/dashboard/setup/bookshelves");
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: { nickname: user!.nickname ?? "" },
+  });
 
   return (
     <div className="flex flex-col">
-      <AddBookModal
-        isbn={passingIsbn as string}
-        addBook={addBook}
-        showModal={open}
-        setShowModal={setOpen}
-        setPassingIsbn={setPassingIsbn}
-        setCurrentIsbn={setCurrentIsbn}
-      />
       <SetupModal />
 
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        Setup your books
+        Setup your nickname
       </h1>
       <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        You add as many books as you want, once you're on your dashboard you
-        will be able to organise and setup additional books.
+        What would you like to be called? This nickname can be changed later,
+        and will affect any of our sibling services you may use.
       </div>
 
-      <div className="mt-10">
-        <div className="mb-4 text-xl text-slate-300">Enter the book's ISBN</div>
-        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-          <input
-            type="text"
-            value={currentIsbn ?? ""}
-            onChange={(e) => {
-              setCurrentIsbn(e.target.value);
-            }}
-            placeholder="Enter ISBN..."
-            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
-          />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {errors.nickname && (
+          <div className="my-4 flex flex-col rounded-xl bg-slate-800/70 p-4 shadow-xl">
+            <div className="flex flex-row items-center space-x-4">
+              <Info className="h-10 w-10 fill-red-600" />
+              <h2 className="text-2xl font-bold text-red-600">Important!</h2>
+            </div>
+            <div className="flex flex-row pl-14 text-lg text-slate-200">
+              {errors.nickname.message}
+            </div>
+          </div>
+        )}
+        <div className="mt-10">
+          <div className="mb-4 text-xl text-slate-300">Enter your nickname</div>
+          <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
+            <input
+              {...register("nickname", {
+                required: { value: true, message: "A nickanme is required" },
+                maxLength: { value: 64, message: "Nickname is too long" },
+              })}
+              type="text"
+              placeholder="Enter nickname..."
+              className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
+            />
+          </div>
+        </div>
+        <div className="mb-10 mt-20 flex flex-row space-x-6">
           <Button
-            size="large"
-            variant="primary"
-            onClick={() => {
-              setPassingIsbn(currentIsbn);
-              setOpen(true);
-            }}
             type="button"
-            disabled={currentIsbn === undefined || currentIsbn === ""}
+            size="large"
+            variant="secondary"
+            onClick={() => router.push("/dashboard/setup")}
           >
-            Lookup Book
+            Back
+          </Button>
+          <Button size="large" type="submit">
+            Continue
           </Button>
         </div>
-
-        {setupBooks && setupBooks.length > 0 && (
-          <AccordionManager
-            className="space-y-3 pt-12"
-            accordions={[
-              {
-                title: "Proposed books",
-                children: (
-                  <div className="space-y-1 divide-y divide-slate-500 pb-1">
-                    {setupBooks.map((book, index) => (
-                      <div
-                        key={`${book}-${index}`}
-                        className="item-center flex flex-row justify-center pr-2 pt-1 text-slate-300"
-                      >
-                        <div className="flex items-center justify-center">
-                          {book.name}
-                        </div>
-
-                        <div className="flex flex-grow" />
-                        <div className="flex h-full items-center justify-center">
-                          <Button
-                            onClick={() => {
-                              setSetupBooks((prevItems) =>
-                                prevItems?.filter((_, i) => i !== index),
-                              );
-                            }}
-                            size="small"
-                            variant="destructive"
-                            className="flex text-slate-900"
-                          >
-                            Remove
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ),
-              },
-            ]}
-          />
-        )}
-      </div>
-      <div className="mb-10 mt-20 flex flex-row space-x-6">
-        <Button
-          type="button"
-          size="large"
-          variant="secondary"
-          onClick={() => router.push("/dashboard/setup/bookshelf")}
-        >
-          Back
-        </Button>
-        <Button size="large" onClick={onContinue}>
-          Continue
-        </Button>
-      </div>
+      </form>
     </div>
   );
 }
