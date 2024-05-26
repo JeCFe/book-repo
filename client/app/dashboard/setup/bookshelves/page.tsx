@@ -12,7 +12,7 @@ export type FormValues = {
   checkBox: boolean;
 };
 
-export default function Bookshelf() {
+export default function Bookshelves() {
   const { config, bookshelves, includeDefaults, complete, updateCustomer } =
     useSetupWizard();
 

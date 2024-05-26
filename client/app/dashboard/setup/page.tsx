@@ -12,7 +12,7 @@ type FormValues = {
   radio: Config;
 };
 
-export default function Dashboard() {
+export default function SetupPath() {
   const { config, complete, updateCustomer } = useSetupWizard();
   const { isLoading, data } = useGetCustomerSummary();
   const router = useRouter();

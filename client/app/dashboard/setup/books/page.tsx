@@ -12,7 +12,7 @@ export type FormValues = {
   checkBox: boolean;
 };
 
-export default function Nickname() {
+export default function Books() {
   const { config, books, updateCustomer } = useSetupWizard();
 
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
