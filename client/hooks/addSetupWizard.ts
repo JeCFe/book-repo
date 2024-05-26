@@ -1,3 +1,4 @@
+"use client";
 import { useSessionStorage } from "usehooks-ts";
 
 export const SESSION_STORAGE_KEY = "setup-account";
@@ -8,11 +9,6 @@ export type IncludeDefaultShelves = boolean;
 export type SetupBook = {
   isbn: string;
   name: string;
-  release: string;
-  picture: string;
-  pageCount?: number;
-  authors?: string[];
-  subjects?: string[];
 };
 export type Nickname = string;
 type Action =

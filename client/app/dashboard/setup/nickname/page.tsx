@@ -13,7 +13,7 @@ export type FormValues = {
   nickname: string;
 };
 
-export default function Books() {
+export default function Nickname() {
   const { config, complete, nickname, updateCustomer } = useSetupWizard();
   const { user } = useUser();
 

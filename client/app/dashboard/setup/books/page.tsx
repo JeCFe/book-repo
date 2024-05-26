@@ -47,7 +47,6 @@ export default function Nickname() {
     if (book === undefined) {
       return;
     }
-
     setSetupBooks((prev) => [...prev, book]);
   };
 
