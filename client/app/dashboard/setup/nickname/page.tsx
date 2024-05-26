@@ -14,7 +14,7 @@ export type FormValues = {
 };
 
 export default function Books() {
-  const { config, isComplete, updateCustomer } = useSetupWizard();
+  const { config, complete, nickname, updateCustomer } = useSetupWizard();
   const { user } = useUser();
 
   const router = useRouter();
@@ -26,12 +26,13 @@ export default function Books() {
   }, []);
 
   const onSubmit = (data: FormValues) => {
-    updateCustomer({
+    var updatedCustomer = updateCustomer({
       type: "set-nickanme",
       nickname: data.nickname,
     });
-    if (isComplete || config === "express") {
+    if (complete(updatedCustomer) || config === "express") {
       router.push("/dashboard/setup/preview");
+      return;
     }
     router.push("/dashboard/setup/bookshelves");
   };
@@ -41,7 +42,7 @@ export default function Books() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { nickname: user!.nickname ?? "" },
+    defaultValues: { nickname: nickname ?? user!.nickname ?? "" },
   });
 
   return (

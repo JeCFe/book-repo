@@ -13,7 +13,7 @@ export type FormValues = {
 };
 
 export default function Bookshelf() {
-  const { config, bookshelves, includeDefaults, isComplete, updateCustomer } =
+  const { config, bookshelves, includeDefaults, complete, updateCustomer } =
     useSetupWizard();
 
   const [setupBookshelves, setSetupBookshelves] = useState<SetupBookshelf>([]);
@@ -35,14 +35,15 @@ export default function Bookshelf() {
   }, [bookshelves]);
 
   const onSubmit = (data: FormValues) => {
-    updateCustomer({
+    var updatedCustomer = updateCustomer({
       type: "add-bookshelves",
       bookshelves: setupBookshelves,
       defaults: data.checkBox,
     });
 
-    if (isComplete) {
+    if (complete(updatedCustomer)) {
       router.push("/dashboard/setup/preview");
+      return;
     }
 
     router.push("/dashboard/setup/books");
@@ -151,7 +152,7 @@ export default function Bookshelf() {
             type="button"
             size="large"
             variant="secondary"
-            onClick={() => router.push("/dashboard/setup")}
+            onClick={() => router.push("/dashboard/setup/nickname")}
           >
             Back
           </Button>

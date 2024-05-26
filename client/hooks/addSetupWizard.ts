@@ -92,19 +92,18 @@ export const useSetupWizard = () => {
     useSessionStorage<NewCustomer>(SESSION_STORAGE_KEY, getDefaultState());
 
   const updateCustomer = (action: Action) => {
-    setNewSetupCustomerData(
-      reducer({ state: { ...newSetupCustomerData }, action }),
-    );
+    var newState = reducer({ state: { ...newSetupCustomerData }, action });
+    setNewSetupCustomerData(newState);
+    return newState;
   };
 
-  const complete = () => {
+  const complete = (customer: NewCustomer) => {
     if (
-      (newSetupCustomerData.nickname !== undefined &&
-        newSetupCustomerData.config === "advanced" &&
-        newSetupCustomerData.books !== undefined &&
-        newSetupCustomerData.bookshelves !== undefined) ||
-      (newSetupCustomerData.nickname !== undefined &&
-        newSetupCustomerData.config === "express")
+      (customer.nickname !== undefined &&
+        customer.config === "advanced" &&
+        customer.books !== undefined &&
+        customer.bookshelves !== undefined) ||
+      (customer.nickname !== undefined && customer.config === "express")
     ) {
       return true;
     }
@@ -112,7 +111,7 @@ export const useSetupWizard = () => {
     return false;
   };
 
-  const completeNewRegistration = complete();
+  const completeNewRegistration = complete(newSetupCustomerData);
   const isComplete = completeNewRegistration != null;
 
   return {
@@ -122,8 +121,8 @@ export const useSetupWizard = () => {
     bookshelves: newSetupCustomerData.bookshelves,
     includeDefaults: newSetupCustomerData.includeDefaults,
     updateCustomer,
+    complete,
     isComplete,
-
     completeNewRegistration,
   } as const;
 };
