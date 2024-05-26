@@ -1,18 +1,18 @@
 "use client";
 
-import { AccordionManager } from "@/components";
-import { SetupBook, useSetupWizard } from "@/hooks";
+import { AccordionManager, Checkbox } from "@/components";
+import { SetupBook, SetupBookshelf, useSetupWizard } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { SetupModal } from "../../SetupModal";
-import { AddBookModal } from "./AddBookModal";
 
 export type FormValues = {
   checkBox: boolean;
 };
 
-export default function Nickname() {
+export default function Books() {
   const { config, books, includeDefaults, updateCustomer } = useSetupWizard();
 
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
