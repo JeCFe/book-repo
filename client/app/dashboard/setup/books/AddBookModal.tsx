@@ -80,7 +80,11 @@ export function AddBookModal({
         {setupBook !== undefined && (
           <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
             <div>
-              <Picture pictureUrl={setupBook.picture} title={setupBook.name} />
+              <Picture
+                pictureUrl={setupBook.picture}
+                title={setupBook.name}
+                loading={isLoading}
+              />
             </div>
             <div className="flex flex-col space-y-2">
               <RenderSection title="Book Title">{setupBook.name}</RenderSection>
@@ -111,7 +115,7 @@ export function AddBookModal({
             </div>
           </div>
         )}
-        <h2 className="mb-2 mt-2 text-sm font-bold tracking-tight text-slate-600">
+        <h2 className="mb-2 mt-2 max-w-md text-sm font-bold tracking-tight text-slate-600">
           This data is supplied from OpenLibrary, you will be able to raise any
           inaccuracies or missing data with an admin when your account is setup.
         </h2>

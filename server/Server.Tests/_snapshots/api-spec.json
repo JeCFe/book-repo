@@ -172,12 +172,9 @@
     "schemas": {
       "Book": {
         "required": [
-          "authors",
           "isbn",
           "name",
           "pageCount",
-          "picture",
-          "release",
           "subjects"
         ],
         "type": "object",
@@ -194,8 +191,7 @@
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "nullable": true
+            }
           },
           "subjects": {
             "type": "array",
@@ -205,12 +201,10 @@
             "nullable": true
           },
           "release": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "picture": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "pageCount": {
             "type": "integer",
