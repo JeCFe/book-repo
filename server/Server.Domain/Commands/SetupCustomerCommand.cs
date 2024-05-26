@@ -1,6 +1,7 @@
 namespace Server.Domain.Commands;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Server.Domain;
 using Server.Domain.Models;
 
@@ -8,7 +9,7 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
 {
     public required string Id { get; init; }
     public List<string>? BookshelvesNames { get; init; }
-    public List<Book>? Books { get; init; }
+    public List<string>? Isbns { get; init; }
     public bool IncludeDefaultBookshelves { get; init; }
 
     public async Task Execute(
@@ -33,7 +34,7 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
             CreationDate = ctx.time.GetUtcNow(),
             UpdatedDate = ctx.time.GetUtcNow(),
         };
-        if (Books is { })
+        if (!Isbns.IsNullOrEmpty())
         {
             customer.Bookshelves =  [ ..customer.Bookshelves, homelessBookBookshelf ];
         }
@@ -87,19 +88,24 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
 
         dbContext.Customer.Add(customer);
 
-        if (Books is { } books)
+        if (Isbns is { } isbns)
         {
-            dbContext.Books.AddRange(Books);
             List<BookshelfBook> bookshelfBooks =  [ ];
-            for (int i = 0; i < books.Count; i++)
+            foreach (var isbn in isbns)
             {
+                //Note: For the UI to display a book that book must already exist in our db
+                var book = await dbContext.Books.FindAsync([ isbn ], cancellationToken);
+                if (book is null)
+                {
+                    continue; //TODO: This should have strcutured logging
+                }
                 bookshelfBooks.Add(
                     new BookshelfBook()
                     {
                         BookshelfId = homelessBookBookshelf.Id,
-                        Isbn = books[i].Isbn,
-                        Order = i,
-                        Book = books[i],
+                        Isbn = isbn,
+                        Order = bookshelfBooks.Count(),
+                        Book = book,
                         Bookshelf = homelessBookBookshelf
                     }
                 );
