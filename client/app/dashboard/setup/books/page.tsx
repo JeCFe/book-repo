@@ -13,7 +13,7 @@ export type FormValues = {
 };
 
 export default function Nickname() {
-  const { config, books, includeDefaults, updateCustomer } = useSetupWizard();
+  const { config, books, updateCustomer } = useSetupWizard();
 
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
 
@@ -143,7 +143,7 @@ export default function Nickname() {
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard/setup/bookshelf")}
+          onClick={() => router.push("/dashboard/setup/bookshelves")}
         >
           Back
         </Button>

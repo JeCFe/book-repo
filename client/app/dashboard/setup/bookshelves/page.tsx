@@ -13,7 +13,7 @@ export type FormValues = {
 };
 
 export default function Bookshelf() {
-  const { config, bookshelves, includeDefaults, updateCustomer } =
+  const { config, bookshelves, includeDefaults, isComplete, updateCustomer } =
     useSetupWizard();
 
   const [setupBookshelves, setSetupBookshelves] = useState<SetupBookshelf>([]);
@@ -25,7 +25,7 @@ export default function Bookshelf() {
   >();
 
   useEffect(() => {
-    if (config === undefined) {
+    if (config === undefined || config === "express") {
       router.push("/dashboard/setup");
     }
   }, []);
@@ -40,6 +40,10 @@ export default function Bookshelf() {
       bookshelves: setupBookshelves,
       defaults: data.checkBox,
     });
+
+    if (isComplete) {
+      router.push("/dashboard/setup/preview");
+    }
 
     router.push("/dashboard/setup/books");
   };

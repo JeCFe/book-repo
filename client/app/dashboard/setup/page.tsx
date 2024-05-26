@@ -13,7 +13,7 @@ type FormValues = {
 };
 
 export default function Dashboard() {
-  const { config, updateCustomer } = useSetupWizard();
+  const { config, isComplete, updateCustomer } = useSetupWizard();
   const { isLoading, data } = useGetCustomerSummary();
   const router = useRouter();
 
@@ -31,12 +31,10 @@ export default function Dashboard() {
 
   const onSubmit = (data: FormValues) => {
     updateCustomer({ type: "set-config-option", option: data.radio });
-    console.log(data.radio);
-    if (data.radio === "express") {
+    if (isComplete) {
       router.push("/dashboard/setup/preview");
-      return;
     }
-    router.push("/dashboard/setup/bookshelf");
+    router.push("/dashboard/setup/nickname");
   };
 
   return (
