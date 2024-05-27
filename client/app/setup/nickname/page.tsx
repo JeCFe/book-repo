@@ -1,11 +1,10 @@
 "use client";
 
-import { AccordionManager, Checkbox } from "@/components";
-import { SetupBook, SetupBookshelf, useSetupWizard } from "@/hooks";
+import { useSetupWizard } from "@/hooks";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { SetupModal } from "../SetupModal";
 
@@ -23,10 +22,10 @@ export default function Nickname() {
     if (config === undefined) {
       router.push("/setup");
     }
-  }, []);
+  }, [config, router]);
 
   const onSubmit = (data: FormValues) => {
-    var updatedCustomer = updateCustomer({
+    const updatedCustomer = updateCustomer({
       type: "set-nickanme",
       nickname: data.nickname,
     });

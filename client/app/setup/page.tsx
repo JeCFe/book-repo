@@ -21,7 +21,7 @@ export default function SetupPath() {
     if (!isLoading && data) {
       router.push("/dashboard");
     }
-  }, [data]);
+  }, [data, isLoading, router]);
 
   const {
     register,
@@ -30,7 +30,7 @@ export default function SetupPath() {
   } = useForm<FormValues>({ defaultValues: { radio: config } });
 
   const onSubmit = (data: FormValues) => {
-    var updatedCustomer = updateCustomer({
+    const updatedCustomer = updateCustomer({
       type: "set-config-option",
       option: data.radio,
     });
@@ -48,8 +48,8 @@ export default function SetupPath() {
         Setup your account
       </h1>
       <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        As this your first time we've seen you, lets run through some steps to
-        get your account setup for the first time!
+        {`As this your first time we've seen you, lets run through some steps to
+        get your account setup for the first time!`}
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {errors.radio && (

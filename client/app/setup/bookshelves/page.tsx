@@ -28,14 +28,14 @@ export default function Bookshelves() {
     if (config === undefined || config === "express") {
       router.push("/setup");
     }
-  }, []);
+  }, [config, router]);
 
   useEffect(() => {
     setSetupBookshelves(bookshelves ?? []);
   }, [bookshelves]);
 
   const onSubmit = (data: FormValues) => {
-    var updatedCustomer = updateCustomer({
+    const updatedCustomer = updateCustomer({
       type: "add-bookshelves",
       bookshelves: setupBookshelves,
       defaults: data.checkBox,

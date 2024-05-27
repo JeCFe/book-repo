@@ -1,10 +1,8 @@
 "use client";
 import { BookLogo, JecfeLogo } from "@/assets";
 import { AccordionManager } from "@/components";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system/dist/esm/";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
@@ -46,9 +44,9 @@ export default function Home() {
                   >
                     Open Library
                   </Anchor>
-                  . If you run into a book that has incorrect or missing details
+                  {`. If you run into a book that has incorrect or missing details
                   you'll be able to flag this with us and we can review and
-                  update Open Library.
+                  update Open Library.`}
                 </span>
               ),
             },

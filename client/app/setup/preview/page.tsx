@@ -5,16 +5,16 @@ import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { SetupModal } from "../SetupModal";
 import { ReviewOption } from "./ReviewOptions";
 
-var setupCustomer = getApiClient()
+const setupCustomer = getApiClient()
   .path("/action/setup-customer")
   .method("post")
   .create();
 
-var updateNickname = getApiClient()
+const updateNickname = getApiClient()
   .path("/customer/update")
   .method("post")
   .create();
@@ -54,7 +54,7 @@ export default function Preview() {
   }, [bookshelves]);
   useEffect(() => {
     setCustomerDefaults(includeDefaults);
-  }, [bookshelves]);
+  }, [includeDefaults]);
 
   const router = useRouter();
 
@@ -62,7 +62,7 @@ export default function Preview() {
     if (!isComplete) {
       router.push("/setup");
     }
-  }, []);
+  }, [isComplete, router]);
 
   const onContinue = async () => {
     setIsLoading(true);

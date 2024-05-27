@@ -1,10 +1,9 @@
 "use client";
 
-import { BookLogo, BookLogoCopy } from "@/assets";
 import { SideNav } from "@/components";
 import { useGetCustomerSummary } from "@/hooks";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -17,7 +16,7 @@ export default function Dashboard() {
     if (!isLoading && !data) {
       router.push("/setup");
     }
-  }, [data, error]);
+  }, [data, error, isLoading, router]);
 
   if (isLoading && !data) {
     return (
@@ -46,7 +45,7 @@ export default function Dashboard() {
             </>
           </SideNav>
           <div className="flex w-full flex-col py-24 pl-12 text-slate-500">
-            test
+            {JSON.stringify(data)}
           </div>
         </div>
       </div>

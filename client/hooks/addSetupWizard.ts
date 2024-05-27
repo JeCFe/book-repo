@@ -88,7 +88,7 @@ export const useSetupWizard = () => {
     useSessionStorage<NewCustomer>(SESSION_STORAGE_KEY, getDefaultState());
 
   const updateCustomer = (action: Action) => {
-    var newState = reducer({ state: { ...newSetupCustomerData }, action });
+    const newState = reducer({ state: { ...newSetupCustomerData }, action });
     setNewSetupCustomerData(newState);
     return newState;
   };
