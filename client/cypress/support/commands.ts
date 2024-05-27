@@ -49,3 +49,6 @@ Cypress.Commands.add("findAccordionByTitle", (value: AccordionTitle) => {
 Cypress.Commands.add("findButtonByName", (value: ButtonName) => {
   cy.findByRole("button", { name: value }).should("exist");
 });
+Cypress.Commands.add("findLinkByName", (value: ButtonName) => {
+  cy.findByRole("link", { name: value }).should("exist");
+});

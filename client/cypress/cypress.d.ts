@@ -12,6 +12,7 @@ declare global {
       toggleAccordionByTitle(value: AccordionTitle): Chainable<any>;
       findAccordionByTitle(value: AccordionTitle): Chainable<any>;
       findButtonByName(value: ButtonName): Chainable<any>;
+      findLinkByName(value: ButtonName): Chainable<any>;
       checkAccordionText(
         title: AccordionTitle,
         text: AccordionText,
