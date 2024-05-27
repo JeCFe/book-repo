@@ -25,6 +25,22 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "jecfeblobby.blob.core.windows.net",
+        port: "",
+        pathname: "/book-repo/**",
+      },
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
