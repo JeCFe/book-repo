@@ -1,15 +1,13 @@
 "use client";
 import { BookLogo, JecfeLogo } from "@/assets";
 import { AccordionManager } from "@/components";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system/dist/esm/";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
   return (
-    <div>
+    <div className="container mx-auto flex-1">
       <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
         <div className="pointer-events-none flex items-center justify-center pb-10 md:absolute md:right-8 md:top-8 md:pb-0">
           <BookLogo height="100" />
@@ -46,9 +44,9 @@ export default function Home() {
                   >
                     Open Library
                   </Anchor>
-                  . If you run into a book that has incorrect or missing details
+                  {`. If you run into a book that has incorrect or missing details
                   you'll be able to flag this with us and we can review and
-                  update Open Library.
+                  update Open Library.`}
                 </span>
               ),
             },

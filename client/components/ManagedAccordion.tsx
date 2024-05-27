@@ -1,6 +1,6 @@
 import { ArrowUp } from "@jecfe/react-design-system";
 import { cva } from "class-variance-authority";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 const accordionContainer = cva(
   [

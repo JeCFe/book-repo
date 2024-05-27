@@ -60,8 +60,8 @@ export function SetupModal() {
             Are you sure?
           </h1>
           <h2 className="mt-1 max-w-sm text-base font-bold tracking-tight text-slate-600">
-            You haven't yet setup your account, this action will take you back
-            to the homepage and cancel any setup actions you have already taken.
+            {`You haven't yet setup your account, this action will take you back
+            to the homepage and cancel any setup actions you have already taken.`}
           </h2>
           <div className="pt-8 md:pt-12">
             <Checkbox

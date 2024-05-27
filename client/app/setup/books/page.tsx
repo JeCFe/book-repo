@@ -5,7 +5,7 @@ import { SetupBook, useSetupWizard } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SetupModal } from "../../SetupModal";
+import { SetupModal } from "../SetupModal";
 import { AddBookModal } from "./AddBookModal";
 
 export type FormValues = {
@@ -26,9 +26,9 @@ export default function Books() {
 
   useEffect(() => {
     if (config === undefined) {
-      router.push("/dashboard/setup");
+      router.push("/setup");
     }
-  }, []);
+  }, [config, router]);
 
   useEffect(() => {
     setSetupBooks(books ?? []);
@@ -40,7 +40,7 @@ export default function Books() {
       setupBooks,
     });
 
-    router.push("/dashboard/setup/preview");
+    router.push("/setup/preview");
   };
 
   const addBook = (book: SetupBook) => {
@@ -66,12 +66,12 @@ export default function Books() {
         Setup your books
       </h1>
       <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        You add as many books as you want, once you're on your dashboard you
-        will be able to organise and setup additional books.
+        {`You add as many books as you want, once you're on your dashboard you
+        will be able to organise and setup additional books.`}
       </div>
 
       <div className="mt-10">
-        <div className="mb-4 text-xl text-slate-300">Enter the book's ISBN</div>
+        <div className="mb-4 text-xl text-slate-300">{`Enter the book's ISBN`}</div>
         <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
           <input
             type="text"
@@ -142,7 +142,7 @@ export default function Books() {
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard/setup/bookshelves")}
+          onClick={() => router.push("/setup/bookshelves")}
         >
           Back
         </Button>

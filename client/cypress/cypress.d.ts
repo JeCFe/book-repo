@@ -9,13 +9,14 @@ declare global {
        */
 
       login(waitFor: string): void;
-      toggleAccordionByTitle(value: AccordionTitle): Chainable<any>;
-      findAccordionByTitle(value: AccordionTitle): Chainable<any>;
-      findButtonByName(value: ButtonName): Chainable<any>;
+      toggleAccordionByTitle(value: AccordionTitle): Chainable<>;
+      findAccordionByTitle(value: AccordionTitle): Chainable<>;
+      findButtonByName(value: ButtonName): Chainable<>;
+      findLinkByName(value: ButtonName): Chainable<>;
       checkAccordionText(
         title: AccordionTitle,
         text: AccordionText,
-      ): Chainable<any>;
+      ): Chainable<>;
     }
   }
 }

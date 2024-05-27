@@ -32,7 +32,7 @@ describe("Login redirects", () => {
       ).as("customerSummary");
       cy.login("@customerSummary");
       cy.url().should("contain", "/dashboard");
-      cy.findButtonByName(ButtonName.LOGOUT).click();
+      cy.findLinkByName(ButtonName.LOGOUT).click();
       cy.findByText(Title.SPLASH);
       cy.url().should("eq", "http://localhost:3000/");
     });
@@ -58,12 +58,12 @@ describe("Login redirects", () => {
       ).as("customerSummary");
       cy.visit("/dashboard");
       cy.login("@customerSummary");
-      cy.visit("/dashboard/setup");
+      cy.visit("/setup");
       cy.wait("@customerSummary");
-      cy.url().should("contain", "/dashboard/setup");
+      cy.url().should("contain", "setup");
 
       cy.findByText("Setup your account").should("exist");
-      cy.url().should("contain", "/dashboard/setup");
+      cy.url().should("contain", "/setup");
     });
   });
 });
