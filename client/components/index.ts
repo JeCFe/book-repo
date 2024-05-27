@@ -4,3 +4,4 @@ export * from "./Checkbox";
 export * from "./ManagedAccordion";
 export * from "./Modal";
 export * from "./RadioButton";
+export * from "./SideNav";
