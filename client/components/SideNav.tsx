@@ -1,12 +1,12 @@
-import { BookLogo, Menu } from "@/assets";
-import { Anchor } from "@jecfe/react-design-system";
+import { Menu } from "@/assets";
+
 import { cva } from "class-variance-authority";
 import { ReactNode, useState } from "react";
 
 const mobileNav = cva("sm:hidden ", {
   variants: {
     isOpen: {
-      true: "fixed left-0 top-0 h-full w-full bg-slate-700",
+      true: "fixed left-0 top-0 h-full w-full bg-slate-800",
       false: "hidden",
     },
   },

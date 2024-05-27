@@ -1,8 +1,10 @@
 "use client";
 
+import { BookLogo } from "@/assets";
+import { SideNav } from "@/components";
 import { useGetCustomerSummary } from "@/hooks";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,7 +15,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isLoading && !data) {
-      router.push("/dashboard/setup");
+      router.push("/setup");
     }
   }, [data, error]);
 
@@ -29,23 +31,30 @@ export default function Dashboard() {
 
   if (!isLoading && data) {
     return (
-      <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
-        <h1 className="flex flex-row pt-0 text-center text-5xl font-bold tracking-tight text-slate-200 md:pt-20 md:text-8xl">
-          Welcome
-        </h1>
-        <div className="mt-4 flex max-w-sm flex-row text-center text-xl font-bold tracking-tight text-slate-400 md:max-w-full md:text-3xl">
-          {user?.nickname}
+      <div>
+        <div className="flex w-full">
+          <SideNav>
+            <div className="flex h-full flex-col divide-y divide-slate-500 py-2 pt-4">
+              <div className="pointer-events-none flex flex-col items-center justify-center pb-4 pt-4">
+                <BookLogo height="100" />
+                <div className="text-lg font-bold tracking-tight text-slate-200">
+                  The Book Repository
+                </div>
+              </div>
+              <div className="flex w-full flex-grow flex-row overflow-y-auto px-2"></div>
+              <div className="flex flex-row px-2 pt-2 text-center text-sm">
+                <div className="flex items-center text-center text-slate-400">
+                  {user?.nickname}
+                </div>
+                <div className="flex flex-grow" />
+                <Anchor href="/api/auth/logout">Logout</Anchor>
+              </div>
+            </div>
+          </SideNav>
+          <div className="flex w-full flex-col py-24 pl-12 text-slate-500">
+            test
+          </div>
         </div>
-        <Button
-          onClick={() => {
-            router.push("/api/auth/logout");
-          }}
-          variant="secondary"
-          size="large"
-          className="my-12"
-        >
-          Logout
-        </Button>
       </div>
     );
   }
