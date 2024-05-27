@@ -6,7 +6,7 @@ import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { SetupModal } from "../../SetupModal";
+import { SetupModal } from "../SetupModal";
 
 export type FormValues = {
   checkBox: boolean;
@@ -26,7 +26,7 @@ export default function Bookshelves() {
 
   useEffect(() => {
     if (config === undefined || config === "express") {
-      router.push("/dashboard/setup");
+      router.push("/setup");
     }
   }, []);
 
@@ -42,11 +42,11 @@ export default function Bookshelves() {
     });
 
     if (complete(updatedCustomer)) {
-      router.push("/dashboard/setup/preview");
+      router.push("/setup/preview");
       return;
     }
 
-    router.push("/dashboard/setup/books");
+    router.push("/setup/books");
   };
   const addBookshelf = () => {
     if (currentBookshelf === undefined) {
@@ -152,7 +152,7 @@ export default function Bookshelves() {
             type="button"
             size="large"
             variant="secondary"
-            onClick={() => router.push("/dashboard/setup/nickname")}
+            onClick={() => router.push("/setup/nickname")}
           >
             Back
           </Button>

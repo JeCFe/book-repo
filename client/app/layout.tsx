@@ -24,7 +24,7 @@ export default function RootLayout({
         <body
           className={`${poppins.variable} flex min-h-screen flex-col bg-slate-900 font-poppins`}
         >
-          <div className="container mx-auto flex-1">{children}</div>
+          <div>{children}</div>
         </body>
       </UserProvider>
     </html>

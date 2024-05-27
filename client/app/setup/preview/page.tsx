@@ -6,7 +6,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { SetupModal } from "../../SetupModal";
+import { SetupModal } from "../SetupModal";
 import { ReviewOption } from "./ReviewOptions";
 
 var setupCustomer = getApiClient()
@@ -60,7 +60,7 @@ export default function Preview() {
 
   useEffect(() => {
     if (!isComplete) {
-      router.push("/dashboard/setup");
+      router.push("/setup");
     }
   }, []);
 
@@ -109,13 +109,10 @@ export default function Preview() {
       </div>
 
       <div className="mt-10 flex flex-col space-y-10">
-        <ReviewOption title="Review nickname" href="/dashboard/setup/nickname">
+        <ReviewOption title="Review nickname" href="/setup/nickname">
           {customerNickname}
         </ReviewOption>
-        <ReviewOption
-          title="Review bookshelves"
-          href="/dashboard/setup/bookshelves"
-        >
+        <ReviewOption title="Review bookshelves" href="/setup/bookshelves">
           <div>
             {customerDefaults !== undefined && customerDefaults
               ? "Default bookshelves will be included."
@@ -144,7 +141,7 @@ export default function Preview() {
             />
           )}
         </ReviewOption>
-        <ReviewOption title="Review books" href="/dashboard/setup/books">
+        <ReviewOption title="Review books" href="/setup/books">
           {customerBooks && customerBooks.length > 0 ? (
             <AccordionManager
               className="max-w-lg space-y-3 pt-4"
@@ -175,7 +172,7 @@ export default function Preview() {
         <Button
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard/setup/books")}
+          onClick={() => router.push("/setup/books")}
           disabled={isLoading}
         >
           Back

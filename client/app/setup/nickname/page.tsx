@@ -7,7 +7,7 @@ import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { SetupModal } from "../../SetupModal";
+import { SetupModal } from "../SetupModal";
 
 export type FormValues = {
   nickname: string;
@@ -21,7 +21,7 @@ export default function Nickname() {
 
   useEffect(() => {
     if (config === undefined) {
-      router.push("/dashboard/setup");
+      router.push("/setup");
     }
   }, []);
 
@@ -31,10 +31,10 @@ export default function Nickname() {
       nickname: data.nickname,
     });
     if (complete(updatedCustomer) || config === "express") {
-      router.push("/dashboard/setup/preview");
+      router.push("/setup/preview");
       return;
     }
-    router.push("/dashboard/setup/bookshelves");
+    router.push("/setup/bookshelves");
   };
 
   const {
@@ -88,7 +88,7 @@ export default function Nickname() {
             type="button"
             size="large"
             variant="secondary"
-            onClick={() => router.push("/dashboard/setup")}
+            onClick={() => router.push("/setup")}
           >
             Back
           </Button>

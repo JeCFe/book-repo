@@ -6,7 +6,7 @@ import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { SetupModal } from "../SetupModal";
+import { SetupModal } from "./SetupModal";
 
 type FormValues = {
   radio: Config;
@@ -35,10 +35,10 @@ export default function SetupPath() {
       option: data.radio,
     });
     if (complete(updatedCustomer)) {
-      router.push("/dashboard/setup/preview");
+      router.push("/setup/preview");
       return;
     }
-    router.push("/dashboard/setup/nickname");
+    router.push("/setup/nickname");
   };
 
   return (

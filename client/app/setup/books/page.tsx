@@ -5,7 +5,7 @@ import { SetupBook, useSetupWizard } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SetupModal } from "../../SetupModal";
+import { SetupModal } from "../SetupModal";
 import { AddBookModal } from "./AddBookModal";
 
 export type FormValues = {
@@ -26,7 +26,7 @@ export default function Books() {
 
   useEffect(() => {
     if (config === undefined) {
-      router.push("/dashboard/setup");
+      router.push("/setup");
     }
   }, []);
 
@@ -40,7 +40,7 @@ export default function Books() {
       setupBooks,
     });
 
-    router.push("/dashboard/setup/preview");
+    router.push("/setup/preview");
   };
 
   const addBook = (book: SetupBook) => {
@@ -142,7 +142,7 @@ export default function Books() {
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard/setup/bookshelves")}
+          onClick={() => router.push("/setup/bookshelves")}
         >
           Back
         </Button>
