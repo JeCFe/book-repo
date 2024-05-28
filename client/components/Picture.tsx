@@ -1,19 +1,35 @@
 import { Spinner } from "@jecfe/react-design-system";
+import { VariantProps, cva } from "class-variance-authority";
 import Image from "next/image";
 
-export function Picture({
-  pictureUrl,
-  title,
-  loading,
-  width = 256,
-  height = 192,
-}: {
+const picture = cva(
+  "flex items-center justify-center rounded border-2 border-cyan-500 shadow-2xl",
+  {
+    variants: {
+      size: {
+        large: "max-w-[192px] max-h-[256px] min-w-[192px] min-h-[256px]",
+        medium: "max-w-[96px] max-h-[128px] min-w-[96px] min-h-[128px]",
+      },
+    },
+  },
+);
+
+type Props = {
   pictureUrl?: string;
   title: string;
   loading?: boolean;
   width?: number;
   height?: number;
-}) {
+} & VariantProps<typeof picture>;
+
+export function Picture({
+  pictureUrl,
+  title,
+  loading,
+  size,
+  width = 256,
+  height = 192,
+}: Props) {
   return (
     <>
       {loading && (
@@ -28,7 +44,7 @@ export function Picture({
           src={pictureUrl}
           width={192}
           height={256}
-          className={`flex min-h-[${height}px] items-center justify-center rounded border-2 border-cyan-500 shadow-2xl w-[${width}px]`}
+          className={picture({ size })}
         />
       )}
       {!loading && !pictureUrl && (
