@@ -79,6 +79,7 @@ export function AddBookModal({
           <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
             <div>
               <Picture
+                size="large"
                 pictureUrl={setupBook.picture}
                 title={setupBook.name}
                 loading={isLoading}
