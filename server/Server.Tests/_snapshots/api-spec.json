@@ -49,6 +49,28 @@
         }
       }
     },
+    "/action/add-book-shelf-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookshelfBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/book/{isbn}": {
       "get": {
         "tags": [
@@ -170,6 +192,33 @@
   },
   "components": {
     "schemas": {
+      "AddBookshelfBookCommand": {
+        "required": [
+          "bookshelfId",
+          "id",
+          "isbn"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Book": {
         "required": [
           "isbn",
