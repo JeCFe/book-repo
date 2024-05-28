@@ -2,17 +2,14 @@ import { Spinner } from "@jecfe/react-design-system";
 import { VariantProps, cva } from "class-variance-authority";
 import Image from "next/image";
 
-const picture = cva(
-  "flex items-center justify-center rounded border-2 border-cyan-500 shadow-2xl",
-  {
-    variants: {
-      size: {
-        large: "max-w-[192px] max-h-[256px] min-w-[192px] min-h-[256px]",
-        medium: "max-w-[96px] max-h-[128px] min-w-[96px] min-h-[128px]",
-      },
+const picture = cva("flex items-center justify-center rounded shadow-2xl", {
+  variants: {
+    size: {
+      large: "max-w-[192px] max-h-[256px] min-w-[192px] min-h-[256px]",
+      medium: "max-w-[96px] max-h-[128px] min-w-[96px] min-h-[128px]",
     },
   },
-);
+});
 
 type Props = {
   pictureUrl?: string;
@@ -33,7 +30,7 @@ export function Picture({
   return (
     <>
       {loading && (
-        <div className="flex items-center justify-center rounded border border-cyan-500 shadow-2xl md:min-h-[256px] md:min-w-[192px]">
+        <div className="flex items-center justify-center rounded  shadow-2xl md:min-h-[256px] md:min-w-[192px]">
           <Spinner className="flex" fast={loading} />
         </div>
       )}
@@ -48,7 +45,7 @@ export function Picture({
         />
       )}
       {!loading && !pictureUrl && (
-        <div className="flex h-[256px] w-[192px] items-center justify-center rounded border-2 border-cyan-500 bg-slate-400/50 shadow-2xl">
+        <div className="flex h-[256px] w-[192px] items-center justify-center rounded  bg-slate-400/50 shadow-2xl">
           <div className="flex justify-center px-2 text-center">{`Book cover unavailable`}</div>
         </div>
       )}

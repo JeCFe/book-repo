@@ -48,7 +48,7 @@ export default function Dashboard() {
               </div>
             </>
           </SideNav>
-          <div className="flex w-full flex-col space-y-10 px-12 py-24 text-slate-500">
+          <div className="flex w-full flex-col space-y-10 overflow-x-auto px-12 py-24 text-slate-500">
             {data.bookshelves &&
               data.bookshelves?.map((x) => (
                 <div key={x.id}>
@@ -64,7 +64,7 @@ export default function Dashboard() {
                             className="flex flex-row"
                           >
                             <Picture
-                              size="medium"
+                              size="large"
                               pictureUrl={book.book.picture}
                               title={book.book.name as string}
                             />
