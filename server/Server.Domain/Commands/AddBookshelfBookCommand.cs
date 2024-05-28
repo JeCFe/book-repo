@@ -1,5 +1,6 @@
 namespace Server.Domain.Commands;
 
+using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 
 public class AddBookshelfBookCommand : ICommand<BookRepoContext>
@@ -14,13 +15,15 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if (await dbContext.Customer.FindAsync([ Id ], cancellationToken) is not { } customer)
+        var customer = await dbContext
+            .Customer
+            .Include(x => x.Bookshelves)
+            .SingleOrDefaultAsync(x => x.Id == Id, cancellationToken);
+        var book = await dbContext.Books.FindAsync([ Isbn ], cancellationToken);
+
+        if (customer == null || book == null)
         {
-            return;
-        }
-        if (await dbContext.Books.FindAsync([ Isbn ], cancellationToken) is not { } book)
-        {
-            return;
+            return; // Handle missing customer or book
         }
 
         foreach (var bookshelf in customer.Bookshelves)
