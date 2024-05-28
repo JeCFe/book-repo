@@ -3,7 +3,7 @@ import { SetupBook } from "@/hooks";
 import { useGetBook } from "@/hooks/useGetBook";
 import { Spinner } from "@jecfe/react-design-system";
 import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
-import { Picture } from "./Picture";
+import { Picture } from "../../../components/Picture";
 
 type Props = {
   isbn?: string;
@@ -79,6 +79,7 @@ export function AddBookModal({
           <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
             <div>
               <Picture
+                size="large"
                 pictureUrl={setupBook.picture}
                 title={setupBook.name}
                 loading={isLoading}
