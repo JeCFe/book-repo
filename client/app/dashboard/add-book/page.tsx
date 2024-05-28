@@ -27,7 +27,7 @@ export default function AddBook() {
     if (book === undefined || data === undefined || user === undefined) {
       return; //error handelling needed
     }
-    var bookshelfIds = data.bookshelves?.map((x) => x.id);
+    const bookshelfIds = data.bookshelves?.map((x) => x.id);
     try {
       console.log(bookshelfIds);
       console.log(user.sub);
