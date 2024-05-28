@@ -34,7 +34,11 @@ export default function Dashboard() {
         <div className="flex w-full">
           <SideNav>
             <>
-              <div className="flex w-full flex-grow flex-row overflow-y-auto px-2"></div>
+              <div className="flex w-full flex-grow flex-row overflow-y-auto px-2">
+                <div className="p-4">
+                  <Anchor href="/dashboard/add-book">Add book</Anchor>
+                </div>
+              </div>
               <div className="flex flex-row px-2 pt-2 text-center text-sm">
                 <div className="flex items-center text-center text-slate-400">
                   {user?.nickname}
@@ -60,8 +64,7 @@ export default function Dashboard() {
                             className="flex flex-row"
                           >
                             <Picture
-                              width={10}
-                              height={10}
+                              size="medium"
                               pictureUrl={book.book.picture}
                               title={book.book.name as string}
                             />
