@@ -10,6 +10,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
     {
         var customerBookshelf =
             from bookshelf in context.Bookshelves
+            where bookshelf.Id == id
             select new Bookshelf
             {
                 Id = bookshelf.Id,
