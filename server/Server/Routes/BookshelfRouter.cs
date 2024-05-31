@@ -1,29 +1,25 @@
-using Auth0.ManagementApi.Models;
-using Azure.Core;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Server.Auth0;
-using Server.Context;
-using Server.Domain.Models;
-using Server.Exceptions;
-using Server.Models;
-using Server.OpenLibrary;
-using Server.Providers;
-
 namespace Server.Routes;
+
+using Microsoft.AspNetCore.Http.HttpResults;
+using Server.Context;
+using Server.Models;
+using Server.Providers;
 
 public static class BookshelfRouter
 {
-    private static async Task<Results<Ok<Book>, NotFound, ForbidHttpResult>> GetBookshelf(
+    private static async Task<Results<Ok<Bookshelf>, NotFound>> GetBookshelf(
         Guid bookshelfId,
+        IBookshelfProvider bookshelfProvider,
         IUserContext userContext,
         CancellationToken cancellationToken
     )
     {
-        var userId = userContext.UserId;
-        if (userId is not { })
+        var bookshelf = await bookshelfProvider.GetBookshelfById(bookshelfId, cancellationToken);
+        if (bookshelf is not { })
         {
-            return TypedResults.Forbid();
+            return TypedResults.NotFound();
         }
+        return TypedResults.Ok(bookshelf);
     }
 
     public static RouteGroupBuilder MapBookshelfEndpoints(this RouteGroupBuilder group)
