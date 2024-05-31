@@ -54,9 +54,18 @@ export default function Dashboard() {
                 <div key={x.id}>
                   {x.books && (
                     <div className="flex flex-col">
-                      <div className="w-full border-b border-slate-600 pb-2 text-3xl font-bold tracking-tight text-slate-300">
-                        {x.name}
+                      <div className="flex w-full flex-row border-b border-slate-600 pb-2">
+                        <div className="text-3xl font-bold tracking-tight text-slate-300">
+                          {x.name}
+                        </div>
+                        <div className="flex flex-grow" />
+                        <div className="flex">
+                          <Anchor href={`/dashboard/manage-bookshelf/${x.id}`}>
+                            Manage
+                          </Anchor>
+                        </div>
                       </div>
+
                       <div className="my-4 flex flex-row space-x-2 overflow-x-auto">
                         {x.books?.map((book) => (
                           <div

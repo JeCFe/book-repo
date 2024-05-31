@@ -145,6 +145,7 @@ public class Program
         builder.Services.AddHttpClient();
         builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddTransient<ICustomerProvider, CustomerProvider>();
+        builder.Services.AddTransient<IBookshelfProvider, BookshelfProvider>();
         builder.Services.RegisterCommandHandlers<BookRepoContext>();
         builder
             .Services
@@ -192,6 +193,7 @@ public class Program
         app.MapHealthChecks("/healthz");
         app.MapGroup("/customer").MapCustomerEndpoints();
         app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
+        app.MapGroup("/bookshelf").MapBookshelfEndpoints();
         app.MapGroup("/book").MapBookEndpoints();
         app.Run();
     }

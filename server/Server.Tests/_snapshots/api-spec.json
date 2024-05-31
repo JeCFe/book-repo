@@ -103,6 +103,39 @@
         }
       }
     },
+    "/bookshelf/{bookshelfId}": {
+      "get": {
+        "tags": [
+          "Bookshelf"
+        ],
+        "parameters": [
+          {
+            "name": "bookshelfId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bookshelf"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/customer/get-customer-summary": {
       "get": {
         "tags": [
