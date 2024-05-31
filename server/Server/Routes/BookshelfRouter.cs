@@ -1,6 +1,7 @@
 namespace Server.Routes;
 
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Server.Context;
 using Server.Models;
 using Server.Providers;
@@ -8,9 +9,9 @@ using Server.Providers;
 public static class BookshelfRouter
 {
     private static async Task<Results<Ok<Bookshelf>, NotFound>> GetBookshelf(
-        Guid bookshelfId,
-        IBookshelfProvider bookshelfProvider,
-        IUserContext userContext,
+        [FromRoute] Guid bookshelfId,
+        [FromServices] IBookshelfProvider bookshelfProvider,
+        [FromServices] IUserContext userContext,
         CancellationToken cancellationToken
     )
     {
