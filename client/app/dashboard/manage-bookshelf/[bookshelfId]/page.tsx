@@ -2,8 +2,9 @@
 import { Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { Spinner } from "@jecfe/react-design-system";
+import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
-import { DragEventHandler, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Book = {
   book: {
@@ -27,6 +28,7 @@ export default function ManageBookshelf({
   const { data, isLoading, error } = useGetBookshelf(bookshelfId);
   const [books, setBooks] = useState<Book[]>([]);
   const router = useRouter();
+
   let draggedItem: Book | null = null;
 
   useEffect(() => {
@@ -44,6 +46,17 @@ export default function ManageBookshelf({
     setBooks(booksOrdered);
   }, [data, isLoading]);
 
+  const updateBooks = useCallback(
+    debounce((x: Book[]) => {
+      console.log("Debounce");
+    }, 1000),
+    [],
+  );
+
+  useEffect(() => {
+    updateBooks(books);
+  }, [books]);
+
   const handleDragStart = (
     e: React.DragEvent<HTMLTableRowElement>,
     book: Book,
@@ -56,15 +69,12 @@ export default function ManageBookshelf({
     e: React.DragEvent<HTMLTableRowElement>,
     target: Book,
   ) => {
-    console.log("Here");
     if (!draggedItem || target === draggedItem) {
       return;
     }
 
     const draggedIndex = books.indexOf(draggedItem);
     const targetIndex = books.indexOf(target);
-
-    console.log(draggedIndex, targetIndex);
 
     const updatedBooks = [...books];
     updatedBooks.splice(draggedIndex, 1);
