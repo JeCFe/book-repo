@@ -1,10 +1,17 @@
 "use client";
 import { Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
+import { getApiClient } from "@/services";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+
+const updateBookshelfOrder = getApiClient()
+  .path("/action/update-bookshelf-order")
+  .method("post")
+  .create();
 
 type Book = {
   book: {
@@ -24,8 +31,9 @@ export default function ManageBookshelf({
 }: {
   params: { bookshelfId: string };
 }) {
+  const { user, isLoading: isLoadingUser } = useUser();
   const { bookshelfId } = params;
-  const { data, isLoading, error } = useGetBookshelf(bookshelfId);
+  const { data, isLoading, error, mutate } = useGetBookshelf(bookshelfId);
   const [books, setBooks] = useState<Book[]>([]);
   const router = useRouter();
 
@@ -47,15 +55,25 @@ export default function ManageBookshelf({
   }, [data, isLoading]);
 
   const updateBooks = useCallback(
-    debounce((x: Book[]) => {
-      console.log("Debounce");
+    debounce(async (x: Book[], userSub: string) => {
+      await updateBookshelfOrder({
+        customerId: userSub,
+        bookshelfId: bookshelfId,
+        books: x.map((book) => {
+          return { isbn: book.book.isbn, order: book.order };
+        }),
+      });
+      mutate();
     }, 1000),
     [],
   );
 
   useEffect(() => {
-    updateBooks(books);
-  }, [books]);
+    if (!user || !user) {
+      return;
+    }
+    updateBooks(books, user!.sub!);
+  }, [books, user]);
 
   const handleDragStart = (
     e: React.DragEvent<HTMLTableRowElement>,
