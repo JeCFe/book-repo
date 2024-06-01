@@ -40,7 +40,7 @@ export default function ManageBookshelf({
       router.push("/dashboard");
       return;
     }
-    var booksOrdered = [...(data.books as Book[])].toSorted(
+    const booksOrdered = [...(data.books as Book[])].toSorted(
       (a, b) => a.order - b.order,
     );
     setBooks(booksOrdered);
