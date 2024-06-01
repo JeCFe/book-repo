@@ -1,0 +1,19 @@
+.table {
+  @apply w-full table-fixed border-b bg-white py-2 text-left text-black last:table-auto;
+}
+
+.table thead {
+  @apply text-grey-500 border-b border-gray-300;
+}
+
+.table tbody tr {
+  @apply border-grey-300 border-b;
+}
+
+.table th {
+  @apply px-6 py-4 font-bold;
+}
+
+.table td {
+  @apply pc-6 py-4 font-normal;
+}
