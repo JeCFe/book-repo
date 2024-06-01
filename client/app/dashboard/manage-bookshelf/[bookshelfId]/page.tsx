@@ -3,7 +3,20 @@ import { Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { DragEventHandler, useEffect, useState } from "react";
+
+type Book = {
+  book: {
+    isbn: string | null;
+    name: string | null;
+    authors?: string[] | undefined;
+    subjects: string[] | null;
+    release?: string | undefined;
+    picture?: string | undefined;
+    pageCount: number;
+  };
+  order: number;
+};
 
 export default function ManageBookshelf({
   params,
@@ -12,9 +25,9 @@ export default function ManageBookshelf({
 }) {
   const { bookshelfId } = params;
   const { data, isLoading, error } = useGetBookshelf(bookshelfId);
+  const [books, setBooks] = useState<Book[]>([]);
   const router = useRouter();
-
-  console.log(bookshelfId);
+  let draggedItem: Book | null = null;
 
   useEffect(() => {
     if (isLoading) {
@@ -23,8 +36,43 @@ export default function ManageBookshelf({
 
     if (data === undefined) {
       router.push("/dashboard");
+      return;
     }
+    var booksOrdered = [...(data.books as Book[])].toSorted(
+      (a, b) => a.order - b.order,
+    );
+    setBooks(booksOrdered);
   }, [data, isLoading]);
+
+  const handleDragStart = (
+    e: React.DragEvent<HTMLTableRowElement>,
+    book: Book,
+  ) => {
+    draggedItem = book;
+    e.dataTransfer.setData("text/plain", book.order.toString());
+  };
+
+  const handleDrop = (
+    e: React.DragEvent<HTMLTableRowElement>,
+    target: Book,
+  ) => {
+    console.log("Here");
+    if (!draggedItem || target === draggedItem) {
+      return;
+    }
+
+    const draggedIndex = books.indexOf(draggedItem);
+    const targetIndex = books.indexOf(target);
+
+    console.log(draggedIndex, targetIndex);
+
+    const updatedBooks = [...books];
+    updatedBooks.splice(draggedIndex, 1);
+    updatedBooks.splice(targetIndex, 0, draggedItem);
+
+    setBooks(updatedBooks);
+    draggedItem = null;
+  };
 
   if (isLoading && data === undefined) {
     return (
@@ -53,8 +101,14 @@ export default function ManageBookshelf({
               </tr>
             </thead>
             <tbody>
-              {data?.books?.map((book, i) => (
-                <tr key={`${book.book.name}-${i}`}>
+              {books.map((book, i) => (
+                <tr
+                  key={`${book.book.name}-${i}`}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, book)}
+                  onDrop={(e) => handleDrop(e, book)}
+                  onDragOver={(e) => e.preventDefault()}
+                >
                   <td>{book.order}</td>
                   <td>{book.book.name}</td>
                   <td>{book.book.authors?.join(", ")}</td>
