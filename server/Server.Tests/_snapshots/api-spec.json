@@ -71,6 +71,28 @@
         }
       }
     },
+    "/action/update-bookshelf-order": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBookcaseOrderCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/book/{isbn}": {
       "get": {
         "tags": [
@@ -485,6 +507,50 @@
           },
           "includeDefaultBookshelves": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateBook": {
+        "required": [
+          "isbn",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateBookcaseOrderCommand": {
+        "required": [
+          "books",
+          "bookshelfId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "books": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdateBook"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -6,3 +6,4 @@ export * from "./Modal";
 export * from "./Picture";
 export * from "./RadioButton";
 export * from "./SideNav";
+export * from "./table";
