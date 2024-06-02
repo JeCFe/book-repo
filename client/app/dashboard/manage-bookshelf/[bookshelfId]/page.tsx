@@ -3,7 +3,7 @@ import { Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -148,9 +148,31 @@ export default function ManageBookshelf({
   } else {
     return (
       <div className="text-slate-400">
+        <div className="flex flex-row space-x-2">
+          <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
+          <div className="underline underline-offset-4">
+            {"< Manage Bookshelf"}
+          </div>
+        </div>
         <h1 className="flex flex-col pb-4 text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
           {`Manage ${data?.name}`}
         </h1>
+        <div className="my-4 flex flex-row">
+          <Button
+            size="large"
+            variant="primary"
+            className="text-black"
+            onClick={() =>
+              router.push(`/dashboard/manage-bookshelf/${bookshelfId}/add-book`)
+            }
+          >
+            Add book
+          </Button>
+          <div className="flex-grow" />
+          <Button size="large" variant="destructive" className="text-black">
+            Delete bookshelf
+          </Button>
+        </div>
         <div className="flex overflow-auto">
           <Table>
             <thead>
