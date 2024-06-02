@@ -8,6 +8,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { SetStateAction, useState } from "react";
+import toast from "react-hot-toast";
 
 const addBookshelfBook = getApiClient()
   .path("/action/add-book-shelf-book")
@@ -39,13 +40,14 @@ export default function AddBook({
         isbn: book.isbn,
         bookshelfId: [bookshelfId],
       });
+      toast.success("Successfully added book");
+      mutate();
+      router.push(
+        `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`,
+      );
     } catch {
-      console.log("Something went wrong!");
+      toast.error("Unable to add book");
     }
-    mutate();
-    router.push(
-      `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`,
-    );
   };
 
   if (isLoading) {
