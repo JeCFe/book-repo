@@ -71,6 +71,31 @@
         }
       }
     },
+    "/action/remove-bookshelf-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBookshelfBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/action/update-bookshelf-order": {
       "post": {
         "tags": [
@@ -481,6 +506,29 @@
         "items": {
           "$ref": "#/components/schemas/JToken"
         }
+      },
+      "RemoveBookshelfBookCommand": {
+        "required": [
+          "bookshelfId",
+          "customerId",
+          "isbn"
+        ],
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
       },
       "SetupCustomerCommand": {
         "required": [

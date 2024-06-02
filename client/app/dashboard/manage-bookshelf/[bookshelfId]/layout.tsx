@@ -18,10 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <BookLogo height="100" />
       </div>
 
-      <div className="container mx-auto flex-1 pt-0 md:pt-20">
-        <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
-        {children}
-      </div>
+      <div className="container mx-auto flex-1 pt-0 md:pt-20">{children}</div>
     </div>
   );
 }

@@ -26,7 +26,12 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
             return; // Handle missing customer or book
         }
 
-        foreach (var bookshelf in customer.Bookshelves)
+        var selectedBookshelves = customer
+            .Bookshelves
+            .Where(b => BookshelfId.Contains(b.Id))
+            .ToList();
+
+        foreach (var bookshelf in selectedBookshelves)
         {
             var bookshelfCount = dbContext
                 .BookshelfBook

@@ -1,20 +1,26 @@
 "use client";
 
+import { AddBookByIsbn } from "@/app/dashboard/AddBookByIsbn";
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { SetupBook, useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { AddBookByIsbn } from "../AddBookByIsbn";
+import { SetStateAction, useState } from "react";
+import toast from "react-hot-toast";
 
 const addBookshelfBook = getApiClient()
   .path("/action/add-book-shelf-book")
   .method("post")
   .create();
 
-export default function AddBook() {
+export default function AddBook({
+  params,
+}: {
+  params: { bookshelfId: string };
+}) {
+  const { bookshelfId } = params;
   const { isLoading, data, error, mutate } = useGetCustomerSummary(); //Will need new endpoint that just returns customer bookshelves names and IDs
   const { user } = useUser();
   const [open, setOpen] = useState<boolean>(false);
@@ -28,18 +34,20 @@ export default function AddBook() {
     if (book === undefined || data === undefined || user === undefined) {
       return; //error handelling needed
     }
-    const bookshelfIds = data.bookshelves?.map((x) => x.id);
     try {
       await addBookshelfBook({
         id: user.sub!,
         isbn: book.isbn,
-        bookshelfId: bookshelfIds ?? [],
+        bookshelfId: [bookshelfId],
       });
+      toast.success("Successfully added book");
+      mutate();
+      router.push(
+        `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`,
+      );
     } catch {
-      console.log("Something went wrong!");
+      toast.error("Unable to add book");
     }
-    mutate();
-    router.push("/dashboard");
   };
 
   if (isLoading) {
@@ -52,15 +60,15 @@ export default function AddBook() {
 
   return (
     <div className="flex flex-col">
-      <AddBookModal
-        isbn={passingIsbn as string}
-        addBook={addBook}
-        showModal={open}
-        setShowModal={setOpen}
-        setPassingIsbn={setPassingIsbn}
-        setCurrentIsbn={setCurrentIsbn}
-      />
-
+      <div className="flex flex-row space-x-2 pb-6">
+        <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
+        <Anchor
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`}
+        >{`< Manage Bookshelf`}</Anchor>
+        <div className="text-slate-400 underline underline-offset-4">
+          {"< Add Book"}
+        </div>
+      </div>
       <AddBookByIsbn
         passingIsbn={passingIsbn}
         setPassingIsbn={setPassingIsbn}
@@ -70,16 +78,6 @@ export default function AddBook() {
         open={open}
         setOpen={setOpen}
       />
-      <div className="mb-10 mt-20 flex flex-row space-x-6">
-        <Button
-          type="button"
-          size="large"
-          variant="secondary"
-          onClick={() => router.push("/dashboard")}
-        >
-          Back
-        </Button>
-      </div>
     </div>
   );
 }

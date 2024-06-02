@@ -50,35 +50,39 @@ export default function Dashboard() {
           </SideNav>
           <div className="flex w-full flex-col space-y-10 overflow-x-auto px-12 py-24 text-slate-500">
             {data.bookshelves &&
-              data.bookshelves?.map((x) => (
-                <div key={x.id}>
-                  {x.books && (
+              data.bookshelves?.map((bookshelf) => (
+                <div key={bookshelf.id}>
+                  {bookshelf.books && (
                     <div className="flex flex-col">
                       <div className="flex w-full flex-row border-b border-slate-600 pb-2">
                         <div className="text-3xl font-bold tracking-tight text-slate-300">
-                          {x.name}
+                          {bookshelf.name}
                         </div>
                         <div className="flex flex-grow" />
                         <div className="flex">
-                          <Anchor href={`/dashboard/manage-bookshelf/${x.id}`}>
+                          <Anchor
+                            href={`/dashboard/manage-bookshelf/${bookshelf.id}`}
+                          >
                             Manage
                           </Anchor>
                         </div>
                       </div>
 
                       <div className="my-4 flex flex-row space-x-2 overflow-x-auto">
-                        {x.books?.map((book) => (
-                          <div
-                            key={`${x.id}-${book.book.isbn}`}
-                            className="flex flex-row"
-                          >
-                            <Picture
-                              size="large"
-                              pictureUrl={book.book.picture}
-                              title={book.book.name as string}
-                            />
-                          </div>
-                        ))}
+                        {bookshelf.books
+                          .toSorted((a, b) => a.order - b.order)
+                          .map((book) => (
+                            <div
+                              key={`${bookshelf.id}-${book.book.isbn}`}
+                              className="flex flex-row"
+                            >
+                              <Picture
+                                size="large"
+                                pictureUrl={book.book.picture}
+                                title={book.book.name as string}
+                              />
+                            </div>
+                          ))}
                       </div>
                     </div>
                   )}
