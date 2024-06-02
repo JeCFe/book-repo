@@ -103,7 +103,9 @@ public static class ActionRouter
         group.MapPost("/forget-me", ForgetMe);
         group.MapPost("/setup-customer", SetupCustomer);
         group.MapPost("/add-book-shelf-book", AddBookshelfBook);
+        group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
         group.MapPost("/update-bookshelf-order", UpdateBookshelfOrder);
+
         return group;
     }
 }
