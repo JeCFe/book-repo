@@ -1,13 +1,13 @@
 "use client";
 import { Table } from "@/components";
-import { useGetCustomerSummary } from "@/hooks";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 const updateBookshelfOrder = getApiClient()
   .path("/action/update-bookshelf-order")
@@ -58,13 +58,25 @@ export default function ManageBookshelf({
   const updateBooks = useCallback(
     debounce(async (x: Book[], userSub: string) => {
       setIsAutoSaving(true);
-      await updateBookshelfOrder({
+
+      var myPromise = updateBookshelfOrder({
         customerId: userSub,
         bookshelfId: bookshelfId,
         books: x.map((book, i) => {
           return { isbn: book.book.isbn, order: i };
         }),
-      }).finally(() => setIsAutoSaving(false));
+      });
+
+      toast.promise(
+        myPromise,
+        {
+          loading: "Auto saving",
+          success: "Auto save complete",
+          error: "There was an error when autosaving",
+        },
+        { id: "autosave" },
+      );
+
       mutate();
     }, 1000),
     [],
@@ -115,11 +127,6 @@ export default function ManageBookshelf({
   } else {
     return (
       <div className="text-slate-400">
-        {isAutoSaving && (
-          <div className="absolute left-5 top-5">
-            <Spinner size="small" />
-          </div>
-        )}
         <h1 className="flex flex-col pb-4 text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
           {`Manage ${data?.name}`}
         </h1>
