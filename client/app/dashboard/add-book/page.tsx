@@ -23,6 +23,7 @@ export default function AddBook() {
 
   const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
+  const [currentSearch, setCurrentSearch] = useState<string | undefined>();
 
   const addBook = async (book: SetupBook) => {
     if (book === undefined || data === undefined || user === undefined) {
@@ -52,15 +53,6 @@ export default function AddBook() {
 
   return (
     <div className="flex flex-col">
-      <AddBookModal
-        isbn={passingIsbn as string}
-        addBook={addBook}
-        showModal={open}
-        setShowModal={setOpen}
-        setPassingIsbn={setPassingIsbn}
-        setCurrentIsbn={setCurrentIsbn}
-      />
-
       <AddBookByIsbn
         passingIsbn={passingIsbn}
         setPassingIsbn={setPassingIsbn}
@@ -70,6 +62,34 @@ export default function AddBook() {
         open={open}
         setOpen={setOpen}
       />
+
+      <div className="mt-10">
+        <div className="mb-4 text-xl text-slate-300">{`Search for book`}</div>
+        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
+          <input
+            type="text"
+            value={currentSearch ?? ""}
+            onChange={(e) => {
+              setCurrentSearch(e.target.value);
+            }}
+            placeholder="Enter search criteria"
+            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
+          />
+          <Button
+            size="large"
+            variant="primary"
+            onClick={() =>
+              router.push(
+                `/dashboard/add-book/${encodeURIComponent(currentSearch!)}`,
+              )
+            }
+            type="button"
+            disabled={currentSearch === undefined || currentSearch === ""}
+          >
+            Lookup Book
+          </Button>
+        </div>
+      </div>
       <div className="mb-10 mt-20 flex flex-row space-x-6">
         <Button
           type="button"
