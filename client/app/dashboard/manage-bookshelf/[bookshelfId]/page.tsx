@@ -59,8 +59,8 @@ export default function ManageBookshelf({
       await updateBookshelfOrder({
         customerId: userSub,
         bookshelfId: bookshelfId,
-        books: x.map((book) => {
-          return { isbn: book.book.isbn, order: book.order };
+        books: x.map((book, i) => {
+          return { isbn: book.book.isbn, order: i };
         }),
       });
       mutate();
