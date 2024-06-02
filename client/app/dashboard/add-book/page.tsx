@@ -4,7 +4,7 @@ import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { SetupBook, useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AddBookByIsbn } from "../AddBookByIsbn";
@@ -53,6 +53,13 @@ export default function AddBook() {
 
   return (
     <div className="flex flex-col">
+      <div className="flex flex-row space-x-2 pb-6">
+        <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
+
+        <div className="text-slate-400 underline underline-offset-4">
+          {"< Add book"}
+        </div>
+      </div>
       <AddBookByIsbn
         passingIsbn={passingIsbn}
         setPassingIsbn={setPassingIsbn}

@@ -1,7 +1,7 @@
 "use client";
 import { Table } from "@/components";
 import { useSearchForBooks } from "@/hooks";
-import { Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useEffect } from "react";
 
 export default function SearchBookByQuery({
@@ -21,6 +21,13 @@ export default function SearchBookByQuery({
 
   return (
     <div className="flex flex-col">
+      <div className="flex flex-row space-x-2 pb-6">
+        <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
+        <Anchor href={`/dashboard/add-book`}>{`< Add book`}</Anchor>
+        <div className="text-slate-400 underline underline-offset-4">
+          {"< Search results"}
+        </div>
+      </div>
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         Add Book
       </h1>
