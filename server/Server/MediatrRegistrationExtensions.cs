@@ -21,7 +21,11 @@ public static class MediatrRegistrationExtensions
             else
             {
                 serviceType = typeof(IRequestHandler<,>).MakeGenericType(type, response);
-                handlerType = typeof(CommandHandler<,>).MakeGenericType(typeof(TDbContext), type);
+                handlerType = typeof(CommandHandler<,,>).MakeGenericType(
+                    typeof(TDbContext),
+                    type,
+                    response
+                );
             }
 
             services.AddTransient(serviceType, handlerType);
