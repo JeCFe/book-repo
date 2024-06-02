@@ -3,7 +3,7 @@ import { Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Spinner } from "@jecfe/react-design-system";
+import { Button, Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -11,6 +11,11 @@ import { toast } from "react-hot-toast";
 
 const updateBookshelfOrder = getApiClient()
   .path("/action/update-bookshelf-order")
+  .method("post")
+  .create();
+
+const removeBookshelfBook = getApiClient()
+  .path("/action/remove-bookshelf-book")
   .method("post")
   .create();
 
@@ -36,10 +41,16 @@ export default function ManageBookshelf({
   const { user } = useUser();
   const { data, isLoading, error, mutate } = useGetBookshelf(bookshelfId);
   const [books, setBooks] = useState<Book[]>([]);
-  const [isAutoSaving, setIsAutoSaving] = useState<boolean>(false);
   const router = useRouter();
 
   let draggedItem: Book | null = null;
+
+  useEffect(() => {
+    if (error === undefined || typeof error === "undefined") {
+      return;
+    }
+    toast.error(error);
+  }, error);
 
   useEffect(() => {
     if (isLoading) {
@@ -57,26 +68,21 @@ export default function ManageBookshelf({
 
   const updateBooks = useCallback(
     debounce(async (x: Book[], userSub: string) => {
-      setIsAutoSaving(true);
-
-      var myPromise = updateBookshelfOrder({
-        customerId: userSub,
-        bookshelfId: bookshelfId,
-        books: x.map((book, i) => {
-          return { isbn: book.book.isbn, order: i };
-        }),
-      });
-
       toast.promise(
-        myPromise,
+        updateBookshelfOrder({
+          customerId: userSub,
+          bookshelfId: bookshelfId,
+          books: x.map((book, i) => {
+            return { isbn: book.book.isbn, order: i };
+          }),
+        }),
         {
-          loading: "Auto saving",
-          success: "Auto save complete",
+          loading: "Autosaving",
+          success: "Autosave complete",
           error: "There was an error when autosaving",
         },
         { id: "autosave" },
       );
-
       mutate();
     }, 1000),
     [],
@@ -97,10 +103,7 @@ export default function ManageBookshelf({
     e.dataTransfer.setData("text/plain", book.order.toString());
   };
 
-  const handleDrop = (
-    e: React.DragEvent<HTMLTableRowElement>,
-    target: Book,
-  ) => {
+  const handleDrop = (target: Book) => {
     if (!draggedItem || target === draggedItem) {
       return;
     }
@@ -114,6 +117,24 @@ export default function ManageBookshelf({
 
     setBooks(updatedBooks);
     draggedItem = null;
+  };
+
+  const removeBook = (book: Book) => {
+    toast.promise(
+      removeBookshelfBook({
+        customerId: user?.sub as string,
+        bookshelfId: bookshelfId,
+        isbn: book.book.isbn,
+      }),
+      {
+        loading: `Removing ${book.book.name} from ${data?.name}`,
+        success: `Successfully removed ${book.book.name}`,
+        error: `There was an error when trying to remove ${book.book.name}`,
+      },
+
+      { id: book.book.isbn as string },
+    );
+    mutate();
   };
 
   if (isLoading && data === undefined) {
@@ -148,7 +169,7 @@ export default function ManageBookshelf({
                   key={`${book.book.name}-${i}`}
                   draggable
                   onDragStart={(e) => handleDragStart(e, book)}
-                  onDrop={(e) => handleDrop(e, book)}
+                  onDrop={() => handleDrop(book)}
                   onDragOver={(e) => e.preventDefault()}
                 >
                   <td>{book.order}</td>
@@ -156,7 +177,16 @@ export default function ManageBookshelf({
                   <td>{book.book.authors?.join(", ")}</td>
                   <td>COMING</td>
                   <td>{book.book.isbn}</td>
-                  <td>DELETE COMING</td>
+                  <td>
+                    <Button
+                      size="small"
+                      variant="destructive"
+                      className="text-black"
+                      onClick={() => removeBook(book)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
