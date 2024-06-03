@@ -19,6 +19,11 @@ const removeBookshelfBook = getApiClient()
   .method("post")
   .create();
 
+const removeBookshelf = getApiClient()
+  .path("/action/remove-bookshelf")
+  .method("post")
+  .create();
+
 type Book = {
   book: {
     isbn: string | null;
@@ -41,6 +46,7 @@ export default function ManageBookshelf({
   const { user } = useUser();
   const { data, isLoading, error, mutate } = useGetBookshelf(bookshelfId);
   const [books, setBooks] = useState<Book[]>([]);
+  const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
   const router = useRouter();
 
   let draggedItem: Book | null = null;
@@ -137,6 +143,25 @@ export default function ManageBookshelf({
     mutate();
   };
 
+  const removeBookshelfFunc = () => {
+    toast.promise(
+      removeBookshelf({
+        id: user?.sub as string,
+        bookshelfId: bookshelfId,
+      }),
+      {
+        loading: `Removing ${data?.name}`,
+        success: () => {
+          router.push("/dashboard");
+          return `Successfully removed ${data?.name}`;
+        },
+        error: `There was an error when trying to remove ${data?.name}`,
+      },
+
+      { id: data?.name as string },
+    );
+  };
+
   if (isLoading && data === undefined) {
     return (
       <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
@@ -162,6 +187,7 @@ export default function ManageBookshelf({
             size="large"
             variant="primary"
             className="text-black"
+            disabled={isDeletingBookshelf}
             onClick={() =>
               router.push(`/dashboard/manage-bookshelf/${bookshelfId}/add-book`)
             }
@@ -169,7 +195,13 @@ export default function ManageBookshelf({
             Add book
           </Button>
           <div className="flex-grow" />
-          <Button size="large" variant="destructive" className="text-black">
+          <Button
+            size="large"
+            variant="destructive"
+            className="text-black"
+            disabled={isDeletingBookshelf}
+            onClick={() => removeBookshelfFunc()}
+          >
             Delete bookshelf
           </Button>
         </div>
