@@ -118,9 +118,7 @@ export default function SearchBookByQuery({
                               size="small"
                               variant="primary"
                               className="text-black"
-                              onClick={() =>
-                                viewBook(edition.isbn[0] as string)
-                              }
+                              onClick={() => viewBook(edition.isbn![0])}
                             >
                               View book
                             </Button>
