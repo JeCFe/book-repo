@@ -35,8 +35,9 @@ export default function Dashboard() {
           <SideNav>
             <>
               <div className="flex w-full flex-grow flex-row overflow-y-auto px-2">
-                <div className="p-4">
+                <div className="flex flex-col space-y-4 p-4">
                   <Anchor href="/dashboard/add-book">Add book</Anchor>
+                  <Anchor href="/dashboard/add-bookshelf">Add bookshelf</Anchor>
                 </div>
               </div>
               <div className="flex flex-row px-2 pt-2 text-center text-sm">
@@ -44,7 +45,10 @@ export default function Dashboard() {
                   {user?.nickname}
                 </div>
                 <div className="flex flex-grow" />
-                <Anchor href="/api/auth/logout">Logout</Anchor>
+                <div className="flex flex-row space-x-2">
+                  <Anchor href="/me">Manage</Anchor>
+                  <Anchor href="/api/auth/logout">Logout</Anchor>
+                </div>
               </div>
             </>
           </SideNav>
