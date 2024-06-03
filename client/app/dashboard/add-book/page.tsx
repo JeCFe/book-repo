@@ -71,7 +71,7 @@ export default function AddBook() {
       />
 
       <div className="mt-10">
-        <div className="mb-4 text-xl text-slate-300">{`Search for book`}</div>
+        <div className="mb-4 text-xl text-slate-300">{`Search for book by name and author`}</div>
         <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
           <input
             type="text"
