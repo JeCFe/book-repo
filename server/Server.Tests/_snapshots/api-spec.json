@@ -49,6 +49,31 @@
         }
       }
     },
+    "/action/remove-bookshelf": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBookshelfCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/action/add-book-shelf-book": {
       "post": {
         "tags": [
@@ -520,6 +545,24 @@
             "nullable": true
           },
           "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemoveBookshelfCommand": {
+        "required": [
+          "bookshelfId",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "string",
             "nullable": true
           },

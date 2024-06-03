@@ -97,11 +97,29 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
+    private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> RemoveBookshelf(
+        RemoveBookshelfCommand command,
+        IMediator mediator,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { } || command.Id != userId)
+        {
+            return TypedResults.Forbid();
+        }
+
+        await mediator.Send(command, cancellationToken);
+        return TypedResults.NoContent();
+    }
+
     public static RouteGroupBuilder MapActionEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Actions");
         group.MapPost("/forget-me", ForgetMe);
         group.MapPost("/setup-customer", SetupCustomer);
+        group.MapPost("/remove-bookshelf", RemoveBookshelf);
         group.MapPost("/add-book-shelf-book", AddBookshelfBook);
         group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
         group.MapPost("/update-bookshelf-order", UpdateBookshelfOrder);
