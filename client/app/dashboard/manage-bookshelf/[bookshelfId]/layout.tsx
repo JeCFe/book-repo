@@ -1,7 +1,6 @@
 "use client";
 import { BookLogo } from "@/assets";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Anchor } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

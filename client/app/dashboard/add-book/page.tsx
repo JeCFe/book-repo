@@ -1,7 +1,7 @@
 "use client";
 
 import { AccordionManager, ProposedBooks } from "@/components";
-import { SetupBook, addBookWizard, useGetCustomerSummary } from "@/hooks";
+import { SetupBook, useBookWizard, useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ export default function AddBook() {
   const { isLoading, data, error, mutate } = useGetCustomerSummary(); //Will need new endpoint that just returns customer bookshelves names and IDs
   const [open, setOpen] = useState<boolean>(false);
 
-  const { books, updateBook } = addBookWizard();
+  const { books, updateBook } = useBookWizard();
 
   const router = useRouter();
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);

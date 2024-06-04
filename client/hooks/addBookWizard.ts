@@ -46,7 +46,7 @@ const reducer = ({
   }
 };
 
-export const addBookWizard = () => {
+export const useBookWizard = () => {
   const [newAddBookData, setnewAddBookData] = useSessionStorage<AddBookProcess>(
     SESSION_STORAGE_KEY,
     getDefaultState(),

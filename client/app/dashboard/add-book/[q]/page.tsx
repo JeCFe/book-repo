@@ -1,14 +1,8 @@
 "use client";
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { ProposedBooks, Table } from "@/components";
-import {
-  SetupBook,
-  addBookWizard,
-  useGetCustomerSummary,
-  useSearchForBooks,
-} from "@/hooks";
+import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
 import { getApiClient } from "@/services";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -30,7 +24,7 @@ export default function SearchBookByQuery({
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
 
-  const { books, updateBook } = addBookWizard();
+  const { books, updateBook } = useBookWizard();
 
   useEffect(() => {
     if (!data) {
@@ -51,7 +45,7 @@ export default function SearchBookByQuery({
   }, [isLoading]);
 
   const addBook = async (book: SetupBook) => {
-    var updatedBook = updateBook({ type: "add-books", setupBook: book });
+    const updatedBook = updateBook({ type: "add-books", setupBook: book });
     setSetupBooks(updatedBook.books ?? []);
   };
 

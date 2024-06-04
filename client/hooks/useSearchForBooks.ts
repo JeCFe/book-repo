@@ -7,7 +7,6 @@ export type SearchResponse = {
   docs: Works[];
   num_found: number;
   q: string;
-  offset: any;
 };
 
 export type Works = {
