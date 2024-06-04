@@ -1,3 +1,4 @@
+export * from "./addBookWizard";
 export * from "./addSetupWizard";
 export * from "./useGetBook";
 export * from "./useGetBookshelf";

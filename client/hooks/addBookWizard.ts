@@ -1,30 +1,25 @@
 "use client";
 import { useSessionStorage } from "usehooks-ts";
+import { SetupBook } from ".";
 
-export const SESSION_STORAGE_KEY = "add-book";
+const SESSION_STORAGE_KEY = "add-book";
 
-export type SetupBook = {
-  isbn: string;
-  name: string;
-  author?: string;
-};
-export type Nickname = string;
 type Action =
   | {
       type: "add-books";
-      setupBooks: SetupBook[];
+      setupBook: SetupBook;
     }
   | { type: "default" };
 
-export type AddBookProcess = {
+type AddBookProcess = {
   books?: SetupBook[];
 };
 
-export const getDefaultState = (): AddBookProcess => ({
+const getDefaultState = (): AddBookProcess => ({
   books: undefined,
 });
 
-export const reducer = ({
+const reducer = ({
   state = getDefaultState(),
   action,
 }: {
@@ -34,8 +29,7 @@ export const reducer = ({
   switch (action.type) {
     case "add-books": {
       return {
-        ...state,
-        books: action.setupBooks,
+        books: [...(state.books ?? []), action.setupBook],
       };
     }
     case "default": {
@@ -44,7 +38,7 @@ export const reducer = ({
   }
 };
 
-export const useSetupWizard = () => {
+export const addBookWizard = () => {
   const [newAddBookData, setnewAddBookData] = useSessionStorage<AddBookProcess>(
     SESSION_STORAGE_KEY,
     getDefaultState(),
