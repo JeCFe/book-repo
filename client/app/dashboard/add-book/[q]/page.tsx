@@ -95,11 +95,11 @@ export default function SearchBookByQuery({
           <Table>
             <thead>
               <tr>
-                <th>Order</th>
+                <th className="w-[15px]">Order</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>ISBN</th>
-                <th>Action</th>
+                <th className="min-w-[150px]">Action</th>
               </tr>
             </thead>
             <tbody>
