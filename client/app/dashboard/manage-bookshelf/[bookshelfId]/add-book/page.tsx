@@ -1,13 +1,12 @@
 "use client";
 
 import { AddBookByIsbn } from "@/app/dashboard/AddBookByIsbn";
-import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { SetupBook, useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 const addBookshelfBook = getApiClient()
