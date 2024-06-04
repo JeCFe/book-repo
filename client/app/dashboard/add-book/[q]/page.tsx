@@ -1,12 +1,17 @@
 "use client";
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
-import { Table } from "@/components";
-import { SetupBook, useGetCustomerSummary, useSearchForBooks } from "@/hooks";
+import { ProposedBooks, Table } from "@/components";
+import {
+  SetupBook,
+  addBookWizard,
+  useGetCustomerSummary,
+  useSearchForBooks,
+} from "@/hooks";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const addBookshelfBook = getApiClient()
   .path("/action/add-book-shelf-book")
@@ -20,16 +25,12 @@ export default function SearchBookByQuery({
 }) {
   const { q } = params;
   const { data, isLoading } = useSearchForBooks(q);
-  const {
-    isLoading: customerSummaryLoading,
-    data: customerSummaryData,
-    mutate,
-  } = useGetCustomerSummary(); //Will need new endpoint that just returns customer bookshelves names and IDs
-  const { user } = useUser();
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
-  const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
+  const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
+
+  const { books, updateBook } = addBookWizard();
 
   useEffect(() => {
     if (!data) {
@@ -42,27 +43,33 @@ export default function SearchBookByQuery({
     setPassingIsbn(isbn);
     setOpen(true);
   };
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    setSetupBooks(books ?? []);
+  }, [isLoading]);
 
   const addBook = async (book: SetupBook) => {
-    if (
-      book === undefined ||
-      customerSummaryData === undefined ||
-      user === undefined
-    ) {
-      return; //error handelling needed
+    var updatedBook = updateBook({ type: "add-books", setupBook: book });
+    setSetupBooks(updatedBook.books ?? []);
+  };
+
+  const filteredBooks = useMemo(() => {
+    if (isLoading || data === undefined) {
+      return;
     }
-    const bookshelfIds = customerSummaryData.bookshelves?.map((x) => x.id);
-    try {
-      await addBookshelfBook({
-        id: user.sub!,
-        isbn: book.isbn,
-        bookshelfId: bookshelfIds ?? [],
-      });
-    } catch {
-      console.log("Something went wrong!");
-    }
-    mutate();
-    router.push("/dashboard");
+    const isbnSet = new Set(setupBooks.map((book) => book.isbn));
+
+    return data.docs.filter((work) =>
+      work.editions.docs.some(
+        (editionDoc) => !isbnSet.has(editionDoc.isbn![0]),
+      ),
+    );
+  }, [books, data]);
+
+  const removeBook = (isbn: string) => {
+    updateBook({ type: "remove-book", isbn });
   };
 
   return (
@@ -73,7 +80,6 @@ export default function SearchBookByQuery({
         showModal={open}
         setShowModal={setOpen}
         setPassingIsbn={setPassingIsbn}
-        setCurrentIsbn={setCurrentIsbn}
       />
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
@@ -91,7 +97,7 @@ export default function SearchBookByQuery({
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="flex overflow-auto pb-20">
+        <div className="flex overflow-auto pb-4">
           <Table>
             <thead>
               <tr>
@@ -103,7 +109,7 @@ export default function SearchBookByQuery({
               </tr>
             </thead>
             <tbody>
-              {data.docs.map((work, i) => (
+              {filteredBooks?.map((work, i) => (
                 <>
                   {work.editions.docs.map((edition) => (
                     <>
@@ -133,6 +139,23 @@ export default function SearchBookByQuery({
           </Table>
         </div>
       )}
+      {setupBooks && setupBooks.length > 0 && (
+        <ProposedBooks
+          setSetupBooks={setSetupBooks}
+          setupBooks={setupBooks}
+          removeBook={removeBook}
+        />
+      )}
+      <div className="mb-10 mt-20 flex flex-row space-x-6">
+        <Button
+          type="button"
+          size="large"
+          variant="secondary"
+          onClick={() => router.push("/dashboard/add-book")}
+        >
+          Back
+        </Button>
+      </div>
     </div>
   );
 }

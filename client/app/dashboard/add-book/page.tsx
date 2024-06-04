@@ -1,12 +1,11 @@
 "use client";
 
-import { AddBookModal } from "@/app/setup/books/AddBookModal";
-import { SetupBook, useGetCustomerSummary } from "@/hooks";
+import { AccordionManager, ProposedBooks } from "@/components";
+import { SetupBook, addBookWizard, useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddBookByIsbn } from "../AddBookByIsbn";
 
 const addBookshelfBook = getApiClient()
@@ -16,31 +15,22 @@ const addBookshelfBook = getApiClient()
 
 export default function AddBook() {
   const { isLoading, data, error, mutate } = useGetCustomerSummary(); //Will need new endpoint that just returns customer bookshelves names and IDs
-  const { user } = useUser();
   const [open, setOpen] = useState<boolean>(false);
 
-  const router = useRouter();
+  const { books, updateBook } = addBookWizard();
 
+  const router = useRouter();
+  const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
   const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
   const [currentSearch, setCurrentSearch] = useState<string | undefined>();
 
+  useEffect(() => {
+    setSetupBooks(books ?? []);
+  }, [books]);
+
   const addBook = async (book: SetupBook) => {
-    if (book === undefined || data === undefined || user === undefined) {
-      return; //error handelling needed
-    }
-    const bookshelfIds = data.bookshelves?.map((x) => x.id);
-    try {
-      await addBookshelfBook({
-        id: user.sub!,
-        isbn: book.isbn,
-        bookshelfId: bookshelfIds ?? [],
-      });
-    } catch {
-      console.log("Something went wrong!");
-    }
-    mutate();
-    router.push("/dashboard");
+    updateBook({ type: "add-books", setupBook: book });
   };
 
   if (isLoading) {
@@ -97,6 +87,11 @@ export default function AddBook() {
           </Button>
         </div>
       </div>
+
+      {setupBooks && setupBooks.length > 0 && (
+        <ProposedBooks setSetupBooks={setSetupBooks} setupBooks={setupBooks} />
+      )}
+
       <div className="mb-10 mt-20 flex flex-row space-x-6">
         <Button
           type="button"
