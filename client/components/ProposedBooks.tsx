@@ -6,9 +6,14 @@ import { AccordionManager } from ".";
 type Props = {
   setupBooks: SetupBook[];
   setSetupBooks: Dispatch<SetStateAction<SetupBook[]>>;
+  removeBook?: (isbn: string) => void;
 };
 
-export function ProposedBooks({ setupBooks, setSetupBooks }: Props) {
+export function ProposedBooks({
+  setupBooks,
+  setSetupBooks,
+  removeBook,
+}: Props) {
   return (
     <AccordionManager
       className="space-y-3 pt-12"
@@ -33,6 +38,9 @@ export function ProposedBooks({ setupBooks, setSetupBooks }: Props) {
                         setSetupBooks((prevItems) =>
                           prevItems?.filter((_, i) => i !== index),
                         );
+                        if (removeBook) {
+                          removeBook(book.isbn);
+                        }
                       }}
                       size="small"
                       variant="destructive"

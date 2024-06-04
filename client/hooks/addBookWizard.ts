@@ -9,6 +9,7 @@ type Action =
       type: "add-books";
       setupBook: SetupBook;
     }
+  | { type: "remove-book"; isbn: string }
   | { type: "default" };
 
 type AddBookProcess = {
@@ -30,6 +31,13 @@ const reducer = ({
     case "add-books": {
       return {
         books: [...(state.books ?? []), action.setupBook],
+      };
+    }
+    case "remove-book": {
+      return {
+        books: [...(state.books ?? [])].filter(
+          (prev) => prev.isbn === action.isbn,
+        ),
       };
     }
     case "default": {

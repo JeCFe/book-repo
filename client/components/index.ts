@@ -4,6 +4,7 @@ export * from "./Checkbox";
 export * from "./ManagedAccordion";
 export * from "./Modal";
 export * from "./Picture";
+export * from "./ProposedBooks";
 export * from "./RadioButton";
 export * from "./SideNav";
 export * from "./table";

@@ -11,7 +11,7 @@ type Props = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   setPassingIsbn: Dispatch<SetStateAction<string | undefined>>;
-  setCurrentIsbn: Dispatch<SetStateAction<string | undefined>>;
+  setCurrentIsbn?: Dispatch<SetStateAction<string | undefined>>;
 };
 
 export function AddBookModal({
@@ -52,7 +52,9 @@ export function AddBookModal({
         addBook(setupBook);
         setPassingIsbn(undefined);
         setShowModal(false);
-        setCurrentIsbn(undefined);
+        if (setCurrentIsbn !== undefined) {
+          setCurrentIsbn(undefined);
+        }
       }}
       error=""
       actioning={isLoading}
