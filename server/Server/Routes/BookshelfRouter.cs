@@ -27,7 +27,6 @@ public static class BookshelfRouter
     public static async Task<
         Results<Ok<List<BookshelfSummary>>, NotFound<string>, ForbidHttpResult>
     > GetBookshelfSummary(
-        Guid bookshelfId,
         string customerId,
         IBookshelfProvider provider,
         IUserContext userContext,
@@ -55,7 +54,7 @@ public static class BookshelfRouter
     {
         group.WithTags("Bookshelf");
         group.MapGet("/{bookshelfId}", GetBookshelf);
-        group.MapGet("/{bookshelfId}/{customerId}", GetBookshelfSummary);
+        group.MapGet("/summary/{customerId}", GetBookshelfSummary);
 
         return group;
     }

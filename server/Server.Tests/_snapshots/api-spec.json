@@ -208,21 +208,12 @@
         }
       }
     },
-    "/bookshelf/{bookshelfId}/{customerId}": {
+    "/bookshelf/summary/{customerId}": {
       "get": {
         "tags": [
           "Bookshelf"
         ],
         "parameters": [
-          {
-            "name": "bookshelfId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
           {
             "name": "customerId",
             "in": "path",
