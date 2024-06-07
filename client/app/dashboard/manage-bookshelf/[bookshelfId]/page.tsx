@@ -55,10 +55,29 @@ export default function ManageBookshelf({
     if (error === undefined || typeof error === "undefined") {
       return;
     }
-    toast.error(error);
-  }, error);
+    if (error instanceof Error) {
+      console.log(error.cause);
+      if (error.message == "Bad Request") {
+        toast.error(
+          "Unable to retrieve bookshelf as the bookshelf was in the wrong form",
+        );
+      } else {
+        toast.error(
+          `${error.message} prevent successful retrival of bookshelf`,
+        );
+      }
+    } else {
+      toast.error("An unknown error occurred retrieving bookshelf");
+    }
+
+    router.push("/dashboard");
+  }, [error]);
 
   useEffect(() => {
+    if (error !== undefined) {
+      return;
+    }
+
     if (isLoading) {
       return;
     }
@@ -162,7 +181,7 @@ export default function ManageBookshelf({
     );
   };
 
-  if (isLoading && data === undefined) {
+  if (isLoading || data === undefined || error !== undefined) {
     return (
       <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
         <div className="flex items-center justify-center">
