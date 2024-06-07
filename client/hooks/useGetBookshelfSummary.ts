@@ -2,19 +2,16 @@ import { getApiClient } from "@/services";
 import useSWR from "swr";
 
 const getBookshelfSummary = getApiClient()
-  .path("/bookshelf/{bookshelfId}/{customerId}")
+  .path("/bookshelf/summary/{customerId}")
   .method("get")
   .create();
 
-export const useGetBookshelfSummary = (
-  customerId: string,
-  bookshelfId: string,
-) => {
+export const useGetBookshelfSummary = (customerId: string) => {
   const { data, error, isLoading, mutate } = useSWR(
     "getCustomerSummary",
     async () => {
       try {
-        return (await getBookshelfSummary({ customerId, bookshelfId })).data;
+        return (await getBookshelfSummary({ customerId })).data;
       } catch (error) {
         throw error;
       }
