@@ -31,19 +31,10 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
     public async Task<List<BookshelfSummary>> GetBookshelfSummary(
         string customerId,
         CancellationToken cancellationToken
-    )
-    {
-        if (
-            (await context.Customer.FindAsync([ customerId ], cancellationToken))
-            is not { } customer
-        )
-        {
-            throw new UserNotFoundException();
-        }
-        return await (
-            from bookshelf in context.Bookshelves
-            where bookshelf.CustomerId == customerId
-            select new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name }
-        ).ToListAsync(cancellationToken);
-    }
+    ) =>
+        await context
+            .Bookshelves
+            .Where(x => x.CustomerId == customerId)
+            .Select(bookshelf => new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name })
+            .ToListAsync(cancellationToken);
 }

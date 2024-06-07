@@ -238,14 +238,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "Not Found"
           }
         }
       }
@@ -450,7 +443,21 @@
         "additionalProperties": false
       },
       "BookshelfSummary": {
+        "required": [
+          "id",
+          "name"
+        ],
         "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
         "additionalProperties": false
       },
       "BooktoShelf": {

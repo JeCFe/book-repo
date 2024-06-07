@@ -25,7 +25,7 @@ public static class BookshelfRouter
     }
 
     public static async Task<
-        Results<Ok<List<BookshelfSummary>>, NotFound<string>, ForbidHttpResult>
+        Results<Ok<List<BookshelfSummary>>, NotFound, ForbidHttpResult>
     > GetBookshelfSummary(
         string customerId,
         IBookshelfProvider provider,
@@ -38,16 +38,12 @@ public static class BookshelfRouter
         {
             return TypedResults.Forbid();
         }
-        try
+        var bookshelf = await provider.GetBookshelfSummary(customerId, cancellationToken);
+        if (bookshelf is not { })
         {
-            return TypedResults.Ok(
-                await provider.GetBookshelfSummary(customerId, cancellationToken)
-            );
+            return TypedResults.NotFound();
         }
-        catch (UserNotFoundException)
-        {
-            return TypedResults.NotFound("User not found");
-        }
+        return TypedResults.Ok(bookshelf);
     }
 
     public static RouteGroupBuilder MapBookshelfEndpoints(this RouteGroupBuilder group)
