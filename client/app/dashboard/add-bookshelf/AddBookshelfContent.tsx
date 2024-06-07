@@ -1,15 +1,21 @@
 "use client";
 
 import { AccordionManager } from "@/components";
-import { useGetBookshelfSummary } from "@/hooks";
+import { useGetBookshelfSummary, useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
+const addBookshelfBook = getApiClient()
+  .path("/action/add-bookshelf")
+  .method("post")
+  .create();
+
 export function AddBookshelfContent({ id }: { id: string }) {
   const { data } = useGetBookshelfSummary(id);
+  const { mutate } = useGetCustomerSummary();
   const [newBookshelves, setNewBookshelves] = useState<string[]>([]);
   const [newBookshelf, setNewBookshelf] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -37,6 +43,16 @@ export function AddBookshelfContent({ id }: { id: string }) {
 
   const saveChanges = () => {
     setIsSaving(true);
+    toast.promise(addBookshelfBook({ id, bookshelves: newBookshelves }), {
+      success: () => {
+        router.push("/dashboard");
+        mutate();
+        return "Bookshelves added successfully";
+      },
+      loading: "Adding new bookshelves",
+      error: "There was an issue adding bookshelves",
+    });
+    setIsSaving(false);
   };
 
   return (
@@ -137,7 +153,7 @@ export function AddBookshelfContent({ id }: { id: string }) {
         <Button
           type="button"
           size="large"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => saveChanges()}
           disabled={newBookshelves.length === 0}
           isLoading={isSaving}
         >
