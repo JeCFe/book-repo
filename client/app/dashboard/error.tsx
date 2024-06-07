@@ -11,8 +11,8 @@ export default function NotFound() {
       </h1>
 
       <p className="mt-4 flex max-w-sm text-center text-xl text-slate-400 md:max-w-full">
-        We're sorry, an unknown error has occurred. If this persists please
-        contact an admin.
+        {`We're sorry, an unknown error has occurred. If this persists please
+        contact an admin.`}
       </p>
       <Anchor href="/" className="pt-8 text-2xl">
         Escape
