@@ -11,7 +11,10 @@ export const useGetBookshelfSummary = (customerId: string) => {
     "getCustomerSummary",
     async () => {
       try {
-        return (await getBookshelfSummary({ customerId })).data;
+        return (await getBookshelfSummary({ customerId })).data as unknown as {
+          id: string;
+          name: string;
+        }[];
       } catch (error) {
         throw error;
       }

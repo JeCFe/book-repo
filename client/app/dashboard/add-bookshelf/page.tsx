@@ -1,13 +1,12 @@
 "use client";
 
-import { AccordionManager } from "@/components";
-import { useGetBookshelfSummary } from "@/hooks";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Anchor, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { AddBookshelfContent } from "./AddBookshelfContent";
 
 export default function AddBookshelf() {
   const { user, isLoading } = useUser();
+
   return (
     <div className="text-slate-400">
       <div className="flex flex-row space-x-2">
@@ -17,6 +16,9 @@ export default function AddBookshelf() {
       <h1 className="flex flex-col pb-4 text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         Add Bookshelf
       </h1>
+      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
+        You can add as many bookshelves that you want.
+      </div>
       {isLoading || !user || !user.sub ? (
         <Spinner />
       ) : (
