@@ -27,69 +27,11 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
 
         Customer customer = new() { Id = Id, CreationDate = ctx.time.GetUtcNow(), };
 
-        var homelessBookBookshelf = new Bookshelf()
-        {
-            Id = Guid.NewGuid(),
-            Name = "Homeless Books",
-            CreationDate = ctx.time.GetUtcNow(),
-            UpdatedDate = ctx.time.GetUtcNow(),
-        };
-        if (!Isbns.IsNullOrEmpty())
-        {
-            customer.Bookshelves =  [ ..customer.Bookshelves, homelessBookBookshelf ];
-        }
-
-        if (IncludeDefaultBookshelves)
-        {
-            customer.Bookshelves =
-            [
-                ..customer.Bookshelves,
-                new (){
-                    Id = Guid.NewGuid(),
-                    Name = "Wanting to read",
-                    CreationDate = ctx.time.GetUtcNow(),
-                    UpdatedDate = ctx.time.GetUtcNow(),
-                    
-                },
-                new (){
-                    Id = Guid.NewGuid(),
-                    Name = "Currently Reading",  
-                    CreationDate = ctx.time.GetUtcNow(),
-                    UpdatedDate = ctx.time.GetUtcNow(),
-                    
-                },
-                new (){
-                    Id = Guid.NewGuid(),
-                    Name = "Read",
-             
-                    CreationDate = ctx.time.GetUtcNow(),
-                    UpdatedDate = ctx.time.GetUtcNow(),
-                    
-                },
-            ];
-        }
-
-        if (BookshelvesNames is { } names)
-        {
-            List<Bookshelf> customBookshelves =  [ ];
-            foreach (var name in names)
-            {
-                customBookshelves.Add(
-                    new()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = name,
-                        CreationDate = DateTimeOffset.UtcNow
-                    }
-                );
-            }
-            customer.Bookshelves =  [ ..customer.Bookshelves, ..customBookshelves ];
-        }
-
-        dbContext.Customer.Add(customer);
-
         if (Isbns is { } isbns)
         {
+            var homelessBookBookshelf = StaticBookshelf.Homeless();
+            customer.Bookshelves =  [ ..customer.Bookshelves, homelessBookBookshelf ];
+
             List<BookshelfBook> bookshelfBooks =  [ ];
             foreach (var isbn in isbns)
             {
@@ -112,6 +54,36 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
             }
             dbContext.BookshelfBook.AddRange(bookshelfBooks);
         }
+
+        if (IncludeDefaultBookshelves)
+        {
+            customer.Bookshelves =
+            [
+                ..customer.Bookshelves,
+                StaticBookshelf.WantingToRead(),
+                StaticBookshelf.CurrentlyRead(),
+                StaticBookshelf.Read(),
+            ];
+        }
+
+        if (BookshelvesNames is { } names)
+        {
+            List<Bookshelf> customBookshelves =  [ ];
+            foreach (var name in names)
+            {
+                customBookshelves.Add(
+                    new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = name,
+                        CreationDate = DateTimeOffset.UtcNow
+                    }
+                );
+            }
+            customer.Bookshelves =  [ ..customer.Bookshelves, ..customBookshelves ];
+        }
+
+        dbContext.Customer.Add(customer);
 
         await dbContext.SaveChangesAsync(cancellationToken);
     }
