@@ -27,6 +27,31 @@
         }
       }
     },
+    "/action/add-bookshelf": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookshelfCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/action/setup-customer": {
       "post": {
         "tags": [
@@ -208,6 +233,41 @@
         }
       }
     },
+    "/bookshelf/summary/{customerId}": {
+      "get": {
+        "tags": [
+          "Bookshelf"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookshelfSummary"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/customer/get-customer-summary": {
       "get": {
         "tags": [
@@ -324,6 +384,27 @@
         },
         "additionalProperties": false
       },
+      "AddBookshelfCommand": {
+        "required": [
+          "bookshelves",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Book": {
         "required": [
           "isbn",
@@ -371,6 +452,7 @@
         "required": [
           "books",
           "creationDate",
+          "homelessBooks",
           "id",
           "name",
           "updatedDate"
@@ -399,6 +481,27 @@
           "updatedDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "homelessBooks": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BookshelfSummary": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

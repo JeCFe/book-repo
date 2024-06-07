@@ -30,6 +30,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                         Id = x.Id,
                         CreationDate = x.CreationDate,
                         UpdatedDate = x.UpdatedDate,
+                        HomelessBooks = x.HomelessBooks,
                         Books = [..dbContext.BookshelfBook.Where(y => y.Bookshelf.Id == x.Id).Select(z => new BooktoShelf(){
                             Order = z.Order,
                             Book = z.Book

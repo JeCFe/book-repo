@@ -31,14 +31,14 @@ const accordionIcon = cva(
 
 const accordion = cva(
   [
-    "transition-max-height overflow-hidden duration-300 ease-in-out",
+    "transition-max-height duration-300 ease-in-out",
     "border-l border-slate-200 pl-10",
     "text-slate-400 leading-normal text-lg",
   ],
   {
     variants: {
       open: {
-        true: "max-h-96 opacity-100 ml-5",
+        true: "max-h-96 opacity-100 ml-5 overflow-x-auto",
         false: "max-h-0 opacity-0",
       },
     },

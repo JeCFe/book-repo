@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Exceptions;
 using Server.Models;
 
 namespace Server.Providers;
@@ -17,6 +18,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
                 Name = bookshelf.Name,
                 CreationDate = bookshelf.CreationDate,
                 UpdatedDate = bookshelf.UpdatedDate,
+                HomelessBooks = bookshelf.HomelessBooks,
                 Books = (
                     from book in context.BookshelfBook
                     where book.BookshelfId == bookshelf.Id
@@ -25,4 +27,14 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
             };
         return await customerBookshelf.FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task<List<BookshelfSummary>> GetBookshelfSummary(
+        string customerId,
+        CancellationToken cancellationToken
+    ) =>
+        await context
+            .Bookshelves
+            .Where(x => x.CustomerId == customerId)
+            .Select(bookshelf => new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name })
+            .ToListAsync(cancellationToken);
 }

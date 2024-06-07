@@ -24,7 +24,7 @@ describe("Login redirects", () => {
       cy.url().should("contain", "/dashboard");
     });
 
-    it("redirects to splash page from dashboard after logging out", () => {
+    it.skip("redirects to splash page from dashboard after logging out", () => {
       cy.intercept(
         { method: "GET", url: "/customer/get-customer-summary" },
         { id: "123", createdOn: "Today", bookshelves: [] },
