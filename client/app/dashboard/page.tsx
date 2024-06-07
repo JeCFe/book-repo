@@ -13,6 +13,9 @@ export default function Dashboard() {
   const { user } = useUser();
 
   useEffect(() => {
+    if (error) {
+      throw error;
+    }
     if (!isLoading && !data && user) {
       router.push("/setup");
     }

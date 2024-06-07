@@ -5,7 +5,7 @@ import { paths } from "../server-client";
 export const getApiClient = () => {
   const client = Fetcher.for<paths>();
   client.configure({
-    use: [addBaseUrl(), addAuth()],
+    use: [addAuth(), addBaseUrl()],
   });
   return client;
 };
