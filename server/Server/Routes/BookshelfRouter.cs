@@ -3,6 +3,7 @@ namespace Server.Routes;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Server.Context;
+using Server.Exceptions;
 using Server.Models;
 using Server.Providers;
 
@@ -23,10 +24,38 @@ public static class BookshelfRouter
         return TypedResults.Ok(bookshelf);
     }
 
+    public static async Task<
+        Results<Ok<List<BookshelfSummary>>, NotFound<string>, ForbidHttpResult>
+    > GetBookshelfSummary(
+        Guid bookshelfId,
+        string customerId,
+        IBookshelfProvider provider,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { } || customerId != userId)
+        {
+            return TypedResults.Forbid();
+        }
+        try
+        {
+            return TypedResults.Ok(
+                await provider.GetBookshelfSummary(customerId, cancellationToken)
+            );
+        }
+        catch (UserNotFoundException)
+        {
+            return TypedResults.NotFound("User not found");
+        }
+    }
+
     public static RouteGroupBuilder MapBookshelfEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Bookshelf");
         group.MapGet("/{bookshelfId}", GetBookshelf);
+        group.MapGet("/{bookshelfId}/{customerId}", GetBookshelfSummary);
 
         return group;
     }
