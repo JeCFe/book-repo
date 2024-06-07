@@ -22,10 +22,9 @@ describe("Login redirects", () => {
       cy.visit("/");
       cy.findButtonByName(ButtonName.TAKE_ME_THERE).click();
       cy.url().should("contain", "/dashboard");
-      cy.findByText(Cypress.env("CYPRESS_USERNAME"));
     });
 
-    it.only("redirects to splash page from dashboard after logging out", () => {
+    it("redirects to splash page from dashboard after logging out", () => {
       cy.intercept(
         { method: "GET", url: "/customer/get-customer-summary" },
         { id: "123", createdOn: "Today", bookshelves: [] },
@@ -37,14 +36,16 @@ describe("Login redirects", () => {
       cy.url().should("eq", "http://localhost:3000/");
     });
 
-    it.only("should redirect to /setup if there's no customer data", () => {
-      cy.intercept({ method: "GET", url: "/customer/get-customer-summary" }).as(
-        "customerSummary",
-      );
-      cy.visit("/dashboard");
+    it("should redirect to /setup if there's no customer data", () => {
+      cy.intercept(
+        { method: "GET", url: "/customer/get-customer-summary" },
+        {},
+      ).as("customerSummary");
       cy.login("@customerSummary");
+      cy.visit("/dashboard");
+
       cy.url().should("contain", "/setup");
-      // cy.wait("@customerSummary");
+      //cy.wait("@customerSummary");
       cy.findByText("Setup your account").should("exist");
     });
 
