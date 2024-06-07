@@ -16,6 +16,7 @@ public record Bookshelf()
     public required List<BooktoShelf> Books { get; init; } = [ ];
     public required DateTimeOffset CreationDate { get; init; }
     public required DateTimeOffset UpdatedDate { get; set; }
+    public required bool HomelessBooks { get; init; }
 }
 
 public record BooktoShelf()
