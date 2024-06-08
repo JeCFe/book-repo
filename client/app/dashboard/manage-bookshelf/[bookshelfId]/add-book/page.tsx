@@ -1,13 +1,9 @@
 "use client";
 
 import { AddBookByIsbn } from "@/app/dashboard/AddBookByIsbn";
-import {
-  SetupBook,
-  useGetBookshelfSummary,
-  useGetCustomerSummary,
-} from "@/hooks";
+import { SetupBook, useGetBookshelfSummary } from "@/hooks";
 import { getApiClient } from "@/services";
-import { UserProfile, useUser } from "@auth0/nextjs-auth0/client";
+import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,7 +18,7 @@ type Props = {
   params: { bookshelfId: string };
 };
 
-export default function AddBook({
+export default withPageAuthRequired(function AddBook({
   params,
   user,
 }: Props & { user: UserProfile }) {
@@ -84,4 +80,4 @@ export default function AddBook({
       />
     </div>
   );
-}
+});

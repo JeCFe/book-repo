@@ -1,7 +1,7 @@
 "use client";
 
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { Anchor } from "@jecfe/react-design-system";
 import { AddBookshelfContent } from "./AddBookshelfContent";
 
 export default withPageAuthRequired(function AddBookshelf({ user }) {

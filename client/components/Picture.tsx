@@ -39,8 +39,8 @@ export function Picture({
         <Image
           alt={title}
           src={pictureUrl}
-          width={192}
-          height={256}
+          width={width}
+          height={height}
           className={picture({ size })}
         />
       )}

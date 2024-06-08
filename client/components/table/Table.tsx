@@ -11,7 +11,7 @@ type Props = {
 
 export function Table({ caption, children, className, ...props }: Props) {
   return (
-    <table className={table({ className })}>
+    <table className={table({ className })} {...props}>
       {caption && <caption>{caption}</caption>}
       {children}
     </table>

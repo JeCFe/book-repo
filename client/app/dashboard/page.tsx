@@ -6,6 +6,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
@@ -13,9 +14,10 @@ export default withPageAuthRequired(function Dashboard({ user }) {
 
   useEffect(() => {
     if (error) {
+      toast.error("There was an error retrieving your dashboard data");
       throw error;
     }
-    if (!isLoading && !data && user) {
+    if (!isLoading && !data) {
       router.push("/setup");
     }
   }, [data, error, isLoading]);

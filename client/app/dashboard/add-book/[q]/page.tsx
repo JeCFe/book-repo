@@ -43,7 +43,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
       return;
     }
     setSetupBooks(books ?? []);
-  }, [isLoading]);
+  }, [isLoading, books]);
 
   const addBook = async (book: SetupBook) => {
     const updatedBook = updateBook({ type: "add-books", setupBook: book });
@@ -61,7 +61,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
         (editionDoc) => !isbnSet.has(editionDoc.isbn![0]),
       ),
     );
-  }, [books, data]);
+  }, [books, data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });

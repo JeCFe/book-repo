@@ -148,6 +148,7 @@ export default withPageAuthRequired(function ManageBookshelf({
   };
 
   const removeBook = (book: Book) => {
+    setIsDeletingBookcase(true);
     toast.promise(
       removeBookshelfBook({
         customerId: user?.sub as string,
@@ -156,13 +157,16 @@ export default withPageAuthRequired(function ManageBookshelf({
       }),
       {
         loading: `Removing ${book.book.name} from ${data?.name}`,
-        success: `Successfully removed ${book.book.name}`,
+        success: () => {
+          mutate();
+          return `Successfully removed ${book.book.name}`;
+        },
         error: `There was an error when trying to remove ${book.book.name}`,
       },
 
       { id: book.book.isbn as string },
     );
-    mutate();
+    setIsDeletingBookcase(false);
   };
 
   const removeBookshelfFunc = () => {
