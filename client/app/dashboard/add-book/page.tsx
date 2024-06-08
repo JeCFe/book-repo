@@ -47,7 +47,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
 
   const saveBooks = async () => {
     setIsSavingBooks(true);
-    for (var book of setupBooks) {
+    for (const book of setupBooks) {
       await toast.promise(
         addBookshelfBook({ id: user.sub!, bookshelfId: [], isbn: book.isbn }),
         {
