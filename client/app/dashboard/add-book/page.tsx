@@ -19,103 +19,95 @@ const addBookshelfBook = getApiClient()
   .method("post")
   .create();
 
-export default withPageAuthRequired(
-  function AddBook({ user }) {
-    const { isLoading, data, error, mutate } = useGetBookshelfSummary(
-      user.sub!,
-    );
-    const [open, setOpen] = useState<boolean>(false);
+export default withPageAuthRequired(function AddBook({ user }) {
+  const { isLoading, data, error, mutate } = useGetBookshelfSummary(user.sub!);
+  const [open, setOpen] = useState<boolean>(false);
 
-    const { books, updateBook } = useBookWizard();
+  const { books, updateBook } = useBookWizard();
 
-    const router = useRouter();
-    const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
-    const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
-    const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
-    const [currentSearch, setCurrentSearch] = useState<string | undefined>();
+  const router = useRouter();
+  const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
+  const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
+  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
+  const [currentSearch, setCurrentSearch] = useState<string | undefined>();
 
-    useEffect(() => {
-      setSetupBooks(books ?? []);
-    }, [books]);
+  useEffect(() => {
+    setSetupBooks(books ?? []);
+  }, [books]);
 
-    const addBook = async (book: SetupBook) => {
-      updateBook({ type: "add-books", setupBook: book });
-    };
+  const addBook = async (book: SetupBook) => {
+    updateBook({ type: "add-books", setupBook: book });
+  };
 
-    if (isLoading) {
-      <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
-        <div className="flex items-center justify-center">
-          <Spinner fast={isLoading} size="large" />
+  if (isLoading) {
+    <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
+      <div className="flex items-center justify-center">
+        <Spinner fast={isLoading} size="large" />
+      </div>
+    </div>;
+  }
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-row space-x-2 pb-6">
+        <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
+
+        <div className="text-slate-400 underline underline-offset-4">
+          {"< Add book"}
         </div>
-      </div>;
-    }
+      </div>
+      <AddBookByIsbn
+        passingIsbn={passingIsbn}
+        setPassingIsbn={setPassingIsbn}
+        currentIsbn={currentIsbn}
+        setCurrentIsbn={setCurrentIsbn}
+        addBook={addBook}
+        open={open}
+        setOpen={setOpen}
+      />
 
-    return (
-      <div className="flex flex-col">
-        <div className="flex flex-row space-x-2 pb-6">
-          <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
-
-          <div className="text-slate-400 underline underline-offset-4">
-            {"< Add book"}
-          </div>
-        </div>
-        <AddBookByIsbn
-          passingIsbn={passingIsbn}
-          setPassingIsbn={setPassingIsbn}
-          currentIsbn={currentIsbn}
-          setCurrentIsbn={setCurrentIsbn}
-          addBook={addBook}
-          open={open}
-          setOpen={setOpen}
-        />
-
-        <div className="mt-10">
-          <div className="mb-4 text-xl text-slate-300">{`Search for book by name and author`}</div>
-          <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-            <input
-              type="text"
-              value={currentSearch ?? ""}
-              onChange={(e) => {
-                setCurrentSearch(e.target.value);
-              }}
-              placeholder="Enter search criteria"
-              className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
-            />
-            <Button
-              size="large"
-              variant="primary"
-              onClick={() =>
-                router.push(
-                  `/dashboard/add-book/${encodeURIComponent(currentSearch!)}`,
-                )
-              }
-              type="button"
-              disabled={currentSearch === undefined || currentSearch === ""}
-            >
-              Lookup Book
-            </Button>
-          </div>
-        </div>
-
-        {setupBooks && setupBooks.length > 0 && (
-          <ProposedBooks
-            setSetupBooks={setSetupBooks}
-            setupBooks={setupBooks}
+      <div className="mt-10">
+        <div className="mb-4 text-xl text-slate-300">{`Search for book by name and author`}</div>
+        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
+          <input
+            type="text"
+            value={currentSearch ?? ""}
+            onChange={(e) => {
+              setCurrentSearch(e.target.value);
+            }}
+            placeholder="Enter search criteria"
+            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
           />
-        )}
-
-        <div className="mb-10 mt-20 flex flex-row space-x-6">
           <Button
-            type="button"
             size="large"
-            variant="secondary"
-            onClick={() => router.push("/dashboard")}
+            variant="primary"
+            onClick={() =>
+              router.push(
+                `/dashboard/add-book/${encodeURIComponent(currentSearch!)}`,
+              )
+            }
+            type="button"
+            disabled={currentSearch === undefined || currentSearch === ""}
           >
-            Back
+            Lookup Book
           </Button>
         </div>
       </div>
-    );
-  },
-  { returnTo: "/dashboard/add-book" },
-);
+
+      {setupBooks && setupBooks.length > 0 && (
+        <ProposedBooks setSetupBooks={setSetupBooks} setupBooks={setupBooks} />
+      )}
+
+      <div className="mb-10 mt-20 flex flex-row space-x-6">
+        <Button
+          type="button"
+          size="large"
+          variant="secondary"
+          onClick={() => router.push("/dashboard")}
+        >
+          Back
+        </Button>
+      </div>
+    </div>
+  );
+});
