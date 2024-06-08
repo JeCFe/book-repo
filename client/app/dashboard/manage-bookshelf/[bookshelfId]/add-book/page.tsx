@@ -1,9 +1,13 @@
 "use client";
 
 import { AddBookByIsbn } from "@/app/dashboard/AddBookByIsbn";
-import { SetupBook, useGetCustomerSummary } from "@/hooks";
+import {
+  SetupBook,
+  useGetBookshelfSummary,
+  useGetCustomerSummary,
+} from "@/hooks";
 import { getApiClient } from "@/services";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { UserProfile, useUser } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,16 +18,17 @@ const addBookshelfBook = getApiClient()
   .method("post")
   .create();
 
+type Props = {
+  params: { bookshelfId: string };
+};
+
 export default function AddBook({
   params,
-}: {
-  params: { bookshelfId: string };
-}) {
+  user,
+}: Props & { user: UserProfile }) {
   const { bookshelfId } = params;
-  const { isLoading, data, error, mutate } = useGetCustomerSummary(); //Will need new endpoint that just returns customer bookshelves names and IDs
-  const { user } = useUser();
+  const { isLoading, data, error, mutate } = useGetBookshelfSummary(user.sub!);
   const [open, setOpen] = useState<boolean>(false);
-
   const router = useRouter();
 
   const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
