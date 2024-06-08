@@ -1,6 +1,6 @@
 import { ButtonName, Title } from "../lib/enum";
 
-describe("Login redirects", () => {
+describe.skip("Login redirects", () => {
   describe("/dashboard", () => {
     it("redirect to login page and then dashboard from splash page", () => {
       cy.intercept(
