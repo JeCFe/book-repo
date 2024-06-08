@@ -34,6 +34,10 @@ export default withPageAuthRequired(function AddBook({ user }) {
     updateBook({ type: "add-books", setupBook: book });
   };
 
+  const removeBook = (isbn: string) => {
+    updateBook({ type: "remove-book", isbn });
+  };
+
   if (isLoading) {
     <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
       <div className="flex items-center justify-center">
@@ -90,7 +94,11 @@ export default withPageAuthRequired(function AddBook({ user }) {
       </div>
 
       {setupBooks && setupBooks.length > 0 && (
-        <ProposedBooks setSetupBooks={setSetupBooks} setupBooks={setupBooks} />
+        <ProposedBooks
+          setSetupBooks={setSetupBooks}
+          setupBooks={setupBooks}
+          removeBook={removeBook}
+        />
       )}
 
       <div className="mb-10 mt-20 flex flex-row space-x-6">

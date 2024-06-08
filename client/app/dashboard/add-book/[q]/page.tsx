@@ -27,13 +27,6 @@ export default withPageAuthRequired(function SearchBookByQuery({
 
   const { books, updateBook } = useBookWizard();
 
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-    console.log(data);
-  }, [data]);
-
   const viewBook = (isbn: string) => {
     setPassingIsbn(isbn);
     setOpen(true);
@@ -46,8 +39,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
   }, [isLoading, books]);
 
   const addBook = async (book: SetupBook) => {
-    const updatedBook = updateBook({ type: "add-books", setupBook: book });
-    setSetupBooks(updatedBook.books ?? []);
+    updateBook({ type: "add-books", setupBook: book });
   };
 
   const filteredBooks = useMemo(() => {

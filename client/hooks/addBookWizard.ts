@@ -34,10 +34,11 @@ const reducer = ({
       };
     }
     case "remove-book": {
+      if (state.books === undefined || state.books.length === 0) {
+        return { books: [] };
+      }
       return {
-        books: [...(state.books ?? [])].filter(
-          (prev) => prev.isbn === action.isbn,
-        ),
+        books: [...state.books].filter((prev) => prev.isbn !== action.isbn),
       };
     }
     case "default": {
