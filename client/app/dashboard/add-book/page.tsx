@@ -1,12 +1,18 @@
 "use client";
 
 import { ProposedBooks } from "@/components";
-import { SetupBook, useBookWizard, useGetBookshelfSummary } from "@/hooks";
+import {
+  SetupBook,
+  useBookWizard,
+  useGetBookshelfSummary,
+  useGetCustomerSummary,
+} from "@/hooks";
 import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { AddBookByIsbn } from "../AddBookByIsbn";
 
 const addBookshelfBook = getApiClient()
@@ -16,6 +22,7 @@ const addBookshelfBook = getApiClient()
 
 export default withPageAuthRequired(function AddBook({ user }) {
   const { isLoading } = useGetBookshelfSummary(user.sub!);
+  const { mutate } = useGetCustomerSummary();
   const [open, setOpen] = useState<boolean>(false);
 
   const { books, updateBook } = useBookWizard();
@@ -25,6 +32,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
   const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
   const [currentSearch, setCurrentSearch] = useState<string | undefined>();
+  const [isSavingBooks, setIsSavingBooks] = useState<boolean>(false);
 
   useEffect(() => {
     setSetupBooks(books ?? []);
@@ -36,6 +44,24 @@ export default withPageAuthRequired(function AddBook({ user }) {
 
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });
+  };
+
+  const saveBooks = async () => {
+    setIsSavingBooks(true);
+    for (var book of setupBooks) {
+      await toast.promise(
+        addBookshelfBook({ id: user.sub!, bookshelfId: [], isbn: book.isbn }),
+        {
+          loading: `Adding ${book.name}`,
+          success: `Added ${book.name}`,
+          error: `There was an error adding ${book.name}`,
+        },
+      );
+    }
+
+    router.push("/dashboard");
+    mutate();
+    setIsSavingBooks(false);
   };
 
   if (isLoading) {
@@ -109,6 +135,15 @@ export default withPageAuthRequired(function AddBook({ user }) {
           onClick={() => router.push("/dashboard")}
         >
           Back
+        </Button>
+        <Button
+          type="button"
+          size="large"
+          disabled={setupBooks.length === 0}
+          isLoading={isSavingBooks}
+          onClick={() => saveBooks()}
+        >
+          Add books
         </Button>
       </div>
     </div>
