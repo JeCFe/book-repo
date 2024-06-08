@@ -1,8 +1,9 @@
 "use client";
 
-import { AccordionManager, ProposedBooks } from "@/components";
-import { SetupBook, useBookWizard, useGetCustomerSummary } from "@/hooks";
+import { ProposedBooks } from "@/components";
+import { SetupBook, useBookWizard, useGetBookshelfSummary } from "@/hooks";
 import { getApiClient } from "@/services";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,8 +14,8 @@ const addBookshelfBook = getApiClient()
   .method("post")
   .create();
 
-export default function AddBook() {
-  const { isLoading, data, error, mutate } = useGetCustomerSummary(); //Will need new endpoint that just returns customer bookshelves names and IDs
+export default withPageAuthRequired(function AddBook({ user }) {
+  const { isLoading } = useGetBookshelfSummary(user.sub!);
   const [open, setOpen] = useState<boolean>(false);
 
   const { books, updateBook } = useBookWizard();
@@ -104,4 +105,4 @@ export default function AddBook() {
       </div>
     </div>
   );
-}
+});

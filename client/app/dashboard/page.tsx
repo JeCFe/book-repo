@@ -2,29 +2,25 @@
 
 import { Picture, SideNav } from "@/components";
 import { useGetCustomerSummary } from "@/hooks";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
-export default function Dashboard() {
+export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
   const router = useRouter();
-  const { user } = useUser();
 
   useEffect(() => {
     if (error) {
+      toast.error("There was an error retrieving your dashboard data");
       throw error;
     }
-    if (!isLoading && !data && user) {
+    if (!isLoading && !data) {
       router.push("/setup");
     }
-    if (!isLoading && !data && !user) {
-      router.push(
-        `/api/auth/login?returnTo=${encodeURIComponent("/dashboard")}`,
-      );
-    }
-  }, [data, error, isLoading, router]);
+  }, [data, error, isLoading]);
 
   if (isLoading && !data) {
     return (
@@ -50,7 +46,7 @@ export default function Dashboard() {
               </div>
               <div className="h-f flex flex-row items-center px-4 pt-4 text-center text-base">
                 <div className="flex items-center text-center text-slate-400">
-                  {user?.nickname}
+                  {user.nickname}
                 </div>
                 <div className="flex flex-grow" />
                 <div className="flex flex-row space-x-2">
@@ -105,4 +101,4 @@ export default function Dashboard() {
       </div>
     );
   }
-}
+});

@@ -2,10 +2,11 @@
 import { AccordionManager } from "@/components";
 import { SetupBook, SetupBookshelf, useSetupWizard } from "@/hooks";
 import { getApiClient } from "@/services";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { SetupModal } from "../SetupModal";
 import { ReviewOption } from "./ReviewOptions";
 
@@ -19,13 +20,11 @@ const updateNickname = getApiClient()
   .method("post")
   .create();
 
-export default function Preview() {
+export default withPageAuthRequired(function Preview() {
   const { isComplete, nickname, books, bookshelves, includeDefaults } =
     useSetupWizard();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [nicknameError, setNicknameError] = useState<string | undefined>();
-  const [error, setError] = useState<string | undefined>();
   const [customerBooks, setCustomerBooks] = useState<SetupBook[]>([]);
   const [customerNickname, setCustomerNickname] = useState<
     string | undefined
@@ -67,32 +66,38 @@ export default function Preview() {
   const onContinue = async () => {
     setIsLoading(true);
     if (user?.nickname !== nickname) {
-      try {
-        setNicknameError(undefined);
-        await updateNickname({
+      toast.promise(
+        updateNickname({
           id: user?.sub as string,
           nickname: customerNickname,
-        });
-      } catch (e) {
-        setNicknameError(
-          "Something went wrong with updating your username, please try this again later",
-        );
-      }
+        }),
+        {
+          loading: "Upading nickname",
+          success: "Nickname updated successfully",
+          error:
+            "Something went wrong with updating your username, you will be able to update this later",
+        },
+      );
     }
-    try {
-      setError(undefined);
-      await setupCustomer({
+
+    toast.promise(
+      setupCustomer({
         id: user!.sub as string,
         bookshelvesNames: bookshelves,
         isbns: books?.map((x) => x.isbn),
         includeDefaultBookshelves: includeDefaults,
-      });
-      router.push("/dashboard");
-    } catch {
-      setError(
-        "Something went wrong with setting up your account. Please try again later, or contact an admin",
-      );
-    }
+      }),
+      {
+        loading: "Setting up account",
+        success: () => {
+          router.push("/dashboard");
+          return "Account has been setup";
+        },
+        error:
+          "Something went wrong with setting up your account. Please try again later, or contact an admin",
+      },
+    );
+
     setIsLoading(false);
   };
 
@@ -183,4 +188,4 @@ export default function Preview() {
       </div>
     </div>
   );
-}
+});

@@ -1,10 +1,10 @@
 "use client";
 
 import { RadioButton } from "@/components";
-import { Config, useGetCustomerSummary, useSetupWizard } from "@/hooks";
+import { Config, useSetupWizard } from "@/hooks";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { SetupModal } from "./SetupModal";
 
@@ -12,16 +12,9 @@ type FormValues = {
   radio: Config;
 };
 
-export default function SetupPath() {
+export default withPageAuthRequired(function SetupPath() {
   const { config, complete, updateCustomer } = useSetupWizard();
-  const { isLoading, data } = useGetCustomerSummary();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading && data) {
-      router.push("/dashboard");
-    }
-  }, [data, isLoading, router]);
 
   const {
     register,
@@ -98,4 +91,4 @@ export default function SetupPath() {
       </form>
     </div>
   );
-}
+});

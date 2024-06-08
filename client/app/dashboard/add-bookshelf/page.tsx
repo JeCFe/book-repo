@@ -1,12 +1,10 @@
 "use client";
 
-import { useUser } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { Anchor } from "@jecfe/react-design-system";
 import { AddBookshelfContent } from "./AddBookshelfContent";
 
-export default function AddBookshelf() {
-  const { user, isLoading } = useUser();
-
+export default withPageAuthRequired(function AddBookshelf({ user }) {
   return (
     <div className="text-slate-400">
       <div className="flex flex-row space-x-2">
@@ -19,11 +17,7 @@ export default function AddBookshelf() {
       <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
         You can add as many bookshelves that you want.
       </div>
-      {isLoading || !user || !user.sub ? (
-        <Spinner />
-      ) : (
-        <AddBookshelfContent id={user?.sub} />
-      )}
+      <AddBookshelfContent id={user.sub!} />
     </div>
   );
-}
+});

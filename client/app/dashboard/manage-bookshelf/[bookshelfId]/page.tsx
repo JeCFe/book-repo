@@ -2,7 +2,7 @@
 import { Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient } from "@/services";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
@@ -37,13 +37,16 @@ type Book = {
   order: number;
 };
 
-export default function ManageBookshelf({
-  params,
-}: {
+type Props = {
   params: { bookshelfId: string };
-}) {
+};
+
+export default withPageAuthRequired(function ManageBookshelf({
+  params,
+  user,
+}: Props & { user: UserProfile }) {
   const { bookshelfId } = params;
-  const { user } = useUser();
+
   const { data, isLoading, error, mutate } = useGetBookshelf(bookshelfId);
   const [books, setBooks] = useState<Book[]>([]);
   const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
@@ -145,6 +148,7 @@ export default function ManageBookshelf({
   };
 
   const removeBook = (book: Book) => {
+    setIsDeletingBookcase(true);
     toast.promise(
       removeBookshelfBook({
         customerId: user?.sub as string,
@@ -153,13 +157,16 @@ export default function ManageBookshelf({
       }),
       {
         loading: `Removing ${book.book.name} from ${data?.name}`,
-        success: `Successfully removed ${book.book.name}`,
+        success: () => {
+          mutate();
+          return `Successfully removed ${book.book.name}`;
+        },
         error: `There was an error when trying to remove ${book.book.name}`,
       },
 
       { id: book.book.isbn as string },
     );
-    mutate();
+    setIsDeletingBookcase(false);
   };
 
   const removeBookshelfFunc = () => {
@@ -268,4 +275,4 @@ export default function ManageBookshelf({
       </div>
     );
   }
-}
+});

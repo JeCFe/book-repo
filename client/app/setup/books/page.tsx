@@ -2,6 +2,7 @@
 
 import { AccordionManager } from "@/components";
 import { SetupBook, useSetupWizard } from "@/hooks";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ export type FormValues = {
   checkBox: boolean;
 };
 
-export default function Books() {
+export default withPageAuthRequired(function Books() {
   const { config, books, updateCustomer } = useSetupWizard();
 
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
@@ -152,4 +153,4 @@ export default function Books() {
       </div>
     </div>
   );
-}
+});

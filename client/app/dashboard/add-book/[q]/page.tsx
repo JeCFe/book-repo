@@ -3,6 +3,7 @@ import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
 import { getApiClient } from "@/services";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -12,7 +13,7 @@ const addBookshelfBook = getApiClient()
   .method("post")
   .create();
 
-export default function SearchBookByQuery({
+export default withPageAuthRequired(function SearchBookByQuery({
   params,
 }: {
   params: { q: string };
@@ -42,7 +43,7 @@ export default function SearchBookByQuery({
       return;
     }
     setSetupBooks(books ?? []);
-  }, [isLoading]);
+  }, [isLoading, books]);
 
   const addBook = async (book: SetupBook) => {
     const updatedBook = updateBook({ type: "add-books", setupBook: book });
@@ -60,7 +61,7 @@ export default function SearchBookByQuery({
         (editionDoc) => !isbnSet.has(editionDoc.isbn![0]),
       ),
     );
-  }, [books, data]);
+  }, [books, data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });
@@ -152,4 +153,4 @@ export default function SearchBookByQuery({
       </div>
     </div>
   );
-}
+});

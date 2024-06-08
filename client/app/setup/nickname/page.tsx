@@ -1,7 +1,8 @@
 "use client";
 
 import { useSetupWizard } from "@/hooks";
-import { useUser } from "@auth0/nextjs-auth0/client";
+
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -12,9 +13,8 @@ export type FormValues = {
   nickname: string;
 };
 
-export default function Nickname() {
+export default withPageAuthRequired(function Nickname({ user }) {
   const { config, complete, nickname, updateCustomer } = useSetupWizard();
-  const { user } = useUser();
 
   const router = useRouter();
 
@@ -98,4 +98,4 @@ export default function Nickname() {
       </form>
     </div>
   );
-}
+});
