@@ -22,7 +22,6 @@ const addBookshelfBook = getApiClient()
 
 export default withPageAuthRequired(function AddBook({ user }) {
   const { isLoading } = useGetBookshelfSummary(user.sub!);
-  const { mutate } = useGetCustomerSummary();
   const [open, setOpen] = useState<boolean>(false);
 
   const { books, updateBook } = useBookWizard();
@@ -60,7 +59,6 @@ export default withPageAuthRequired(function AddBook({ user }) {
     }
 
     router.push("/dashboard");
-    mutate();
     setIsSavingBooks(false);
   };
 

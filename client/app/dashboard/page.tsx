@@ -1,7 +1,7 @@
 "use client";
 
 import { Picture, SideNav } from "@/components";
-import { useGetCustomerSummary } from "@/hooks";
+import { useBookWizard, useGetCustomerSummary, useSetupWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,13 @@ import toast from "react-hot-toast";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
+  const { updateBook } = useBookWizard();
+
   const router = useRouter();
+
+  useEffect(() => {
+    updateBook({ type: "default" });
+  }, []);
 
   useEffect(() => {
     if (error) {

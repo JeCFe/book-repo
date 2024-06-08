@@ -7,7 +7,7 @@ const getCustomerSummary = getApiClient()
   .create();
 
 export const useGetCustomerSummary = () => {
-  const { data, error, isLoading, mutate } = useSWR(
+  const { data, error, isLoading, mutate, isValidating } = useSWR(
     "getCustomerSummary",
     async () => {
       try {
@@ -25,6 +25,7 @@ export const useGetCustomerSummary = () => {
     data,
     error,
     isLoading,
+    isValidating,
     mutate,
   };
 };
