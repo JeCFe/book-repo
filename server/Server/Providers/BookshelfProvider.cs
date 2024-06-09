@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Domain.Models;
 using Server.Exceptions;
 using Server.Models;
 
@@ -7,12 +8,15 @@ namespace Server.Providers;
 
 public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
 {
-    public async Task<Bookshelf?> GetBookshelfById(Guid id, CancellationToken cancellationToken)
+    public async Task<Models.Bookshelf?> GetBookshelfById(
+        Guid id,
+        CancellationToken cancellationToken
+    )
     {
         var customerBookshelf =
             from bookshelf in context.Bookshelves
             where bookshelf.Id == id
-            select new Bookshelf
+            select new Models.Bookshelf
             {
                 Id = bookshelf.Id,
                 Name = bookshelf.Name,
@@ -37,4 +41,32 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
             .Where(x => x.CustomerId == customerId)
             .Select(bookshelf => new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name })
             .ToListAsync(cancellationToken);
+
+    public async Task<Guid> GetHomelessBookshelfId(
+        string customerId,
+        CancellationToken cancellationToken
+    )
+    {
+        if (
+            await context
+                .Bookshelves
+                .SingleOrDefaultAsync(
+                    x => x.CustomerId == customerId && x.HomelessBooks,
+                    cancellationToken
+                ) is
+            { } homeless
+        )
+        {
+            return homeless.Id;
+        }
+
+        if (await context.Customer.FindAsync([ customerId ], cancellationToken) is not { } customer)
+        {
+            throw new UserNotFoundException();
+        }
+
+        var newHomeless = StaticBookshelf.Homeless();
+        context.Bookshelves.Add(newHomeless with { CustomerId = customerId });
+        return newHomeless.Id;
+    }
 }
