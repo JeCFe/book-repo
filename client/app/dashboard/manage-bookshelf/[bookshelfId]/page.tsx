@@ -1,5 +1,5 @@
 "use client";
-import { Table } from "@/components";
+import { LinkButton, Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -8,6 +8,7 @@ import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { ShowBookDetailsModal } from "../../ShowBookDetailsModal";
 
 const updateBookshelfOrder = getApiClient()
   .path("/action/update-bookshelf-order")
@@ -51,6 +52,8 @@ export default withPageAuthRequired(function ManageBookshelf({
   const [books, setBooks] = useState<Book[]>([]);
   const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
 
   let draggedItem: Book | null = null;
 
@@ -199,6 +202,12 @@ export default withPageAuthRequired(function ManageBookshelf({
   } else {
     return (
       <div className="text-slate-400">
+        <ShowBookDetailsModal
+          passingIsbn={passingIsbn ?? ""}
+          showModal={isOpen}
+          setShowModal={setIsOpen}
+          setPassingIsbn={setPassingIsbn}
+        />
         <div className="flex flex-row space-x-2">
           <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
           <div className="underline underline-offset-4">
@@ -231,7 +240,7 @@ export default withPageAuthRequired(function ManageBookshelf({
             Delete bookshelf
           </Button>
         </div>
-        <div className="flex overflow-auto pb-10">
+        <div className="flex overflow-auto pb-20">
           <Table>
             <thead>
               <tr>
@@ -253,7 +262,16 @@ export default withPageAuthRequired(function ManageBookshelf({
                   onDragOver={(e) => e.preventDefault()}
                 >
                   <td>{book.order}</td>
-                  <td>{book.book.name}</td>
+                  <td>
+                    <LinkButton
+                      onClick={() => {
+                        setPassingIsbn(book.book.isbn ?? "");
+                        setIsOpen(true);
+                      }}
+                    >
+                      {book.book.name}
+                    </LinkButton>
+                  </td>
                   <td>{book.book.authors?.join(", ")}</td>
                   <td>COMING</td>
                   <td>{book.book.isbn}</td>

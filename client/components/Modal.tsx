@@ -7,7 +7,7 @@ type Props = {
   actioning: boolean;
   error?: string;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
   disabled: boolean;
 };
 
@@ -38,17 +38,19 @@ export function Modal({
                   onClick={() => onClose()}
                   aria-disabled={actioning}
                 >
-                  Cancel
+                  {onConfirm ? "Cancel" : "Close"}
                 </Anchor>
                 <div className="flex flex-grow" />
-                <Button
-                  onClick={() => onConfirm()}
-                  size="small"
-                  isLoading={actioning}
-                  disabled={disabled}
-                >
-                  Confirm
-                </Button>
+                {onConfirm && (
+                  <Button
+                    onClick={() => onConfirm()}
+                    size="small"
+                    isLoading={actioning}
+                    disabled={disabled}
+                  >
+                    Confirm
+                  </Button>
+                )}
               </div>
             </div>
           </div>

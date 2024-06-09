@@ -5,12 +5,15 @@ import { useBookWizard, useGetCustomerSummary, useSetupWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { ShowBookDetailsModal } from "./ShowBookDetailsModal";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
   const { updateBook } = useBookWizard();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
 
   const router = useRouter();
 
@@ -41,6 +44,12 @@ export default withPageAuthRequired(function Dashboard({ user }) {
   if (!isLoading && data) {
     return (
       <div>
+        <ShowBookDetailsModal
+          passingIsbn={passingIsbn ?? ""}
+          showModal={isOpen}
+          setShowModal={setIsOpen}
+          setPassingIsbn={setPassingIsbn}
+        />
         <div className="flex w-full">
           <SideNav>
             <>
@@ -87,8 +96,12 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                           .toSorted((a, b) => a.order - b.order)
                           .map((book) => (
                             <div
+                              onClick={() => {
+                                setPassingIsbn(book.book.isbn as string);
+                                setIsOpen(true);
+                              }}
                               key={`${bookshelf.id}-${book.book.isbn}`}
-                              className="flex flex-row"
+                              className="flex cursor-pointer flex-row rounded border-2 border-transparent hover:border-slate-200"
                             >
                               <Picture
                                 size="large"
