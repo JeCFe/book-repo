@@ -231,7 +231,7 @@ export default withPageAuthRequired(function ManageBookshelf({
             Delete bookshelf
           </Button>
         </div>
-        <div className="flex overflow-auto">
+        <div className="flex overflow-auto pb-10">
           <Table>
             <thead>
               <tr>
