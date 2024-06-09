@@ -33,13 +33,6 @@ export function AddBookByIsbn({
         setCurrentIsbn={setCurrentIsbn}
       />
 
-      <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        Add Book
-      </h1>
-      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        {`Search for the book you wish to add with the ISBN`}
-      </div>
-
       <div className="mt-10">
         <div className="mb-4 text-xl text-slate-300">{`Enter the book's ISBN`}</div>
         <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">

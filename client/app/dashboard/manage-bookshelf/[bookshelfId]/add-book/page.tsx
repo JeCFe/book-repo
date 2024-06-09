@@ -30,7 +30,11 @@ export default withPageAuthRequired(function AddBook({
 }: Props & { user: UserProfile }) {
   const { bookshelfId } = params;
   const { isLoading } = useGetBookshelfSummary(user.sub!);
-  const { data, mutate } = useGetBookshelf(bookshelfId);
+  const {
+    data,
+    isLoading: bookshelfLoading,
+    mutate,
+  } = useGetBookshelf(bookshelfId);
   const [open, setOpen] = useState<boolean>(false);
 
   const { books, updateBook } = useBookWizard();
@@ -77,7 +81,7 @@ export default withPageAuthRequired(function AddBook({
     setIsSavingBooks(false);
   };
 
-  if (isLoading) {
+  if (isLoading || bookshelfLoading) {
     <div className="flex min-h-screen w-full flex-col items-center pt-10 md:justify-center md:pt-0">
       <div className="flex items-center justify-center">
         <Spinner fast={isLoading} size="large" />
@@ -98,6 +102,12 @@ export default withPageAuthRequired(function AddBook({
         <div className="text-slate-400 underline underline-offset-4">
           {"< Add book"}
         </div>
+      </div>
+      <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
+        Add Book
+      </h1>
+      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
+        {`Search for the book you wish to add - these books will be added to ${data?.name}`}
       </div>
       <AddBookByIsbn
         passingIsbn={passingIsbn}

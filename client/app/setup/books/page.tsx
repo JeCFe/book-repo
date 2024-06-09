@@ -53,6 +53,12 @@ export default withPageAuthRequired(function Books() {
 
   return (
     <div className="flex flex-col">
+      <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
+        Add Book
+      </h1>
+      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
+        {`Search for the book you wish to add - these books will be added to your homeless bookshelf`}
+      </div>
       <AddBookModal
         isbn={passingIsbn as string}
         addBook={addBook}
