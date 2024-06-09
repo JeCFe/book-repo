@@ -61,11 +61,16 @@ export default withPageAuthRequired(function SearchBookByQuery({
     );
 
     return data.docs.filter((work) =>
-      work.editions.docs.some(
-        (editionDoc) =>
+      work.editions.docs.some((editionDoc) => {
+        if (!editionDoc.isbn) {
+          return false;
+        }
+
+        return (
           !isbnSet.has(editionDoc.isbn![0]) ||
-          !existingIsbnSet.has(editionDoc.isbn![0]),
-      ),
+          !existingIsbnSet.has(editionDoc.isbn![0])
+        );
+      }),
     );
   }, [books, data, isLoading, setupBooks]);
 

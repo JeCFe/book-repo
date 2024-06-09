@@ -49,9 +49,12 @@ export default withPageAuthRequired(function SearchBookByQuery({
     const isbnSet = new Set(setupBooks.map((book) => book.isbn));
 
     return data.docs.filter((work) =>
-      work.editions.docs.some(
-        (editionDoc) => !isbnSet.has(editionDoc.isbn![0]),
-      ),
+      work.editions.docs.some((editionDoc) => {
+        if (!editionDoc.isbn) {
+          return false;
+        }
+        return !isbnSet.has(editionDoc.isbn[0]);
+      }),
     );
   }, [books, data, isLoading, setupBooks]);
 
@@ -82,7 +85,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
         {`Search results:`}
       </div>
       {isLoading ? (
-        <Spinner />
+        <Spinner fast={isLoading} />
       ) : (
         <div className="flex overflow-auto pb-4">
           <Table>
