@@ -9,4 +9,8 @@ public interface IBookshelfProvider
         string customerId,
         CancellationToken cancellationToken
     );
+    public Task<Guid> GetHomelessBookshelfId(
+        string customerId,
+        CancellationToken cancellationToken
+    );
 }
