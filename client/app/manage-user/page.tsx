@@ -2,8 +2,19 @@
 import { Checkbox, SummaryTable } from "@/components";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system";
+import { useForm } from "react-hook-form";
+
+type FormValues = {
+  download: string;
+};
 
 export default withPageAuthRequired(function ManageUser({ user }) {
+  const { handleSubmit } = useForm<FormValues>();
+
+  const onSubmit = (data: FormValues) => {
+    // Do stuff here
+  };
+
   return (
     <>
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
@@ -43,14 +54,24 @@ export default withPageAuthRequired(function ManageUser({ user }) {
           },
         ]}
       />
-      <div className="flex flex-col space-y-4 py-4">
+      <form
+        className="flex flex-col space-y-4 py-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <legend className="text-xl text-slate-200">
+          Choose what data you would want to download
+        </legend>
         <Checkbox theme="dark" size="large">
-          Download authorisation data
+          Authorisation data
         </Checkbox>
         <Checkbox theme="dark" size="large">
-          Download database data
+          Database data
         </Checkbox>
-      </div>
+
+        <Button type="submit" size="large">
+          Download
+        </Button>
+      </form>
 
       <div className="flex w-fit flex-col space-y-2 pb-20 text-lg">
         <Anchor href="/dashboard">Go to Dashboard</Anchor>
