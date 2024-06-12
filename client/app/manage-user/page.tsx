@@ -50,7 +50,7 @@ export default withPageAuthRequired(function ManageUser({ user }) {
           },
           {
             title: "Last updated",
-            content: user.updated_at ?? "Missing data",
+            content: new Date(user.updated_at!).toDateString(),
           },
         ]}
       />
