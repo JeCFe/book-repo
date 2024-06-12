@@ -65,7 +65,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                 </div>
                 <div className="flex flex-grow" />
                 <div className="flex flex-row space-x-2">
-                  <Anchor href="/me">Manage</Anchor>
+                  <Anchor href="/manage-user">Manage</Anchor>
                   <Anchor href="/api/auth/logout">Logout</Anchor>
                 </div>
               </div>
