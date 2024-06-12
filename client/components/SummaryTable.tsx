@@ -15,7 +15,7 @@ export function SummaryTable({ title, rows }: Props) {
               <div className="flex flex-grow" />
               <div>{row.content}</div>
             </div>
-            {index > rows.length && <div className="border-1 border" />}
+            {index + 1 !== rows.length && <div className="border-1 border" />}
           </>
         ))}
       </div>
