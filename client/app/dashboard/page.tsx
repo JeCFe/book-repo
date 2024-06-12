@@ -5,8 +5,7 @@ import { useBookWizard, useGetCustomerSummary, useSetupWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { SetStateAction, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { ShowBookDetailsModal } from "./ShowBookDetailsModal";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
@@ -22,10 +21,6 @@ export default withPageAuthRequired(function Dashboard({ user }) {
   }, []);
 
   useEffect(() => {
-    if (error) {
-      toast.error("There was an error retrieving your dashboard data");
-      throw error;
-    }
     if (!isLoading && !data) {
       router.push("/setup");
     }
@@ -65,7 +60,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                 </div>
                 <div className="flex flex-grow" />
                 <div className="flex flex-row space-x-2">
-                  <Anchor href="/me">Manage</Anchor>
+                  <Anchor href="/manage-user">Manage</Anchor>
                   <Anchor href="/api/auth/logout">Logout</Anchor>
                 </div>
               </div>
