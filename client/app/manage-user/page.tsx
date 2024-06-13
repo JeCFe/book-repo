@@ -102,7 +102,12 @@ export default withPageAuthRequired(function ManageUser({ user }) {
       </div>
 
       <div className="flex max-w-3xl flex-row  space-x-4 py-4">
-        <Button variant="primary" size="large" disabled={isDeleting}>
+        <Button
+          variant="primary"
+          size="large"
+          disabled={isDeleting}
+          onClick={() => router.push("/manage-user/edit-nickname")}
+        >
           Edit nickname
         </Button>
         <div className="flex flex-grow" />
