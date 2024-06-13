@@ -1,5 +1,6 @@
 "use client";
 import { Checkbox, Modal, SummaryTable } from "@/components";
+import { useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system";
@@ -24,6 +25,7 @@ const forgetCustomer = getApiClient()
 
 export default withPageAuthRequired(function ManageUser({ user }) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { data: customerData } = useGetCustomerSummary();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { handleSubmit, register, watch } = useForm<FormValues>();
@@ -50,8 +52,8 @@ export default withPageAuthRequired(function ManageUser({ user }) {
     if (data.auth0) {
       dataObj.auth0 = JSON.stringify(user);
     }
-    if (data.db) {
-      dataObj.db = JSON.stringify(data.db);
+    if (data.db && customerData) {
+      dataObj.db = JSON.stringify(customerData);
     }
     downloadJSON(JSON.stringify(dataObj), `${user.nickname}-data`);
   };
