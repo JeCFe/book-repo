@@ -6,7 +6,7 @@ type Props = {
   isOpen?: boolean;
   actioning: boolean;
   error?: string;
-  onClose: () => void;
+  onClose?: () => void;
   onConfirm?: () => void;
   disabled: boolean;
 };
@@ -14,7 +14,7 @@ type Props = {
 export function Modal({
   children,
   isOpen,
-  onClose,
+  onClose = () => {},
   onConfirm,
   actioning,
   error,

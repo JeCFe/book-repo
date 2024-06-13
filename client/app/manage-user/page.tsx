@@ -1,5 +1,5 @@
 "use client";
-import { Checkbox, SummaryTable } from "@/components";
+import { Checkbox, Modal, SummaryTable } from "@/components";
 import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system";
@@ -23,6 +23,7 @@ const forgetCustomer = getApiClient()
 
 export default withPageAuthRequired(function ManageUser({ user }) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { handleSubmit } = useForm<FormValues>();
 
@@ -46,6 +47,26 @@ export default withPageAuthRequired(function ManageUser({ user }) {
   };
   return (
     <>
+      <Modal
+        isOpen={isOpen}
+        actioning={isDeleting}
+        onClose={() => setIsOpen(false)}
+        onConfirm={() => {
+          setIsDeleting(true);
+          forgetMe();
+        }}
+        disabled={isDeleting}
+      >
+        <div className="flex flex-col items-center justify-center p-8 text-center align-middle">
+          <h1 className="flex flex-col text-center text-5xl font-bold tracking-tight text-slate-700">
+            Are you sure?
+          </h1>
+          <div className="max-w-sm pt-10 text-xl tracking-tight text-slate-500">
+            This action is non reversible and will remove your Auth0 account and
+            delete any data we hold for you in our databases.
+          </div>
+        </div>
+      </Modal>
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         {`Manage ${user.nickname}`}
       </h1>
@@ -63,8 +84,7 @@ export default withPageAuthRequired(function ManageUser({ user }) {
           size="large"
           isLoading={isDeleting}
           onClick={() => {
-            setIsDeleting(true);
-            forgetMe();
+            setIsOpen(true);
           }}
         >
           Forget me
