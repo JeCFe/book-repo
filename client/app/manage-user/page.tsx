@@ -1,5 +1,6 @@
 "use client";
-import { Checkbox, SummaryTable } from "@/components";
+import { Checkbox, Modal, SummaryTable } from "@/components";
+import { useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button } from "@jecfe/react-design-system";
@@ -9,7 +10,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 type FormValues = {
-  download: string;
+  auth0: string;
+  db: string;
 };
 
 const deleteCustomer = getApiClient()
@@ -23,11 +25,37 @@ const forgetCustomer = getApiClient()
 
 export default withPageAuthRequired(function ManageUser({ user }) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const { data: customerData } = useGetCustomerSummary();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
-  const { handleSubmit } = useForm<FormValues>();
+  const { handleSubmit, register, watch } = useForm<FormValues>();
+
+  const downloadJSON = (jsonString: string, filename: string) => {
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 0);
+  };
 
   const onSubmit = (data: FormValues) => {
-    // Do stuff here
+    if (!data.auth0 && !data.db) {
+      return;
+    }
+    const dataObj: { auth0?: string; db?: string } = {};
+    if (data.auth0) {
+      dataObj.auth0 = JSON.stringify(user);
+    }
+    if (data.db && customerData) {
+      dataObj.db = JSON.stringify(customerData);
+    }
+    downloadJSON(JSON.stringify(dataObj), `${user.nickname}-data`);
   };
 
   const forgetMe = async () => {
@@ -46,6 +74,26 @@ export default withPageAuthRequired(function ManageUser({ user }) {
   };
   return (
     <>
+      <Modal
+        isOpen={isOpen}
+        actioning={isDeleting}
+        onClose={() => setIsOpen(false)}
+        onConfirm={() => {
+          setIsDeleting(true);
+          forgetMe();
+        }}
+        disabled={isDeleting}
+      >
+        <div className="flex flex-col items-center justify-center p-8 text-center align-middle">
+          <h1 className="flex flex-col text-center text-5xl font-bold tracking-tight text-slate-700">
+            Are you sure?
+          </h1>
+          <div className="max-w-sm pt-10 text-xl tracking-tight text-slate-500">
+            This action is non reversible and will remove your Auth0 account and
+            delete any data we hold for you in our databases.
+          </div>
+        </div>
+      </Modal>
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         {`Manage ${user.nickname}`}
       </h1>
@@ -54,7 +102,12 @@ export default withPageAuthRequired(function ManageUser({ user }) {
       </div>
 
       <div className="flex max-w-3xl flex-row  space-x-4 py-4">
-        <Button variant="primary" size="large" disabled={isDeleting}>
+        <Button
+          variant="primary"
+          size="large"
+          disabled={isDeleting}
+          onClick={() => router.push("/manage-user/edit-nickname")}
+        >
           Edit nickname
         </Button>
         <div className="flex flex-grow" />
@@ -63,8 +116,7 @@ export default withPageAuthRequired(function ManageUser({ user }) {
           size="large"
           isLoading={isDeleting}
           onClick={() => {
-            setIsDeleting(true);
-            forgetMe();
+            setIsOpen(true);
           }}
         >
           Forget me
@@ -98,14 +150,18 @@ export default withPageAuthRequired(function ManageUser({ user }) {
         <legend className="text-xl text-slate-200">
           Choose what data you would want to download
         </legend>
-        <Checkbox theme="dark" size="large">
+        <Checkbox theme="dark" size="large" {...register("auth0")}>
           Authorisation data
         </Checkbox>
-        <Checkbox theme="dark" size="large">
+        <Checkbox theme="dark" size="large" {...register("db")}>
           Database data
         </Checkbox>
 
-        <Button type="submit" size="large" disabled={isDeleting}>
+        <Button
+          type="submit"
+          size="large"
+          disabled={isDeleting || (!watch("auth0") && !watch("db"))}
+        >
           Download
         </Button>
       </form>

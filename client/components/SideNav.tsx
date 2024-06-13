@@ -40,7 +40,7 @@ export function SideNav({ children }: { children: ReactNode }) {
 
       {/*DESKTOP NAV*/}
       <div className="sticky top-0 hidden h-screen w-96 flex-col divide-y divide-slate-500 bg-slate-800 py-2 pt-4 sm:flex">
-        <div className="flex h-full flex-col divide-y divide-slate-500 py-2 pt-4">
+        <div className="flex h-full flex-col divide-y divide-slate-500 pt-4">
           <div className="pointer-events-none flex flex-col items-center justify-center pb-4 pt-4">
             <BookLogo height="100" />
             <div className="text-lg font-bold tracking-tight text-slate-200">
