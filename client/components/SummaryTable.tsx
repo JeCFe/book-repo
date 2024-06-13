@@ -9,14 +9,14 @@ export function SummaryTable({ title, rows }: Props) {
       <div className="bg-slate-200 p-4 text-xl">{title}</div>
       <div className="flex flex-col space-y-2 px-4 py-2 text-lg text-slate-200">
         {rows.map((row, index) => (
-          <>
+          <div key={`${row.title}-${index}`}>
             <div className="flex flex-row">
               <div className="font-bold">{row.title}</div>
               <div className="flex flex-grow" />
               <div>{row.content}</div>
             </div>
             {index + 1 !== rows.length && <div className="border-1 border" />}
-          </>
+          </div>
         ))}
       </div>
     </div>
