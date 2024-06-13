@@ -9,7 +9,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 type FormValues = {
-  download: string;
+  auth0: string;
+  db: string;
 };
 
 const deleteCustomer = getApiClient()
@@ -25,10 +26,34 @@ export default withPageAuthRequired(function ManageUser({ user }) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
-  const { handleSubmit } = useForm<FormValues>();
+  const { handleSubmit, register, watch } = useForm<FormValues>();
+
+  const downloadJSON = (jsonString: string, filename: string) => {
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 0);
+  };
 
   const onSubmit = (data: FormValues) => {
-    // Do stuff here
+    if (!data.auth0 && !data.db) {
+      return;
+    }
+    var dataObj: { auth0?: string; db?: string } = {};
+    if (data.auth0) {
+      dataObj.auth0 = JSON.stringify(user);
+    }
+    if (data.db) {
+      dataObj.db = JSON.stringify(data.db);
+    }
+    downloadJSON(JSON.stringify(dataObj), `${user.nickname}-data`);
   };
 
   const forgetMe = async () => {
@@ -118,14 +143,18 @@ export default withPageAuthRequired(function ManageUser({ user }) {
         <legend className="text-xl text-slate-200">
           Choose what data you would want to download
         </legend>
-        <Checkbox theme="dark" size="large">
+        <Checkbox theme="dark" size="large" {...register("auth0")}>
           Authorisation data
         </Checkbox>
-        <Checkbox theme="dark" size="large">
+        <Checkbox theme="dark" size="large" {...register("db")}>
           Database data
         </Checkbox>
 
-        <Button type="submit" size="large" disabled={isDeleting}>
+        <Button
+          type="submit"
+          size="large"
+          disabled={isDeleting || (!watch("auth0") && !watch("db"))}
+        >
           Download
         </Button>
       </form>
