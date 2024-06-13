@@ -54,7 +54,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                   <Anchor href="/dashboard/add-bookshelf">Add bookshelf</Anchor>
                 </div>
               </div>
-              <div className="h-f flex flex-row items-center px-4 pt-4 text-center text-base">
+              <div className="flex flex-row items-center p-4 text-center text-base">
                 <div className="flex items-center text-center text-slate-400">
                   {user.nickname}
                 </div>
