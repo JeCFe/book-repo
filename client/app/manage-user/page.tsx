@@ -48,7 +48,7 @@ export default withPageAuthRequired(function ManageUser({ user }) {
     if (!data.auth0 && !data.db) {
       return;
     }
-    var dataObj: { auth0?: string; db?: string } = {};
+    const dataObj: { auth0?: string; db?: string } = {};
     if (data.auth0) {
       dataObj.auth0 = JSON.stringify(user);
     }
