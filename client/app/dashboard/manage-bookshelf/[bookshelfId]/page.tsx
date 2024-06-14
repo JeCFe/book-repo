@@ -50,6 +50,7 @@ export default withPageAuthRequired(function ManageBookshelf({
 
   const { data, isLoading, error, mutate } = useGetBookshelf(bookshelfId);
   const [books, setBooks] = useState<Book[]>([]);
+  const [updatedBooks, setUpdatedBooks] = useState<Book[]>([]);
   const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -80,6 +81,16 @@ export default withPageAuthRequired(function ManageBookshelf({
   }, [error]);
 
   useEffect(() => {
+    if (!data || updatedBooks) {
+      return;
+    }
+    const booksOrdered = [...(data.books as Book[])].toSorted(
+      (a, b) => a.order - b.order,
+    );
+    setUpdatedBooks(booksOrdered);
+  }, [data]);
+
+  useEffect(() => {
     if (error !== undefined) {
       return;
     }
@@ -98,10 +109,10 @@ export default withPageAuthRequired(function ManageBookshelf({
   }, [data, isLoading]);
 
   const updateBooks = useCallback(
-    debounce(async (x: Book[], userSub: string) => {
+    debounce(async (x: Book[]) => {
       toast.promise(
         updateBookshelfOrder({
-          customerId: userSub,
+          customerId: user.sub!,
           bookshelfId: bookshelfId,
           books: x.map((book, i) => {
             return { isbn: book.book.isbn, order: i };
@@ -120,11 +131,8 @@ export default withPageAuthRequired(function ManageBookshelf({
   );
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
-    updateBooks(books, user.sub!);
-  }, [books, user]);
+    updateBooks(updatedBooks);
+  }, [updatedBooks]);
 
   const handleDragStart = (
     e: React.DragEvent<HTMLTableRowElement>,
@@ -146,7 +154,7 @@ export default withPageAuthRequired(function ManageBookshelf({
     updatedBooks.splice(draggedIndex, 1);
     updatedBooks.splice(targetIndex, 0, draggedItem);
 
-    setBooks(updatedBooks);
+    setUpdatedBooks(updatedBooks);
     draggedItem = null;
   };
 
@@ -189,6 +197,13 @@ export default withPageAuthRequired(function ManageBookshelf({
 
       { id: data?.name as string },
     );
+  };
+
+  const booksToRender = () => {
+    if (updatedBooks.length !== 0) {
+      return updatedBooks;
+    }
+    return books;
   };
 
   if (isLoading || data === undefined || error !== undefined) {
@@ -253,7 +268,7 @@ export default withPageAuthRequired(function ManageBookshelf({
               </tr>
             </thead>
             <tbody>
-              {books.map((book, i) => (
+              {booksToRender().map((book, i) => (
                 <tr
                   key={`${book.book.name}-${i}`}
                   draggable
