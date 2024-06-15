@@ -69,10 +69,19 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
             Name = "TestBookshelf",
             CreationDate = DateTimeOffset.Now,
         };
-
-        var customerBook = new BookshelfBook()
+        var customerBook = new CustomerBook()
         {
+            Id = Guid.NewGuid(),
             Book = domainBook,
+            Isbn = domainBook.Isbn,
+            CustomerId = customer.Id,
+            Customer = customer
+        };
+
+        var bookshelfBook = new BookshelfBook()
+        {
+            CustomerBook = customerBook,
+            CustomerBookId = customerBook.Id,
             Isbn = domainBook.Isbn,
             Bookshelf = domainBookshelf,
             BookshelfId = domainBookshelf.Id,
@@ -81,7 +90,8 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         context.Customer.Add(customer);
         context.Bookshelves.Add(domainBookshelf);
         context.Books.Add(domainBook);
-        context.BookshelfBook.Add(customerBook);
+        context.CustomerBooks.Add(customerBook);
+        context.BookshelfBook.Add(bookshelfBook);
         context.SaveChanges();
 
         var provider = new BookshelfProvider(context);
@@ -89,7 +99,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
 
         Assert.NotNull(bookshelf);
         Assert.Single(bookshelf.Books);
-        Assert.Equal(customerBook.Isbn, bookshelf.Books.First().Book.Isbn);
+        Assert.Equal(bookshelfBook.Isbn, bookshelf.Books.First().Book.Isbn);
         Assert.Equal(domainBookshelf.Name, bookshelf.Name);
     }
 }
