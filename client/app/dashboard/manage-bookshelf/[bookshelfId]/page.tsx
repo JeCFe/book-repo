@@ -36,6 +36,7 @@ type Book = {
     pageCount: number;
   };
   order: number;
+  ranking?: number;
 };
 
 type Props = {
@@ -288,7 +289,7 @@ export default withPageAuthRequired(function ManageBookshelf({
                     </LinkButton>
                   </td>
                   <td>{book.book.authors?.join(", ")}</td>
-                  <td>COMING</td>
+                  <td>{book.ranking}</td>
                   <td>{book.book.isbn}</td>
                   <td>
                     <Button
