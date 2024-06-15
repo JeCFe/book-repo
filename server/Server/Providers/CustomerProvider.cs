@@ -25,7 +25,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             CreatedOn = customer.CreationDate,
             Bookshelves =
             [
-                ..customer.Bookshelves.Select(x => new Models.Bookshelf() {
+                ..customer.Bookshelves.Select(x => new Bookshelf() {
                         Name = x.Name,
                         Id = x.Id,
                         CreationDate = x.CreationDate,
@@ -33,7 +33,8 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                         HomelessBooks = x.HomelessBooks,
                         Books = [..dbContext.BookshelfBook.Where(y => y.Bookshelf.Id == x.Id).Select(z => new BooktoShelf(){
                             Order = z.Order,
-                            Book = z.Book
+                            Book = z.CustomerBook.Book,
+                            Ranking = z.CustomerBook.Ranking
                     })]
                 })
             ]

@@ -37,21 +37,45 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
             {
                 //Note: For the UI to display a book that book must already exist in our db
                 var book = await dbContext.Books.FindAsync([ isbn ], cancellationToken);
+
+                var customerBook = await dbContext
+                    .CustomerBooks
+                    .SingleOrDefaultAsync(
+                        x => x.Isbn == isbn && x.CustomerId == customer.Id,
+                        cancellationToken
+                    );
+
                 if (book is null)
                 {
                     continue; //TODO: This should have strcutured logging
                 }
+
+                if (customerBook is not { })
+                {
+                    customerBook = new CustomerBook()
+                    {
+                        Id = Guid.NewGuid(),
+                        Isbn = isbn,
+                        Book = book,
+                        CustomerId = customer.Id,
+                        Customer = customer
+                    };
+                    dbContext.CustomerBooks.Add(customerBook);
+                }
+
                 bookshelfBooks.Add(
                     new BookshelfBook()
                     {
                         BookshelfId = homelessBookBookshelf.Id,
-                        Isbn = isbn,
+                        CustomerBook = customerBook,
                         Order = bookshelfBooks.Count(),
-                        Book = book,
-                        Bookshelf = homelessBookBookshelf
+                        CustomerBookId = customerBook.Id,
+                        Bookshelf = homelessBookBookshelf,
+                        Isbn = isbn
                     }
                 );
             }
+
             dbContext.BookshelfBook.AddRange(bookshelfBooks);
         }
 

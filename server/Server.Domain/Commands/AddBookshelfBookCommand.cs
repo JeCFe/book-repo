@@ -28,6 +28,26 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
             return; // Handle missing customer or book
         }
 
+        var customerBook = await dbContext
+            .CustomerBooks
+            .SingleOrDefaultAsync(
+                x => x.Isbn == Isbn && x.CustomerId == customer.Id,
+                cancellationToken
+            );
+
+        if (customerBook is not { })
+        {
+            customerBook = new CustomerBook()
+            {
+                Id = Guid.NewGuid(),
+                Isbn = Isbn,
+                Book = book,
+                CustomerId = customer.Id,
+                Customer = customer
+            };
+            dbContext.CustomerBooks.Add(customerBook);
+        }
+
         if (BookshelfId.IsNullOrEmpty())
         {
             if (customer.Bookshelves.SingleOrDefault(x => x.HomelessBooks == true) is not { })
@@ -39,7 +59,8 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
                     .Add(
                         new()
                         {
-                            Book = book,
+                            CustomerBook = customerBook,
+                            CustomerBookId = customerBook.Id,
                             Isbn = book.Isbn,
                             Bookshelf = newHomeless,
                             BookshelfId = newHomeless.Id,
@@ -55,7 +76,8 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
                 .Add(
                     new()
                     {
-                        Book = book,
+                        CustomerBook = customerBook,
+                        CustomerBookId = customerBook.Id,
                         Isbn = book.Isbn,
                         Bookshelf = homeless,
                         BookshelfId = homeless.Id,
@@ -85,7 +107,8 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
                 .Add(
                     new()
                     {
-                        Book = book,
+                        CustomerBook = customerBook,
+                        CustomerBookId = customerBook.Id,
                         Isbn = book.Isbn,
                         Bookshelf = bookshelf,
                         BookshelfId = bookshelf.Id,
