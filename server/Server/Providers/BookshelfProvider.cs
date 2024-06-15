@@ -26,7 +26,12 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
                 Books = (
                     from book in context.BookshelfBook
                     where book.BookshelfId == bookshelf.Id
-                    select new BooktoShelf { Book = book.Book, Order = book.Order }
+                    select new BooktoShelf
+                    {
+                        Book = book.CustomerBook.Book,
+                        Order = book.Order,
+                        Ranking = book.CustomerBook.Ranking
+                    }
                 ).ToList()
             };
         return await customerBookshelf.FirstOrDefaultAsync(cancellationToken);

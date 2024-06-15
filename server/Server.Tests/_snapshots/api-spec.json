@@ -549,7 +549,8 @@
       "BooktoShelf": {
         "required": [
           "book",
-          "order"
+          "order",
+          "ranking"
         ],
         "type": "object",
         "properties": {
@@ -557,6 +558,10 @@
             "$ref": "#/components/schemas/Book"
           },
           "order": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ranking": {
             "type": "integer",
             "format": "int32"
           }

@@ -23,10 +23,19 @@ public class RemoveBookshelfCommandTests(DbFixture fixture) : IClassFixture<DbFi
         customer.Bookshelves =  [ bookshelf ];
 
         var book = new Book() { Isbn = id.ToString(), Name = "This is a test" };
+        var customerBook = new CustomerBook()
+        {
+            Id = Guid.NewGuid(),
+            Book = book,
+            Isbn = book.Isbn,
+            CustomerId = customer.Id,
+            Customer = customer
+        };
         var bookshelfBook = new BookshelfBook()
         {
             Isbn = book.Isbn,
-            Book = book,
+            CustomerBook = customerBook,
+            CustomerBookId = customerBook.Id,
             Bookshelf = bookshelf,
             BookshelfId = bookshelf.Id,
             Order = 1

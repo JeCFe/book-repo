@@ -23,4 +23,5 @@ public record BooktoShelf()
 {
     public required Book Book { get; init; }
     public required int Order { get; init; }
+    public int Ranking { get; init; }
 }

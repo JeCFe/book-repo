@@ -66,7 +66,7 @@ export default withPageAuthRequired(function Preview() {
   const onContinue = async () => {
     setIsLoading(true);
     if (user?.nickname !== nickname) {
-      toast.promise(
+      await toast.promise(
         updateNickname({
           id: user?.sub as string,
           nickname: customerNickname,
@@ -80,7 +80,7 @@ export default withPageAuthRequired(function Preview() {
       );
     }
 
-    toast.promise(
+    await toast.promise(
       setupCustomer({
         id: user!.sub as string,
         bookshelvesNames: bookshelves,
