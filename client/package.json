@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint '*/**/*.{js,jsx,ts,tsx}' --quiet",
-    "build:client": "npx openapi-typescript ../server/Server.Tests/_snapshots/api-spec.json -o server-client.d.ts",
+    "build:client": "openapi-typescript ../server/Server.Tests/_snapshots/api-spec.json -o server-client.d.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "cypress:e2e": "cypress run --browser chrome"
@@ -56,6 +56,7 @@
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "usehooks-ts": "^3.1.0"
+    "usehooks-ts": "^3.1.0",
+    "openapi-typescript": "^6.7.5"
   }
 }
