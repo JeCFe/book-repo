@@ -34,7 +34,8 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                         Books = [..dbContext.BookshelfBook.Where(y => y.Bookshelf.Id == x.Id).Select(z => new BooktoShelf(){
                             Order = z.Order,
                             Book = z.CustomerBook.Book,
-                            Ranking = z.CustomerBook.Ranking
+                            Ranking = z.CustomerBook.Ranking,
+                            Id = z.CustomerBook.Id,
                     })]
                 })
             ]
