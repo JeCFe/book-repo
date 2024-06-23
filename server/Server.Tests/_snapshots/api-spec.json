@@ -99,6 +99,31 @@
         }
       }
     },
+    "/action/rate-customer-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateCustomerBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/action/add-book-shelf-book": {
       "post": {
         "tags": [
@@ -684,6 +709,29 @@
         "items": {
           "$ref": "#/components/schemas/JToken"
         }
+      },
+      "RateCustomerBookCommand": {
+        "required": [
+          "customerBookId",
+          "customerId",
+          "ranking"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "ranking": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "RemoveBookshelfBookCommand": {
         "required": [
