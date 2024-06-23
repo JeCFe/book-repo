@@ -30,7 +30,8 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
                     {
                         Book = book.CustomerBook.Book,
                         Order = book.Order,
-                        Ranking = book.CustomerBook.Ranking
+                        Ranking = book.CustomerBook.Ranking,
+                        Id = book.CustomerBook.Id,
                     }
                 ).ToList()
             };

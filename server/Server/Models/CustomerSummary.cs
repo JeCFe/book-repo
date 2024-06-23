@@ -21,6 +21,7 @@ public record Bookshelf()
 
 public record BooktoShelf()
 {
+    public required Guid Id { get; init; }
     public required Book Book { get; init; }
     public required int Order { get; init; }
     public int Ranking { get; init; }
