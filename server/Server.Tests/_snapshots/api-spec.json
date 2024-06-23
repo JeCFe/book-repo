@@ -549,11 +549,16 @@
       "BooktoShelf": {
         "required": [
           "book",
+          "id",
           "order",
           "ranking"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
           "book": {
             "$ref": "#/components/schemas/Book"
           },
