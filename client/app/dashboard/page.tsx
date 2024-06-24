@@ -12,7 +12,9 @@ export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
   const { updateBook } = useBookWizard();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
+  const [passingCustomerBookId, setPassingCustomerBookId] = useState<
+    string | undefined
+  >();
 
   const router = useRouter();
 
@@ -40,10 +42,11 @@ export default withPageAuthRequired(function Dashboard({ user }) {
     return (
       <div>
         <ShowBookDetailsModal
-          passingIsbn={passingIsbn ?? ""}
+          passingCustomerBookId={passingCustomerBookId as string}
           showModal={isOpen}
           setShowModal={setIsOpen}
-          setPassingIsbn={setPassingIsbn}
+          setPassingCustomerBookId={setPassingCustomerBookId}
+          userId={user.sub!}
         />
         <div className="flex w-full">
           <SideNav>
@@ -92,7 +95,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                           .map((book) => (
                             <div
                               onClick={() => {
-                                setPassingIsbn(book.book.isbn as string);
+                                setPassingCustomerBookId(book.id as string);
                                 setIsOpen(true);
                               }}
                               key={`${bookshelf.id}-${book.book.isbn}`}

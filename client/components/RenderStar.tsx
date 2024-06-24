@@ -1,11 +1,24 @@
 import { cva } from "class-variance-authority";
 import { useId, useState } from "react";
 
-const star = cva("cursor-pointer text-lg", {
+const star = cva("text-lg", {
   variants: {
     showColour: {
       true: "text-yellow-500",
       false: "text-white",
+    },
+    hover: {
+      true: "cursor-pointer ",
+      false: "",
+    },
+  },
+});
+
+const starContainer = cva("flex flex-row items-center space-x-1", {
+  variants: {
+    hover: {
+      true: "cursor-pointer",
+      false: "",
     },
   },
 });
@@ -13,14 +26,22 @@ const star = cva("cursor-pointer text-lg", {
 type Props = {
   amountOfStars?: number;
   ranking?: number;
-  onChange: (value: number) => void;
+  allowHover?: boolean;
+  onChange?: (value: number) => void;
+  className?: string;
 };
 
-export function RenderStar({ ranking, onChange, amountOfStars = 5 }: Props) {
+export function RenderStar({
+  ranking,
+  className,
+  onChange = () => {},
+  amountOfStars = 5,
+  allowHover = false,
+}: Props) {
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const id = useId();
   return (
-    <div className="flex cursor-pointer flex-row items-center space-x-1">
+    <div className={starContainer({ hover: allowHover, className })}>
       {[...Array(amountOfStars)].map((_, index) => {
         const currentRating = index + 1;
 
@@ -35,7 +56,10 @@ export function RenderStar({ ranking, onChange, amountOfStars = 5 }: Props) {
             />
             <span
               className={star({
-                showColour: currentRating <= (hoverIndex || (ranking ?? 0)),
+                showColour:
+                  currentRating <=
+                  ((allowHover && hoverIndex) || (ranking ?? 0)),
+                hover: allowHover,
               })}
               onMouseEnter={() => setHoverIndex(currentRating)}
               onMouseLeave={() => setHoverIndex(undefined)}

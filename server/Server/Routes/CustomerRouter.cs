@@ -87,12 +87,38 @@ public static class CustomerRouter
         }
     }
 
+    private static async Task<
+        Results<Ok<CustomerBook>, NotFound, ForbidHttpResult>
+    > GetCustomerBook(
+        string customerId,
+        Guid customerBookId,
+        ICustomerProvider customerProvider,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { })
+        {
+            return TypedResults.Forbid();
+        }
+        if (
+            await customerProvider.GetCustomerBook(customerBookId, cancellationToken)
+            is not { } book
+        )
+        {
+            return TypedResults.NotFound();
+        }
+        return TypedResults.Ok(book);
+    }
+
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Customer");
         group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
         group.MapPost("/delete", Delete).RequireAuthorization();
         group.MapPost("/update", Update).RequireAuthorization();
+        group.MapGet("/{customerId}/{customerBookId}", GetCustomerBook).RequireAuthorization();
         return group;
     }
 }
