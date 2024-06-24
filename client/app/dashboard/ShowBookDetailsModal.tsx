@@ -1,29 +1,31 @@
 import { Modal, Picture } from "@/components";
 
-import { useGetBook } from "@/hooks";
+import { useGetCustomerBook } from "@/hooks";
 import { Spinner } from "@jecfe/react-design-system";
 import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
 
 type Props = {
-  passingIsbn: string;
+  passingCustomerBookId: string;
   showModal: boolean;
+  userId: string;
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  setPassingIsbn: Dispatch<SetStateAction<string | undefined>>;
+  setPassingCustomerBookId: Dispatch<SetStateAction<string | undefined>>;
 };
 
 export function ShowBookDetailsModal({
-  setPassingIsbn,
-  passingIsbn,
+  setPassingCustomerBookId,
+  passingCustomerBookId,
+  userId,
   showModal,
   setShowModal,
 }: Props) {
-  const { data, isLoading } = useGetBook(passingIsbn);
+  const { data, isLoading } = useGetCustomerBook(userId, passingCustomerBookId);
 
   return (
     <Modal
       isOpen={showModal}
       onClose={() => {
-        setPassingIsbn(undefined);
+        setPassingCustomerBookId(undefined);
         setShowModal(false);
       }}
       error=""
@@ -45,29 +47,35 @@ export function ShowBookDetailsModal({
             <div>
               <Picture
                 size="large"
-                pictureUrl={data.picture}
-                title={data.name ?? ""}
+                pictureUrl={data.book.picture}
+                title={data.book.name ?? ""}
                 loading={isLoading}
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <RenderSection title="Book Title">{data.name}</RenderSection>
-              <RenderSection title="Release Year">{data.release}</RenderSection>
+              <RenderSection title="Book Title">{data.book.name}</RenderSection>
+              <RenderSection title="Release Year">
+                {data.book.release}
+              </RenderSection>
 
-              {data.pageCount && data.pageCount > 0 && (
+              {data.book.pageCount && data.book.pageCount > 0 && (
                 <RenderSection title="Page Count">
-                  <div className="max-w-sm">{data.pageCount}</div>
+                  <div className="max-w-sm">{data.book.pageCount}</div>
                 </RenderSection>
               )}
 
-              {data.authors && data.authors.length > 0 && (
+              {data.book.authors && data.book.authors.length > 0 && (
                 <RenderSection title="Authors">
-                  <div className="max-w-sm">{data.authors?.join(", ")}</div>
+                  <div className="max-w-sm">
+                    {data.book.authors?.join(", ")}
+                  </div>
                 </RenderSection>
               )}
-              {data.subjects && data.subjects.length > 0 && (
+              {data.book.subjects && data.book.subjects.length > 0 && (
                 <RenderSection title="Subjects">
-                  <div className="max-w-sm">{data.subjects?.join(", ")}</div>
+                  <div className="max-w-sm">
+                    {data.book.subjects?.join(", ")}
+                  </div>
                 </RenderSection>
               )}
             </div>

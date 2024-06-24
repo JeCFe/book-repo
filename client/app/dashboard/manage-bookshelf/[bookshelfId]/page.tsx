@@ -63,7 +63,9 @@ export default withPageAuthRequired(function ManageBookshelf({
   const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
+  const [passingCustomerBookId, setPassingCustomerBookId] = useState<
+    string | undefined
+  >();
 
   let draggedItem: Book | null = null;
 
@@ -244,10 +246,11 @@ export default withPageAuthRequired(function ManageBookshelf({
     return (
       <div className="text-slate-400">
         <ShowBookDetailsModal
-          passingIsbn={passingIsbn ?? ""}
+          passingCustomerBookId={passingCustomerBookId as string}
           showModal={isOpen}
           setShowModal={setIsOpen}
-          setPassingIsbn={setPassingIsbn}
+          setPassingCustomerBookId={setPassingCustomerBookId}
+          userId={user.sub!}
         />
         <div className="flex flex-row space-x-2">
           <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
@@ -306,7 +309,7 @@ export default withPageAuthRequired(function ManageBookshelf({
                   <td>
                     <LinkButton
                       onClick={() => {
-                        setPassingIsbn(book.book.isbn ?? "");
+                        setPassingCustomerBookId(book.id ?? "");
                         setIsOpen(true);
                       }}
                     >
