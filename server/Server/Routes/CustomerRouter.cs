@@ -88,7 +88,7 @@ public static class CustomerRouter
     }
 
     private static async Task<
-        Results<Ok<Domain.Models.CustomerBook>, NotFound, ForbidHttpResult>
+        Results<Ok<CustomerBook>, NotFound, ForbidHttpResult>
     > GetCustomerBook(
         string customerId,
         Guid customerBookId,
