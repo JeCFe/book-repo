@@ -1,5 +1,6 @@
 "use client";
-import { LinkButton, Table } from "@/components";
+
+import { LinkButton, RenderStar, Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -10,6 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { ShowBookDetailsModal } from "../../ShowBookDetailsModal";
 
+//Should ideally move these to services as this page is getting quite complicated
 const updateBookshelfOrder = getApiClient()
   .path("/action/update-bookshelf-order")
   .method("post")
@@ -25,6 +27,11 @@ const removeBookshelf = getApiClient()
   .method("post")
   .create();
 
+const updateRanking = getApiClient()
+  .path("/action/rate-customer-book")
+  .method("post")
+  .create();
+
 type Book = {
   book: {
     isbn: string | null;
@@ -35,6 +42,7 @@ type Book = {
     picture?: string | undefined;
     pageCount: number;
   };
+  id: string;
   order: number;
   ranking?: number;
 };
@@ -134,6 +142,23 @@ export default withPageAuthRequired(function ManageBookshelf({
   useEffect(() => {
     updateBooks(updatedBooks);
   }, [updatedBooks]);
+
+  const updateBookRanking = (ranking: number, id: string) => {
+    toast.promise(
+      updateRanking({
+        customerId: user.sub!,
+        customerBookId: id,
+        ranking,
+      }),
+      {
+        loading: "Autosaving",
+        success: "Autosave complete",
+        error: "There was an error when autosaving",
+      },
+      { id: "autosave" },
+    );
+    mutate();
+  };
 
   const handleDragStart = (
     e: React.DragEvent<HTMLTableRowElement>,
@@ -256,7 +281,7 @@ export default withPageAuthRequired(function ManageBookshelf({
             Delete bookshelf
           </Button>
         </div>
-        <div className="flex overflow-auto pb-20">
+        <div className="overflow-x flex pb-20">
           <Table>
             <thead>
               <tr>
@@ -289,7 +314,14 @@ export default withPageAuthRequired(function ManageBookshelf({
                     </LinkButton>
                   </td>
                   <td>{book.book.authors?.join(", ")}</td>
-                  <td>{book.ranking}</td>
+                  <td>
+                    <RenderStar
+                      onChange={(ranking) => {
+                        updateBookRanking(ranking, book.id);
+                      }}
+                      ranking={book.ranking}
+                    />
+                  </td>
                   <td>{book.book.isbn}</td>
                   <td>
                     <Button

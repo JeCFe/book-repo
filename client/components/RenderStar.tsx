@@ -12,7 +12,7 @@ const star = cva("cursor-pointer text-lg", {
 
 type Props = {
   amountOfStars?: number;
-  ranking: number;
+  ranking?: number;
   onChange: (value: number) => void;
 };
 
@@ -35,7 +35,7 @@ export function RenderStar({ ranking, onChange, amountOfStars = 5 }: Props) {
             />
             <span
               className={star({
-                showColour: currentRating <= (hoverIndex || ranking),
+                showColour: currentRating <= (hoverIndex || (ranking ?? 0)),
               })}
               onMouseEnter={() => setHoverIndex(currentRating)}
               onMouseLeave={() => setHoverIndex(undefined)}
