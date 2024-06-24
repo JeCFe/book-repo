@@ -41,4 +41,9 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             ]
         };
     }
+
+    public async Task<Domain.Models.CustomerBook?> GetCustomerBook(
+        string customerBookId,
+        CancellationToken cancellationToken
+    ) => await dbContext.CustomerBooks.FindAsync([ customerBookId ], cancellationToken);
 }
