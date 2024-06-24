@@ -2,6 +2,7 @@ namespace Server.Providers;
 
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Domain.Models;
 using Server.Exceptions;
 using Server.Models;
 
@@ -25,7 +26,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             CreatedOn = customer.CreationDate,
             Bookshelves =
             [
-                ..customer.Bookshelves.Select(x => new Bookshelf() {
+                ..customer.Bookshelves.Select(x => new Models.Bookshelf() {
                         Name = x.Name,
                         Id = x.Id,
                         CreationDate = x.CreationDate,
@@ -42,8 +43,27 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
         };
     }
 
-    public async Task<Domain.Models.CustomerBook?> GetCustomerBook(
-        string customerBookId,
+    public async Task<Models.CustomerBook?> GetCustomerBook(
+        Guid customerBookId,
         CancellationToken cancellationToken
-    ) => await dbContext.CustomerBooks.FindAsync([ customerBookId ], cancellationToken);
+    )
+    {
+        if (
+            await dbContext
+                .CustomerBooks
+                .Include(x => x.Book)
+                .SingleOrDefaultAsync(x => x.Id == customerBookId, cancellationToken)
+            is not { } book
+        )
+        {
+            return null;
+        }
+
+        return new Models.CustomerBook()
+        {
+            Id = book.Id,
+            Book = book.Book,
+            Ranking = book.Ranking,
+        };
+    }
 }

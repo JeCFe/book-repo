@@ -91,7 +91,7 @@ public static class CustomerRouter
         Results<Ok<Domain.Models.CustomerBook>, NotFound, ForbidHttpResult>
     > GetCustomerBook(
         string customerId,
-        string customerBookId,
+        Guid customerBookId,
         ICustomerProvider customerProvider,
         IUserContext userContext,
         CancellationToken cancellationToken
