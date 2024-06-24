@@ -13,7 +13,7 @@ export const useGetBookshelf = (bookshelfId?: string) => {
     async () =>
       (await getBookshelf({ bookshelfId: bookshelfId as string })).data,
     {
-      refreshInterval: 10000,
+      refreshInterval: 60000,
       onErrorRetry: (error) => {
         if (error.status === 404) return;
       },
