@@ -319,6 +319,7 @@ export default withPageAuthRequired(function ManageBookshelf({
                   <td>{book.book.authors?.join(", ")}</td>
                   <td>
                     <RenderStar
+                      allowHover
                       onChange={(ranking) => {
                         updateBookRanking(ranking, book.id);
                       }}

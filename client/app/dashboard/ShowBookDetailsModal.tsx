@@ -1,4 +1,4 @@
-import { Modal, Picture } from "@/components";
+import { Modal, Picture, RenderStar } from "@/components";
 
 import { useGetCustomerBook } from "@/hooks";
 import { Spinner } from "@jecfe/react-design-system";
@@ -52,8 +52,12 @@ export function ShowBookDetailsModal({
                 loading={isLoading}
               />
             </div>
+
             <div className="flex flex-col space-y-2">
               <RenderSection title="Book Title">{data.book.name}</RenderSection>
+              <RenderSection title="Rating">
+                <RenderStar ranking={data.ranking} />
+              </RenderSection>
               <RenderSection title="Release Year">
                 {data.book.release}
               </RenderSection>
