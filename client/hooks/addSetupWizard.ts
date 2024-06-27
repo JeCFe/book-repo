@@ -59,6 +59,7 @@ export const reducer = ({
         return {
           ...getDefaultState(),
           config: action.option,
+          includeDefaults: true,
         };
       }
       return {
