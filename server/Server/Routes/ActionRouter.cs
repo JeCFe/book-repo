@@ -148,6 +148,23 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
+    private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> CommentCustomerBook(
+        AddCustomerBookCommentCommand command,
+        IMediator mediator,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { } || command.CustomerId != userId)
+        {
+            return TypedResults.Forbid();
+        }
+
+        await mediator.Send(command, cancellationToken);
+        return TypedResults.NoContent();
+    }
+
     public static RouteGroupBuilder MapActionEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Actions");
@@ -158,6 +175,7 @@ public static class ActionRouter
         group.MapPost("/remove-bookshelf", RemoveBookshelf);
         group.MapPost("/rate-customer-book", RateCustomerBook);
         group.MapPost("/add-book-shelf-book", AddBookshelfBook);
+        group.MapPost("/comment-customer-book", CommentCustomerBook);
         group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
         group.MapPost("/update-bookshelf-order", UpdateBookshelfOrder);
 
