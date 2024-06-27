@@ -1,6 +1,11 @@
 "use client";
 import { AccordionManager } from "@/components";
-import { SetupBook, SetupBookshelf, useSetupWizard } from "@/hooks";
+import {
+  SetupBook,
+  SetupBookshelf,
+  useGetCustomerSummary,
+  useSetupWizard,
+} from "@/hooks";
 import { getApiClient } from "@/services";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button } from "@jecfe/react-design-system";
@@ -23,6 +28,7 @@ const updateNickname = getApiClient()
 export default withPageAuthRequired(function Preview() {
   const { isComplete, nickname, books, bookshelves, includeDefaults } =
     useSetupWizard();
+  const { mutate } = useGetCustomerSummary();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [customerBooks, setCustomerBooks] = useState<SetupBook[]>([]);
@@ -90,6 +96,7 @@ export default withPageAuthRequired(function Preview() {
       {
         loading: "Setting up account",
         success: () => {
+          mutate();
           router.push("/dashboard");
           return "Account has been setup";
         },
