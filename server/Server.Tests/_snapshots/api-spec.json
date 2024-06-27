@@ -146,6 +146,31 @@
         }
       }
     },
+    "/action/comment-customer-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCustomerBookCommentCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/action/remove-bookshelf-book": {
       "post": {
         "tags": [
@@ -506,6 +531,29 @@
             "items": {
               "type": "string"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddCustomerBookCommentCommand": {
+        "required": [
+          "comment",
+          "customerBookId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
             "nullable": true
           }
         },
