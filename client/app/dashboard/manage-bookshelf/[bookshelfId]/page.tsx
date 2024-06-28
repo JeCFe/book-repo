@@ -1,8 +1,8 @@
 "use client";
 
-import { LinkButton, RenderStar, Table } from "@/components";
+import { RenderStar, Table } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
-import { getApiClient } from "@/services";
+import { getApiClient, updateRanking } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
@@ -23,11 +23,6 @@ const removeBookshelfBook = getApiClient()
 
 const removeBookshelf = getApiClient()
   .path("/action/remove-bookshelf")
-  .method("post")
-  .create();
-
-const updateRanking = getApiClient()
-  .path("/action/rate-customer-book")
   .method("post")
   .create();
 

@@ -5,7 +5,7 @@ const head = cva("font-bold tracking-tight text-slate-700", {
   variants: {
     size: {
       medium: "text-lg",
-      large: "text-2xl md:text-4xl",
+      large: "text-4xl md:text-4xl",
     },
     theme: {
       light: "text-slate-700",
@@ -22,7 +22,7 @@ const body = cva("", {
   variants: {
     size: {
       medium: "text-sm",
-      large: "md:text-2xl text-lg",
+      large: "md:text-2xl text-xl",
     },
     theme: {
       light: "text-slate-900",
