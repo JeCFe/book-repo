@@ -5,6 +5,8 @@ import Image from "next/image";
 const picture = cva("flex items-center justify-center rounded shadow-2xl", {
   variants: {
     size: {
+      xLarge:
+        "md:max-w-[320px] md:max-h-[426.67px] md:min-w-[320px] md:min-h-[426.67px] max-w-[192px] max-h-[256px] min-w-[192px] min-h-[256px]",
       large: "max-w-[192px] max-h-[256px] min-w-[192px] min-h-[256px]",
       medium: "max-w-[96px] max-h-[128px] min-w-[96px] min-h-[128px]",
     },
