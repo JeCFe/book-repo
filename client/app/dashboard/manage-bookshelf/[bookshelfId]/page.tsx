@@ -9,7 +9,6 @@ import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { ShowBookDetailsModal } from "../../ShowBookDetailsModal";
 
 //Should ideally move these to services as this page is getting quite complicated
 const updateBookshelfOrder = getApiClient()
@@ -62,10 +61,6 @@ export default withPageAuthRequired(function ManageBookshelf({
   const [updatedBooks, setUpdatedBooks] = useState<Book[]>([]);
   const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [passingCustomerBookId, setPassingCustomerBookId] = useState<
-    string | undefined
-  >();
 
   let draggedItem: Book | null = null;
 
@@ -245,13 +240,6 @@ export default withPageAuthRequired(function ManageBookshelf({
   } else {
     return (
       <div className="text-slate-400">
-        <ShowBookDetailsModal
-          passingCustomerBookId={passingCustomerBookId as string}
-          showModal={isOpen}
-          setShowModal={setIsOpen}
-          setPassingCustomerBookId={setPassingCustomerBookId}
-          userId={user.sub!}
-        />
         <div className="flex flex-row space-x-2">
           <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
           <div className="underline underline-offset-4">
@@ -261,6 +249,9 @@ export default withPageAuthRequired(function ManageBookshelf({
         <h1 className="flex flex-col pb-4 text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
           {`Manage ${data?.name}`}
         </h1>
+        <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
+          {`View and manage bookshelf, you can drag 'n' drop the ranking and click on the book title to view more options`}
+        </div>
         <div className="my-4 flex flex-row">
           <Button
             size="large"
@@ -307,14 +298,11 @@ export default withPageAuthRequired(function ManageBookshelf({
                 >
                   <td>{book.order}</td>
                   <td>
-                    <LinkButton
-                      onClick={() => {
-                        setPassingCustomerBookId(book.id ?? "");
-                        setIsOpen(true);
-                      }}
+                    <Anchor
+                      href={`/dashboard/manage-bookshelf/${bookshelfId}/${book.id}`}
                     >
                       {book.book.name}
-                    </LinkButton>
+                    </Anchor>
                   </td>
                   <td>{book.book.authors?.join(", ")}</td>
                   <td>
