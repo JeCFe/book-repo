@@ -1,8 +1,7 @@
-import { Modal, Picture, RenderStar } from "@/components";
-
+import { Modal, Picture, RenderSection, RenderStar } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
 import { Spinner } from "@jecfe/react-design-system";
-import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   passingCustomerBookId: string;
@@ -87,22 +86,5 @@ export function ShowBookDetailsModal({
         )}
       </>
     </Modal>
-  );
-}
-
-function RenderSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="flex flex-col">
-      <h4 className="text-lg font-bold tracking-tight text-slate-700">
-        {title}
-      </h4>
-      <div className="text-sm text-slate-900">{children}</div>
-    </div>
   );
 }
