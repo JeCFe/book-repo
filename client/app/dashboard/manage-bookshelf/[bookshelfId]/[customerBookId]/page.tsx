@@ -2,9 +2,11 @@
 
 import { Picture, RenderSection, RenderStar } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
-import { updateRanking } from "@/services";
+import { updateComment, updateRanking } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Spinner, TextArea } from "@jecfe/react-design-system";
+import debounce from "lodash.debounce";
+import { useCallback } from "react";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -40,6 +42,29 @@ export default withPageAuthRequired(function ManageBook({
     mutate();
   };
 
+  const debounceUpdateComment = useCallback(
+    debounce(async (comment: string) => {
+      console.log("Here");
+      if (!data) {
+        return;
+      }
+      toast.promise(
+        updateComment({
+          customerId: user.sub!,
+          customerBookId: data.id,
+          comment,
+        }),
+        {
+          loading: "Autosaving",
+          success: "Autosave complete",
+          error: "There was an error when autosaving",
+        },
+        { id: "autosave" },
+      );
+      mutate();
+    }, 1000),
+    [],
+  );
   return (
     <div className="text-slate-400">
       <div className="flex flex-row space-x-2">
@@ -117,12 +142,22 @@ export default withPageAuthRequired(function ManageBook({
                 )}
               </div>
             </div>
-            <div className="mt-10">
+            <div className="mt-10 w-full">
               <RenderSection
                 size="large"
                 theme="dark"
-                title="Comment"
-              ></RenderSection>
+                title={<div>Comment &#9998;</div>}
+              >
+                <TextArea
+                  onChange={debounceUpdateComment}
+                  autoGrow
+                  border="bottom"
+                  width="large"
+                  defaultValue={data.comment}
+                  placeholder="Add a comment..."
+                  className="mt-4 !max-w-3xl border-b !border-white bg-transparent"
+                />
+              </RenderSection>
             </div>
           </div>
         )}
