@@ -42,45 +42,54 @@ export function ShowBookDetailsModal({
             </div>
           </div>
         ) : (
-          <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-            <div>
-              <Picture
-                size="large"
-                pictureUrl={data.book.picture}
-                title={data.book.name ?? ""}
-                loading={isLoading}
-              />
+          <div className="flex flex-col pb-4">
+            <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+              <div>
+                <Picture
+                  size="large"
+                  pictureUrl={data.book.picture}
+                  title={data.book.name ?? ""}
+                  loading={isLoading}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <RenderSection title="Book Title">
+                  {data.book.name}
+                </RenderSection>
+                <RenderSection title="Rating">
+                  <RenderStar ranking={data.ranking} />
+                </RenderSection>
+                <RenderSection title="Release Year">
+                  {data.book.release}
+                </RenderSection>
+
+                {data.book.pageCount && data.book.pageCount > 0 && (
+                  <RenderSection title="Page Count">
+                    <div className="max-w-sm">{data.book.pageCount}</div>
+                  </RenderSection>
+                )}
+
+                {data.book.authors && data.book.authors.length > 0 && (
+                  <RenderSection title="Authors">
+                    <div className="max-w-sm">
+                      {data.book.authors?.join(", ")}
+                    </div>
+                  </RenderSection>
+                )}
+                {data.book.subjects && data.book.subjects.length > 0 && (
+                  <RenderSection title="Subjects">
+                    <div className="max-w-sm">
+                      {data.book.subjects?.join(", ")}
+                    </div>
+                  </RenderSection>
+                )}
+              </div>
             </div>
-
-            <div className="flex flex-col space-y-2">
-              <RenderSection title="Book Title">{data.book.name}</RenderSection>
-              <RenderSection title="Rating">
-                <RenderStar ranking={data.ranking} />
+            <div className="mt-4 w-full">
+              <RenderSection title={<div>Comment</div>}>
+                {data.comment}
               </RenderSection>
-              <RenderSection title="Release Year">
-                {data.book.release}
-              </RenderSection>
-
-              {data.book.pageCount && data.book.pageCount > 0 && (
-                <RenderSection title="Page Count">
-                  <div className="max-w-sm">{data.book.pageCount}</div>
-                </RenderSection>
-              )}
-
-              {data.book.authors && data.book.authors.length > 0 && (
-                <RenderSection title="Authors">
-                  <div className="max-w-sm">
-                    {data.book.authors?.join(", ")}
-                  </div>
-                </RenderSection>
-              )}
-              {data.book.subjects && data.book.subjects.length > 0 && (
-                <RenderSection title="Subjects">
-                  <div className="max-w-sm">
-                    {data.book.subjects?.join(", ")}
-                  </div>
-                </RenderSection>
-              )}
             </div>
           </div>
         )}

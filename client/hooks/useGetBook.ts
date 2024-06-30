@@ -9,7 +9,8 @@ export const useGetBook = (isbn?: string) => {
     key,
     async () => (await getBook({ isbn: isbn as string })).data,
     {
-      refreshInterval: 10000,
+      refreshInterval: 60000,
+      revalidateOnFocus: false,
       onErrorRetry: (error) => {
         if (error.status === 404) return;
       },

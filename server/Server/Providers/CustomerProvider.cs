@@ -64,6 +64,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             Id = book.Id,
             Book = book.Book,
             Ranking = book.Ranking,
+            Comment = book.Comment
         };
     }
 }

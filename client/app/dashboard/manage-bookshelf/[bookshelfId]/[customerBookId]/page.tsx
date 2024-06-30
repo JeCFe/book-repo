@@ -2,10 +2,11 @@
 
 import { Picture, RenderSection, RenderStar } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
-import { updateRanking } from "@/services";
+import { updateComment, updateRanking } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Spinner } from "@jecfe/react-design-system";
-import { ReactNode } from "react";
+import { Anchor, Spinner, TextArea } from "@jecfe/react-design-system";
+import debounce from "lodash.debounce";
+import { useCallback } from "react";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -41,6 +42,29 @@ export default withPageAuthRequired(function ManageBook({
     mutate();
   };
 
+  const debounceUpdateComment = useCallback(
+    debounce(async (comment: string) => {
+      console.log("Here");
+      if (!data) {
+        return;
+      }
+      toast.promise(
+        updateComment({
+          customerId: user.sub!,
+          customerBookId: data.id,
+          comment,
+        }),
+        {
+          loading: "Autosaving",
+          success: "Autosave complete",
+          error: "There was an error when autosaving",
+        },
+        { id: "autosave" },
+      );
+      mutate();
+    }, 1000),
+    [],
+  );
   return (
     <div className="text-slate-400">
       <div className="flex flex-row space-x-2">
@@ -70,51 +94,70 @@ export default withPageAuthRequired(function ManageBook({
             </div>
           </div>
         ) : (
-          <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-12 md:space-y-0">
-            <div>
-              <Picture
-                size="xLarge"
-                pictureUrl={data.book.picture}
-                title={data.book.name ?? ""}
-                loading={isLoading}
-              />
-            </div>
+          <div className="flex flex-col">
+            <div className="mt-4 flex flex-col space-y-2 md:flex-row md:space-x-12 md:space-y-0">
+              <div>
+                <Picture
+                  size="xLarge"
+                  pictureUrl={data.book.picture}
+                  title={data.book.name ?? ""}
+                  loading={isLoading}
+                />
+              </div>
 
-            <div className="flex flex-col space-y-2">
-              <RenderSection size="large" theme="dark" title="Book Title">
-                {data.book.name}
-              </RenderSection>
-              <RenderSection size="large" theme="dark" title="Rating">
-                <RenderStar
-                  allowHover
-                  ranking={data.ranking}
-                  onChange={updateBookRanking}
+              <div className="flex flex-col space-y-2">
+                <RenderSection size="large" theme="dark" title="Book Title">
+                  {data.book.name}
+                </RenderSection>
+                <RenderSection size="large" theme="dark" title="Rating">
+                  <RenderStar
+                    allowHover
+                    ranking={data.ranking}
+                    onChange={updateBookRanking}
+                  />
+                </RenderSection>
+                <RenderSection size="large" theme="dark" title="Release Year">
+                  {data.book.release}
+                </RenderSection>
+
+                {data.book.pageCount && data.book.pageCount > 0 && (
+                  <RenderSection size="large" theme="dark" title="Page Count">
+                    <div className="max-w-sm">{data.book.pageCount}</div>
+                  </RenderSection>
+                )}
+
+                {data.book.authors && data.book.authors.length > 0 && (
+                  <RenderSection size="large" theme="dark" title="Authors">
+                    <div className="max-w-sm">
+                      {data.book.authors?.join(", ")}
+                    </div>
+                  </RenderSection>
+                )}
+                {data.book.subjects && data.book.subjects.length > 0 && (
+                  <RenderSection size="large" theme="dark" title="Subjects">
+                    <div className="max-w-sm">
+                      {data.book.subjects?.join(", ")}
+                    </div>
+                  </RenderSection>
+                )}
+              </div>
+            </div>
+            <div className="mt-10 w-full">
+              <RenderSection
+                size="large"
+                theme="dark"
+                title={<div>Comment &#9998;</div>}
+              >
+                <TextArea
+                  onChange={debounceUpdateComment}
+                  autoGrow
+                  border="bottom"
+                  width="large"
+                  defaultValue={data.comment}
+                  placeholder="Add a comment..."
+                  className="mt-4 !max-w-3xl border-b !border-white bg-transparent"
                 />
               </RenderSection>
-              <RenderSection size="large" theme="dark" title="Release Year">
-                {data.book.release}
-              </RenderSection>
-
-              {data.book.pageCount && data.book.pageCount > 0 && (
-                <RenderSection size="large" theme="dark" title="Page Count">
-                  <div className="max-w-sm">{data.book.pageCount}</div>
-                </RenderSection>
-              )}
-
-              {data.book.authors && data.book.authors.length > 0 && (
-                <RenderSection size="large" theme="dark" title="Authors">
-                  <div className="max-w-sm">
-                    {data.book.authors?.join(", ")}
-                  </div>
-                </RenderSection>
-              )}
-              {data.book.subjects && data.book.subjects.length > 0 && (
-                <RenderSection size="large" theme="dark" title="Subjects">
-                  <div className="max-w-sm">
-                    {data.book.subjects?.join(", ")}
-                  </div>
-                </RenderSection>
-              )}
             </div>
           </div>
         )}
