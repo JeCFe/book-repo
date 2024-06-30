@@ -41,12 +41,12 @@ export function RenderSection({
   size,
   theme,
 }: {
-  title: string;
+  title: ReactNode;
   children: ReactNode;
 } & VariantProps<typeof head> &
   VariantProps<typeof body>) {
   return (
-    <div className="flex flex-col">
+    <div className="flex w-full flex-col">
       <h4 className={head({ size, theme })}>{title}</h4>
       <div className={body({ size, theme })}>{children}</div>
     </div>
