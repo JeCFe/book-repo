@@ -12,13 +12,12 @@ A service to allow for the visualisation and management of you physical bookshel
 - Create and manage numourous bookshelves
 - Add books to these bookshelves with unique ordering per shelf
 - Ability to add books by ISBN and fuzzy searching
-
+- Allow to rate books
+- Allow to add comments onto books
 
 
 ## Roadmap
 
-- Allow to rate books
-- Allow to add comments onto books
 - Shareable uneditable links to bookshelves / account
 - Set reading goals 
 - Be able to see a global catalogue of book other customers use with averaged reviews and anonymous reviews
