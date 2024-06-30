@@ -14,6 +14,7 @@ export const useGetBookshelf = (bookshelfId?: string) => {
       (await getBookshelf({ bookshelfId: bookshelfId as string })).data,
     {
       refreshInterval: 60000,
+      revalidateOnFocus: false,
       onErrorRetry: (error) => {
         if (error.status === 404) return;
       },

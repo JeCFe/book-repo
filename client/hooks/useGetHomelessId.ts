@@ -20,7 +20,8 @@ export const useGetHomelessId = (customerId: string) => {
       }
     },
     {
-      refreshInterval: 10000,
+      refreshInterval: 120000,
+      revalidateOnFocus: false,
     },
   );
 

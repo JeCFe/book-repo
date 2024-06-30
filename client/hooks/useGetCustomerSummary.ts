@@ -17,7 +17,8 @@ export const useGetCustomerSummary = () => {
       }
     },
     {
-      refreshInterval: 10000,
+      refreshInterval: 60000,
+      revalidateOnFocus: false,
     },
   );
 

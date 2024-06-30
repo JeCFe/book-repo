@@ -20,7 +20,8 @@ export const useGetBookshelfSummary = (customerId: string) => {
       }
     },
     {
-      refreshInterval: 10000,
+      refreshInterval: 60000,
+      revalidateOnFocus: false,
     },
   );
 
