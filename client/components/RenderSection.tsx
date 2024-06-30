@@ -1,7 +1,7 @@
 import { VariantProps, cva } from "class-variance-authority";
 import { ReactNode } from "react";
 
-const head = cva("font-bold tracking-tight text-slate-700", {
+const head = cva("font-bold tracking-tight", {
   variants: {
     size: {
       medium: "text-lg",
@@ -18,7 +18,7 @@ const head = cva("font-bold tracking-tight text-slate-700", {
   },
 });
 
-const body = cva("", {
+const body = cva("flex", {
   variants: {
     size: {
       medium: "text-sm",
@@ -26,7 +26,7 @@ const body = cva("", {
     },
     theme: {
       light: "text-slate-900",
-      dark: "text-slate-200",
+      dark: "text-slate-300",
     },
   },
   defaultVariants: {
