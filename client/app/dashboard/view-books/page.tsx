@@ -1,30 +1,10 @@
 "use client";
 
-import { RenderStar, Table } from "@/components";
+import { RenderBookTable } from "@/components";
 import { useGetCustomerBooks } from "@/hooks";
-import { useGetBookshelf } from "@/hooks/useGetBookshelf";
-import { getApiClient, updateRanking } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
-import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-
-type Book = {
-  book: {
-    isbn: string | null;
-    name: string | null;
-    authors?: string[] | undefined;
-    subjects: string[] | null;
-    release?: string | undefined;
-    picture?: string | undefined;
-    pageCount: number;
-  };
-  id: string;
-  order: number;
-  ranking?: number;
-};
 
 export default withPageAuthRequired(function ManageBookshelf({
   user,
@@ -34,23 +14,6 @@ export default withPageAuthRequired(function ManageBookshelf({
   const { data, isLoading, error, mutate } = useGetCustomerBooks();
 
   const router = useRouter();
-
-  const updateBookRanking = (ranking: number, id: string) => {
-    toast.promise(
-      updateRanking({
-        customerId: user.sub!,
-        customerBookId: id,
-        ranking,
-      }),
-      {
-        loading: "Autosaving",
-        success: "Autosave complete",
-        error: "There was an error when autosaving",
-      },
-      { id: "autosave" },
-    );
-    mutate();
-  };
 
   if (isLoading || data === undefined || error !== undefined) {
     return (
@@ -83,52 +46,12 @@ export default withPageAuthRequired(function ManageBookshelf({
             Add book
           </Button>
         </div>
-        <div className="overflow-x flex pb-20">
-          <Table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Rating</th>
-                <td>ISBN</td>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((book, i) => (
-                <tr key={`${book.book.name}-${i}`}>
-                  <td>
-                    <Anchor href={`/dashboard/view-book/${book.id}`}>
-                      {book.book.name}
-                    </Anchor>
-                  </td>
-                  <td>{book.book.authors?.join(", ")}</td>
-                  <td>
-                    <RenderStar
-                      allowHover
-                      onChange={(ranking) => {
-                        updateBookRanking(ranking, book.id);
-                      }}
-                      ranking={book.ranking}
-                    />
-                  </td>
-                  <td>{book.book.isbn}</td>
-                  <td>
-                    <Button
-                      disabled
-                      size="small"
-                      variant="destructive"
-                      className="text-black"
-                      onClick={() => {}}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
+        <RenderBookTable
+          books={data}
+          bookHref={"/dashboard/view-book/"}
+          userId={user.sub!}
+          deleteBook={() => {}}
+        />
       </div>
     );
   }
