@@ -73,7 +73,7 @@ export default withPageAuthRequired(function ManageBookshelf({
         <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
           {`Here you can view and manage all the books you currently have in your account.`}
         </div>
-        <div className="my-4 flex flex-row">
+        <div className="my-4 flex flex-row pt-10">
           <Button
             size="large"
             variant="primary"
@@ -98,7 +98,7 @@ export default withPageAuthRequired(function ManageBookshelf({
               {data.map((book, i) => (
                 <tr key={`${book.book.name}-${i}`}>
                   <td>
-                    <Anchor href={`/dashboard/manage-bookshelf/${book.id}`}>
+                    <Anchor href={`/dashboard/view-book/${book.id}`}>
                       {book.book.name}
                     </Anchor>
                   </td>
