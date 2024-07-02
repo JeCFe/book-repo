@@ -55,6 +55,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                 <div className="flex flex-col space-y-4 p-4">
                   <Anchor href="/dashboard/add-book">Add book</Anchor>
                   <Anchor href="/dashboard/add-bookshelf">Add bookshelf</Anchor>
+                  <Anchor href="/dashboard/view-books">View books</Anchor>
                 </div>
               </div>
               <div className="flex flex-row items-center p-4 text-center text-base">
