@@ -40,7 +40,8 @@ export const useSearchForBooks = (search: string) => {
     url(search),
     async () => (await fetch(url(search))).json(),
     {
-      refreshInterval: 100,
+      refreshInterval: 60000,
+      revalidateOnFocus: false,
       onErrorRetry: (error) => {
         if (error.status === 404) return;
       },
