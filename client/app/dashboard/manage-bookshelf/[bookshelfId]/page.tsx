@@ -1,6 +1,6 @@
 "use client";
 
-import { RenderStar, Table } from "@/components";
+import { Book, RenderBookTable } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
 import { getApiClient, updateRanking } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -25,21 +25,6 @@ const removeBookshelf = getApiClient()
   .path("/action/remove-bookshelf")
   .method("post")
   .create();
-
-type Book = {
-  book: {
-    isbn: string | null;
-    name: string | null;
-    authors?: string[] | undefined;
-    subjects: string[] | null;
-    release?: string | undefined;
-    picture?: string | undefined;
-    pageCount: number;
-  };
-  id: string;
-  order: number;
-  ranking?: number;
-};
 
 type Props = {
   params: { bookshelfId: string };
@@ -86,7 +71,7 @@ export default withPageAuthRequired(function ManageBookshelf({
       return;
     }
     const booksOrdered = [...(data.books as Book[])].toSorted(
-      (a, b) => a.order - b.order,
+      (a, b) => a.order! - b.order!,
     );
     setUpdatedBooks(booksOrdered);
   }, [data]);
@@ -104,7 +89,7 @@ export default withPageAuthRequired(function ManageBookshelf({
       return;
     }
     const booksOrdered = [...(data.books as Book[])].toSorted(
-      (a, b) => a.order - b.order,
+      (a, b) => a.order! - b.order!,
     );
     setBooks(booksOrdered);
   }, [data, isLoading]);
@@ -157,7 +142,7 @@ export default withPageAuthRequired(function ManageBookshelf({
     book: Book,
   ) => {
     draggedItem = book;
-    e.dataTransfer.setData("text/plain", book.order.toString());
+    e.dataTransfer.setData("text/plain", book.order!.toString());
   };
 
   const handleDrop = (target: Book) => {
@@ -176,24 +161,24 @@ export default withPageAuthRequired(function ManageBookshelf({
     draggedItem = null;
   };
 
-  const removeBook = (book: Book) => {
+  const removeBook = (isbn: string, name: string) => {
     setIsDeletingBookcase(true);
     toast.promise(
       removeBookshelfBook({
         customerId: user?.sub as string,
         bookshelfId: bookshelfId,
-        isbn: book.book.isbn,
+        isbn,
       }),
       {
-        loading: `Removing ${book.book.name} from ${data?.name}`,
+        loading: `Removing ${name} from ${data?.name}`,
         success: () => {
           mutate();
-          return `Successfully removed ${book.book.name}`;
+          return `Successfully removed ${name}`;
         },
-        error: `There was an error when trying to remove ${book.book.name}`,
+        error: `There was an error when trying to remove ${name}`,
       },
 
-      { id: book.book.isbn as string },
+      { id: isbn },
     );
     setIsDeletingBookcase(false);
   };
@@ -270,61 +255,15 @@ export default withPageAuthRequired(function ManageBookshelf({
             Delete bookshelf
           </Button>
         </div>
-        <div className="overflow-x flex pb-20">
-          <Table>
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Rating</th>
-                <td>ISBN</td>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {booksToRender().map((book, i) => (
-                <tr
-                  key={`${book.book.name}-${i}`}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, book)}
-                  onDrop={() => handleDrop(book)}
-                  onDragOver={(e) => e.preventDefault()}
-                >
-                  <td>{book.order}</td>
-                  <td>
-                    <Anchor
-                      href={`/dashboard/manage-bookshelf/${bookshelfId}/${book.id}`}
-                    >
-                      {book.book.name}
-                    </Anchor>
-                  </td>
-                  <td>{book.book.authors?.join(", ")}</td>
-                  <td>
-                    <RenderStar
-                      allowHover
-                      onChange={(ranking) => {
-                        updateBookRanking(ranking, book.id);
-                      }}
-                      ranking={book.ranking}
-                    />
-                  </td>
-                  <td>{book.book.isbn}</td>
-                  <td>
-                    <Button
-                      size="small"
-                      variant="destructive"
-                      className="text-black"
-                      onClick={() => removeBook(book)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
+        <RenderBookTable
+          books={booksToRender()}
+          bookHref={`/dashboard/manage-bookshelf/${bookshelfId}/`}
+          userId={user.sub!}
+          deleteBook={removeBook}
+          handleDragStart={(e, book) => handleDragStart(e, book)}
+          handleDrop={(book) => handleDrop(book)}
+          draggable
+        />
       </div>
     );
   }

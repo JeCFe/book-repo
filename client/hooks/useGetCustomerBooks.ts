@@ -1,16 +1,17 @@
 import { getApiClient } from "@/services";
 import useSWR from "swr";
 
-const getBook = getApiClient().path("/book/{isbn}").method("get").create();
+const getCustomerBooks = getApiClient()
+  .path("/customer/books")
+  .method("get")
+  .create();
 
-export const useGetBook = (isbn?: string) => {
-  const key = isbn ? `getBook/${isbn}` : undefined;
+export const useGetCustomerBooks = () => {
   const { data, error, isLoading, mutate } = useSWR(
-    key,
-    async () => (await getBook({ isbn: isbn as string })).data,
+    "getCustomerBooks",
+    async () => (await getCustomerBooks({})).data,
     {
       refreshInterval: 60000,
-      revalidateOnFocus: false,
       onErrorRetry: (error) => {
         if (error.status === 404) return;
       },
