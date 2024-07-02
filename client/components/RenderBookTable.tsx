@@ -98,7 +98,6 @@ export function RenderBookTable({
               <td>{book.book.isbn}</td>
               <td>
                 <Button
-                  disabled
                   size="small"
                   variant="destructive"
                   className="text-black"
