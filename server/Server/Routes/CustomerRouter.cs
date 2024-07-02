@@ -112,12 +112,22 @@ public static class CustomerRouter
         return TypedResults.Ok(book);
     }
 
+    private static async Task<Ok<List<CustomerBook>>> GetCustomerBooks(
+        ICustomerProvider customerProvider,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    ) =>
+        TypedResults.Ok(
+            await customerProvider.GetCustomerBooks(userContext.UserId!, cancellationToken)
+        );
+
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Customer");
-        group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
         group.MapPost("/delete", Delete).RequireAuthorization();
         group.MapPost("/update", Update).RequireAuthorization();
+        group.MapGet("/books", GetCustomerBooks).RequireAuthorization();
+        group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
         group.MapGet("/{customerId}/{customerBookId}", GetCustomerBook).RequireAuthorization();
         return group;
     }
