@@ -7,6 +7,7 @@ export * from "./Modal";
 export * from "./Picture";
 export * from "./ProposedBooks";
 export * from "./RadioButton";
+export * from "./RenderBookTable";
 export * from "./RenderSection";
 export * from "./RenderStar";
 export * from "./SideNav";
