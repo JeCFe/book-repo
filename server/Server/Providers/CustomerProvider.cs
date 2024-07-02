@@ -1,5 +1,6 @@
 namespace Server.Providers;
 
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 using Server.Domain.Models;
@@ -67,4 +68,22 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             Comment = book.Comment
         };
     }
+
+    public async Task<List<Models.CustomerBook>> GetCustomerBooks(
+        string customerId,
+        CancellationToken cancellationToken
+    ) =>
+        await dbContext
+            .CustomerBooks
+            .Where(x => x.CustomerId == customerId)
+            .Select(
+                x =>
+                    new Models.CustomerBook()
+                    {
+                        Comment = x.Comment,
+                        Book = x.Book,
+                        Id = x.Id
+                    }
+            )
+            .ToListAsync(cancellationToken);
 }
