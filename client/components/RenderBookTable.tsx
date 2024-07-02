@@ -1,10 +1,11 @@
 import { useGetCustomerBooks } from "@/hooks";
 import { updateRanking } from "@/services";
 import { Anchor, Button } from "@jecfe/react-design-system";
+import { DragEvent } from "react";
 import toast from "react-hot-toast";
 import { RenderStar, Table } from ".";
 
-type Book = {
+export type Book = {
   book: {
     isbn: string | null;
     name: string | null;
@@ -23,7 +24,10 @@ type Props = {
   books: Book[];
   bookHref: string;
   userId: string;
-  deleteBook: () => void;
+  draggable?: boolean;
+  deleteBook: (isbn: string, name: string) => void;
+  handleDragStart?: (e: DragEvent<HTMLTableRowElement>, book: Book) => void;
+  handleDrop?: (book: Book) => void;
 };
 
 export function RenderBookTable({
@@ -31,6 +35,9 @@ export function RenderBookTable({
   deleteBook,
   bookHref,
   userId,
+  draggable = false,
+  handleDragStart = () => {},
+  handleDrop = () => {},
 }: Props) {
   const { mutate } = useGetCustomerBooks();
 
@@ -65,7 +72,13 @@ export function RenderBookTable({
         </thead>
         <tbody>
           {books.map((book, i) => (
-            <tr key={`${book.book.name}-${i}`}>
+            <tr
+              key={`${book.book.name}-${i}`}
+              draggable={draggable}
+              onDragStart={(e) => handleDragStart(e, book)}
+              onDrop={() => handleDrop(book)}
+              onDragOver={(e) => e.preventDefault()}
+            >
               <td>{book.order ?? i + 1}</td>
               <td>
                 <Anchor href={`${bookHref}/${book.id}`}>
@@ -89,7 +102,9 @@ export function RenderBookTable({
                   size="small"
                   variant="destructive"
                   className="text-black"
-                  onClick={deleteBook}
+                  onClick={() =>
+                    deleteBook(book.book.isbn as string, book.book.name!)
+                  }
                 >
                   Delete
                 </Button>
