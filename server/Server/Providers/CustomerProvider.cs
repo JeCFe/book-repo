@@ -82,7 +82,8 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                     {
                         Comment = x.Comment,
                         Book = x.Book,
-                        Id = x.Id
+                        Id = x.Id,
+                        Ranking = x.Ranking
                     }
             )
             .ToListAsync(cancellationToken);

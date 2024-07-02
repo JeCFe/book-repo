@@ -12,7 +12,6 @@ export const useGetCustomerBooks = () => {
     async () => (await getCustomerBooks({})).data,
     {
       refreshInterval: 60000,
-      revalidateOnFocus: false,
       onErrorRetry: (error) => {
         if (error.status === 404) return;
       },
