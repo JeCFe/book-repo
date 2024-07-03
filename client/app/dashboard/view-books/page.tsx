@@ -1,6 +1,6 @@
 "use client";
 
-import { RenderBookTable, ToggleSwitch } from "@/components";
+import { RenderBookGrid, RenderBookTable, ToggleSwitch } from "@/components";
 import { useGetCustomerBooks } from "@/hooks";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
@@ -56,16 +56,18 @@ export default withPageAuthRequired(function ManageBookshelf({
             }}
           />
         </div>
-        {!toggleBookRender ? (
-          <RenderBookTable
-            books={data}
-            bookHref={"/dashboard/view-book/"}
-            userId={user.sub!}
-            deleteBook={() => {}}
-          />
-        ) : (
-          <div></div>
-        )}
+        <div className="pb-20 pt-10">
+          {!toggleBookRender ? (
+            <RenderBookTable
+              books={data}
+              bookHref={"/dashboard/view-book/"}
+              userId={user.sub!}
+              deleteBook={() => {}}
+            />
+          ) : (
+            <RenderBookGrid books={data} />
+          )}
+        </div>
       </div>
     );
   }
