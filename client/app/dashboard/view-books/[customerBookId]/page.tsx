@@ -14,7 +14,7 @@ export default withPageAuthRequired(function ManageBook({
   return (
     <ViewCustomerBook
       params={params}
-      breadcrumbHref={"view-book"}
+      breadcrumbHref={"view-books"}
       breadcrumbReturn="View Books"
       user={user}
     />

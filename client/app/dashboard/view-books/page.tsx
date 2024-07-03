@@ -56,7 +56,12 @@ export default withPageAuthRequired(function ManageBookshelf({
               deleteBook={() => {}}
             />
           ) : (
-            <RenderBookGrid books={data} />
+            <RenderBookGrid
+              books={data}
+              onClick={(book) =>
+                router.push(`/dashboard/view-books/${book.id}`)
+              }
+            />
           )}
         </div>
       </div>
