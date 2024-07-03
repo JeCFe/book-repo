@@ -12,12 +12,14 @@ import toast from "react-hot-toast";
 type Props = {
   params: { customerBookId: string; bookshelfId: string };
   breadcrumbHref: string;
+  breadcrumbReturn: string;
 };
 
 export function ViewCustomerBook({
   params,
   user,
   breadcrumbHref,
+  breadcrumbReturn,
 }: Props & { user: UserProfile }) {
   const { data, isLoading, mutate } = useGetCustomerBook(
     user.sub!,
@@ -72,7 +74,7 @@ export function ViewCustomerBook({
       <div className="flex flex-row space-x-2">
         <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
         <Anchor href={`/dashboard/${breadcrumbHref}`} className="pb-6">
-          {"< Manage Book"}
+          {`< ${breadcrumbReturn}`}
         </Anchor>
         <div className="underline underline-offset-4">{"< Manage Book"}</div>
       </div>
