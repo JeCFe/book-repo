@@ -1,8 +1,12 @@
 "use client";
 
 import { RenderBookGrid, RenderBookTable, ToggleSwitch } from "@/components";
-import { useGetBookshelf } from "@/hooks/useGetBookshelf";
-import { getApiClient } from "@/services";
+import { useGetBookshelf } from "@/hooks";
+import {
+  removeBookshelf,
+  removeBookshelfBook,
+  updateBookshelfOrder,
+} from "@/services";
 import { Book } from "@/types";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
@@ -10,22 +14,6 @@ import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-
-//Should ideally move these to services as this page is getting quite complicated
-const updateBookshelfOrder = getApiClient()
-  .path("/action/update-bookshelf-order")
-  .method("post")
-  .create();
-
-const removeBookshelfBook = getApiClient()
-  .path("/action/remove-bookshelf-book")
-  .method("post")
-  .create();
-
-const removeBookshelf = getApiClient()
-  .path("/action/remove-bookshelf")
-  .method("post")
-  .create();
 
 type Props = {
   params: { bookshelfId: string };
@@ -240,6 +228,8 @@ export default withPageAuthRequired(function ManageBookshelf({
             onClick={(toggle) => {
               setToggleBookRender(toggle);
             }}
+            toggleOffText="Show covers"
+            toogleOnText="Show table"
           />
         </div>
 

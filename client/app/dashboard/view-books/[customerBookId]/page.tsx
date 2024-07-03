@@ -1,7 +1,7 @@
 "use client";
 
-import { ViewCustomerBook } from "@/app/dashboard/ViewCustomerBook";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { ViewCustomerBook } from "../../ViewCustomerBook";
 
 type Props = {
   params: { customerBookId: string; bookshelfId: string };
@@ -14,9 +14,9 @@ export default withPageAuthRequired(function ManageBook({
   return (
     <ViewCustomerBook
       params={params}
-      breadcrumbHref={`manage-bookshelf/${encodeURIComponent(params.bookshelfId)}`}
+      breadcrumbHref={"view-books"}
+      breadcrumbReturn="View Books"
       user={user}
-      breadcrumbReturn="Manage Bookshelf"
     />
   );
 });
