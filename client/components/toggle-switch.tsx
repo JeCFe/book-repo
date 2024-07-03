@@ -26,17 +26,17 @@ const innerDiv = cva(
 );
 
 type Props = {
-  checked: boolean;
   onClick: (toggle: boolean) => void;
+  checked?: boolean;
   label?: string;
   className?: string;
 };
 
 export function ToggleSwitch({
-  checked = false,
   onClick,
   label,
   className,
+  checked = false,
 }: Props) {
   const [toggled, setToggled] = useState<boolean>(checked);
   const handleClick = () => {
