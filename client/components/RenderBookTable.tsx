@@ -58,7 +58,7 @@ export function RenderBookTable({
     mutate();
   };
   return (
-    <div className="overflow-x flex pb-20">
+    <div className="mb-20 flex overflow-x-auto">
       <Table>
         <thead>
           <tr>
