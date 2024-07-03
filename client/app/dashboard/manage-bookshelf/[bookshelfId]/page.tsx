@@ -120,23 +120,6 @@ export default withPageAuthRequired(function ManageBookshelf({
     updateBooks(updatedBooks);
   }, [updatedBooks]);
 
-  const updateBookRanking = (ranking: number, id: string) => {
-    toast.promise(
-      updateRanking({
-        customerId: user.sub!,
-        customerBookId: id,
-        ranking,
-      }),
-      {
-        loading: "Autosaving",
-        success: "Autosave complete",
-        error: "There was an error when autosaving",
-      },
-      { id: "autosave" },
-    );
-    mutate();
-  };
-
   const handleDragStart = (
     e: React.DragEvent<HTMLTableRowElement>,
     book: Book,
