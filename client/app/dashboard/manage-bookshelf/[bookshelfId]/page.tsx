@@ -1,8 +1,9 @@
 "use client";
 
-import { Book, RenderBookTable } from "@/components";
+import { RenderBookGrid, RenderBookTable, ToggleSwitch } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
-import { getApiClient, updateRanking } from "@/services";
+import { getApiClient } from "@/services";
+import { Book } from "@/types";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
@@ -35,8 +36,8 @@ export default withPageAuthRequired(function ManageBookshelf({
   user,
 }: Props & { user: UserProfile }) {
   const { bookshelfId } = params;
-
   const { data, isLoading, error, mutate } = useGetBookshelf(bookshelfId);
+  const [toggleBookRender, setToggleBookRender] = useState<boolean>(false);
   const [books, setBooks] = useState<Book[]>([]);
   const [updatedBooks, setUpdatedBooks] = useState<Book[]>([]);
   const [isDeletingBookshelf, setIsDeletingBookcase] = useState<boolean>(false);
@@ -120,27 +121,7 @@ export default withPageAuthRequired(function ManageBookshelf({
     updateBooks(updatedBooks);
   }, [updatedBooks]);
 
-  const updateBookRanking = (ranking: number, id: string) => {
-    toast.promise(
-      updateRanking({
-        customerId: user.sub!,
-        customerBookId: id,
-        ranking,
-      }),
-      {
-        loading: "Autosaving",
-        success: "Autosave complete",
-        error: "There was an error when autosaving",
-      },
-      { id: "autosave" },
-    );
-    mutate();
-  };
-
-  const handleDragStart = (
-    e: React.DragEvent<HTMLTableRowElement>,
-    book: Book,
-  ) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, book: Book) => {
     draggedItem = book;
     e.dataTransfer.setData("text/plain", book.order!.toString());
   };
@@ -232,7 +213,7 @@ export default withPageAuthRequired(function ManageBookshelf({
         <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
           {`View and manage bookshelf, you can drag 'n' drop the ranking and click on the book title to view more options`}
         </div>
-        <div className="my-4 flex flex-row">
+        <div className="my-4 mt-10 flex flex-row">
           <Button
             size="large"
             variant="primary"
@@ -254,16 +235,39 @@ export default withPageAuthRequired(function ManageBookshelf({
           >
             Delete bookshelf
           </Button>
+          <ToggleSwitch
+            className="flex items-center justify-center"
+            onClick={(toggle) => {
+              setToggleBookRender(toggle);
+            }}
+          />
         </div>
-        <RenderBookTable
-          books={booksToRender()}
-          bookHref={`/dashboard/manage-bookshelf/${bookshelfId}/`}
-          userId={user.sub!}
-          deleteBook={removeBook}
-          handleDragStart={(e, book) => handleDragStart(e, book)}
-          handleDrop={(book) => handleDrop(book)}
-          draggable
-        />
+
+        <div className="pb-20 pt-10">
+          {!toggleBookRender ? (
+            <RenderBookTable
+              books={booksToRender()}
+              bookHref={`/dashboard/manage-bookshelf/${bookshelfId}/`}
+              userId={user.sub!}
+              deleteBook={removeBook}
+              handleDragStart={(e, book) => handleDragStart(e, book)}
+              handleDrop={(book) => handleDrop(book)}
+              draggable
+            />
+          ) : (
+            <RenderBookGrid
+              onClick={(book) => {
+                router.push(
+                  `/dashboard/manage-bookshelf/${bookshelfId}/${book.id}`,
+                );
+              }}
+              books={booksToRender()}
+              handleDragStart={(e, book) => handleDragStart(e, book)}
+              handleDrop={(book) => handleDrop(book)}
+              draggable
+            />
+          )}
+        </div>
       </div>
     );
   }

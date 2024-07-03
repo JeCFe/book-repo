@@ -1,17 +1,19 @@
 "use client";
 
-import { RenderBookTable } from "@/components";
+import { RenderBookGrid, RenderBookTable, ToggleSwitch } from "@/components";
 import { useGetCustomerBooks } from "@/hooks";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default withPageAuthRequired(function ManageBookshelf({
   user,
 }: {
   user: UserProfile;
 }) {
-  const { data, isLoading, error, mutate } = useGetCustomerBooks();
+  const { data, isLoading, error } = useGetCustomerBooks();
+  const [toggleBookRender, setToggleBookRender] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -30,6 +32,7 @@ export default withPageAuthRequired(function ManageBookshelf({
           <Anchor href="/dashboard" className="pb-6">{`< Dashboard`}</Anchor>
           <div className="underline underline-offset-4">{"< View Books"}</div>
         </div>
+
         <h1 className="flex flex-col pb-4 text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
           {`View all your books`}
         </h1>
@@ -45,13 +48,26 @@ export default withPageAuthRequired(function ManageBookshelf({
           >
             Add book
           </Button>
+          <div className="flex flex-grow" />
+          <ToggleSwitch
+            className="flex items-center justify-center"
+            onClick={(toggle) => {
+              setToggleBookRender(toggle);
+            }}
+          />
         </div>
-        <RenderBookTable
-          books={data}
-          bookHref={"/dashboard/view-book/"}
-          userId={user.sub!}
-          deleteBook={() => {}}
-        />
+        <div className="pb-20 pt-10">
+          {!toggleBookRender ? (
+            <RenderBookTable
+              books={data}
+              bookHref={"/dashboard/view-book/"}
+              userId={user.sub!}
+              deleteBook={() => {}}
+            />
+          ) : (
+            <RenderBookGrid books={data} />
+          )}
+        </div>
       </div>
     );
   }
