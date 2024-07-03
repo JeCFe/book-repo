@@ -125,10 +125,7 @@ export default withPageAuthRequired(function ManageBookshelf({
     updateBooks(updatedBooks);
   }, [updatedBooks]);
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLTableRowElement>,
-    book: Book,
-  ) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, book: Book) => {
     draggedItem = book;
     e.dataTransfer.setData("text/plain", book.order!.toString());
   };
@@ -263,6 +260,11 @@ export default withPageAuthRequired(function ManageBookshelf({
             />
           ) : (
             <RenderBookGrid
+              onClick={(book) => {
+                router.push(
+                  `/dashboard/manage-bookshelf/${bookshelfId}/${book.id}`,
+                );
+              }}
               books={booksToRender()}
               handleDragStart={(e, book) => handleDragStart(e, book)}
               handleDrop={(book) => handleDrop(book)}
