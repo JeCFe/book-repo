@@ -13,5 +13,5 @@ export * from "./RenderSection";
 export * from "./RenderStar";
 export * from "./SideNav";
 export * from "./SummaryTable";
+export * from "./ToggleSwitch";
 export * from "./table";
-export * from "./toggle-switch";

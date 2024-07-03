@@ -240,6 +240,8 @@ export default withPageAuthRequired(function ManageBookshelf({
             onClick={(toggle) => {
               setToggleBookRender(toggle);
             }}
+            toggleOffText="Show covers"
+            toogleOnText="Show table"
           />
         </div>
 

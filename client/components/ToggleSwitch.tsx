@@ -30,12 +30,16 @@ type Props = {
   checked?: boolean;
   label?: string;
   className?: string;
+  toggleOffText?: string;
+  toogleOnText?: string;
 };
 
 export function ToggleSwitch({
   onClick,
   label,
   className,
+  toggleOffText,
+  toogleOnText,
   checked = false,
 }: Props) {
   const [toggled, setToggled] = useState<boolean>(checked);
@@ -51,6 +55,7 @@ export function ToggleSwitch({
       aria-label={label || "Toggle Switch"}
       tabIndex={0}
     >
+      {toggled ? toogleOnText : toggleOffText}
       <div className={outterDiv({ toggled })}>
         <div className={innerDiv({ toggled })} />
       </div>
