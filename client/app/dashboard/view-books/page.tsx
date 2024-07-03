@@ -40,15 +40,6 @@ export default withPageAuthRequired(function ManageBookshelf({
           {`Here you can view and manage all the books you currently have in your account.`}
         </div>
         <div className="my-4 flex flex-row pt-10">
-          <Button
-            size="large"
-            variant="primary"
-            className="text-black"
-            onClick={() => router.push(`/dashboard/manage-bookshelf/add-book`)}
-          >
-            Add book
-          </Button>
-          <div className="flex flex-grow" />
           <ToggleSwitch
             className="flex items-center justify-center"
             onClick={(toggle) => {
@@ -60,7 +51,7 @@ export default withPageAuthRequired(function ManageBookshelf({
           {!toggleBookRender ? (
             <RenderBookTable
               books={data}
-              bookHref={"/dashboard/view-book/"}
+              bookHref={"/dashboard/view-books/"}
               userId={user.sub!}
               deleteBook={() => {}}
             />
