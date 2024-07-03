@@ -1,24 +1,6 @@
-import { useGetCustomerBooks } from "@/hooks";
-import { updateRanking } from "@/services";
-import { Anchor, Button } from "@jecfe/react-design-system";
+import { Book } from "@/types";
 import { DragEvent } from "react";
-import toast from "react-hot-toast";
-import { Picture, RenderStar, Table } from ".";
-
-export type Book = {
-  book: {
-    isbn: string | null;
-    name: string | null;
-    authors?: string[] | undefined;
-    subjects: string[] | null;
-    release?: string | undefined;
-    picture?: string | undefined;
-    pageCount: number;
-  };
-  id: string;
-  order?: number;
-  ranking?: number;
-};
+import { Picture } from ".";
 
 type Props = {
   books: Book[];

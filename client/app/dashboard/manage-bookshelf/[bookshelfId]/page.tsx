@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  Book,
-  RenderBookGrid,
-  RenderBookTable,
-  ToggleSwitch,
-} from "@/components";
+import { RenderBookGrid, RenderBookTable, ToggleSwitch } from "@/components";
 import { useGetBookshelf } from "@/hooks/useGetBookshelf";
-import { getApiClient, updateRanking } from "@/services";
+import { getApiClient } from "@/services";
+import { Book } from "@/types";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
