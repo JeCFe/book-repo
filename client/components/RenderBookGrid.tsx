@@ -22,18 +22,34 @@ export type Book = {
 
 type Props = {
   books: Book[];
+  draggable?: boolean;
+  handleDragStart?: (e: DragEvent<HTMLDivElement>, book: Book) => void;
+  handleDrop?: (book: Book) => void;
 };
 
-export function RenderBookGrid({ books }: Props) {
+export function RenderBookGrid({
+  books,
+  draggable = false,
+  handleDragStart = () => {},
+  handleDrop = () => {},
+}: Props) {
   return (
     <div className="flex justify-center">
       <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {books.map((book) => (
-          <Picture
-            size="large"
-            pictureUrl={book.book.picture}
-            title={book.book.name ?? ""}
-          />
+          <div
+            draggable={draggable}
+            onDragStart={(e) => handleDragStart(e, book)}
+            onDrop={() => handleDrop(book)}
+            onDragOver={(e) => e.preventDefault()}
+            key={book.id}
+          >
+            <Picture
+              size="large"
+              pictureUrl={book.book.picture}
+              title={book.book.name ?? ""}
+            />
+          </div>
         ))}
       </div>
     </div>
