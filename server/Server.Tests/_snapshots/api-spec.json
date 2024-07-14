@@ -729,6 +729,12 @@
           },
           "book": {
             "$ref": "#/components/schemas/Book"
+          },
+          "bookshelfSummaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookshelfSummary"
+            }
           }
         },
         "additionalProperties": false
