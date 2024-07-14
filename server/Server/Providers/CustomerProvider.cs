@@ -46,6 +46,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
 
     public async Task<Models.CustomerBook?> GetCustomerBook(
         Guid customerBookId,
+        string customerId,
         CancellationToken cancellationToken
     )
     {
@@ -72,8 +73,27 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
         customerBook.BookshelfSummaries = await dbContext
             .BookshelfBook
             .Where(x => x.CustomerBookId == customerBook.Id)
-            .Select(y => new BookshelfSummary { Id = y.BookshelfId, Name = y.Bookshelf.Name })
+            .Select(
+                y =>
+                    new BookshelfSummary
+                    {
+                        Id = y.BookshelfId,
+                        Name = y.Bookshelf.Name,
+                        ContainsBook = true
+                    }
+            )
             .ToListAsync(cancellationToken);
+
+        foreach (var bookshelf in dbContext.Bookshelves.Where(x => x.CustomerId == customerId))
+        {
+            if (customerBook.BookshelfSummaries.Any(x => x.Id == bookshelf.Id))
+            {
+                continue;
+            }
+            customerBook
+                .BookshelfSummaries
+                .Add(new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name, });
+        }
 
         return customerBook;
     }

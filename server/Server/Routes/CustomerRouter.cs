@@ -103,7 +103,7 @@ public static class CustomerRouter
             return TypedResults.Forbid();
         }
         if (
-            await customerProvider.GetCustomerBook(customerBookId, cancellationToken)
+            await customerProvider.GetCustomerBook(customerBookId, userId, cancellationToken)
             is not { } book
         )
         {
