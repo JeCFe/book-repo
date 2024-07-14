@@ -2,7 +2,8 @@
 
 import { Picture, RenderSection, RenderStar, Table } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
-import { updateComment, updateRanking } from "@/services";
+import { removeBookshelfBook, updateComment, updateRanking } from "@/services";
+import { addCustomerBookBookshelf } from "@/services/customerBookBookshelf";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner, TextArea } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
@@ -68,6 +69,67 @@ export function ViewCustomerBook({
     }, 1000),
     [],
   );
+
+  const removeBookFromBookshelf = async (bookshelfId: string) => {
+    if (data?.bookshelfSummaries === undefined) {
+      return;
+    }
+
+    var updatedBookshelfSummaries = data.bookshelfSummaries.map((bookshelf) => {
+      if (bookshelf.id == bookshelfId) {
+        bookshelf.containsBook = false;
+      }
+      return bookshelf;
+    });
+
+    console.log(updatedBookshelfSummaries);
+
+    toast.promise(
+      removeBookshelfBook({
+        customerId: user.sub!,
+        isbn: data.book.isbn,
+        bookshelfId,
+      }),
+      {
+        loading: "Removing book from bookshelf",
+        success: "Removed book from bookshelf",
+        error: "There was an error when removing book from bookshelf",
+      },
+      { id: "remove" },
+    );
+    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, true);
+  };
+
+  const addBookTooBookshelf = async (bookshelfId: string) => {
+    if (data?.bookshelfSummaries === undefined) {
+      return;
+    }
+
+    var updatedBookshelfSummaries = data.bookshelfSummaries.map((bookshelf) => {
+      if (bookshelf.id == bookshelfId) {
+        bookshelf.containsBook = true;
+      }
+      return bookshelf;
+    });
+
+    toast.promise(
+      addCustomerBookBookshelf({
+        customerId: user.sub!,
+        customerBookId: data.id,
+        bookshelfId,
+      }),
+      {
+        loading: "Adding book from bookshelf",
+        success: "Added book from bookshelf",
+        error: "There was an error when adding book from bookshelf",
+      },
+      { id: "add" },
+    );
+
+    console.log(updatedBookshelfSummaries);
+    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, true);
+  };
+
   return (
     <div className="text-slate-400">
       <div className="flex flex-row space-x-2">
@@ -178,32 +240,38 @@ export function ViewCustomerBook({
                     </tr>
                   </thead>
                   <tbody>
-                    {data.bookshelfSummaries?.map((bookshelf, i) => (
-                      <tr key={`${bookshelf.id}`}>
-                        <td>{bookshelf.name}</td>
-                        <td>
-                          {bookshelf.containsBook ? (
-                            <Button
-                              size="medium"
-                              variant="destructive"
-                              className="w-20 text-black"
-                              onClick={() => {}}
-                            >
-                              Remove
-                            </Button>
-                          ) : (
-                            <Button
-                              size="medium"
-                              variant="primary"
-                              className="w-20 text-black"
-                              onClick={() => {}}
-                            >
-                              Add
-                            </Button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                    {data.bookshelfSummaries
+                      ?.sort((a, b) => a.name!.localeCompare(b.name!))
+                      .map((bookshelf, i) => (
+                        <tr key={`${bookshelf.id}`}>
+                          <td>{bookshelf.name}</td>
+                          <td>
+                            {bookshelf.containsBook ? (
+                              <Button
+                                size="medium"
+                                variant="destructive"
+                                className="w-20 text-black"
+                                onClick={() =>
+                                  removeBookFromBookshelf(bookshelf.id)
+                                }
+                              >
+                                Remove
+                              </Button>
+                            ) : (
+                              <Button
+                                size="medium"
+                                variant="primary"
+                                className="w-20 text-black"
+                                onClick={() =>
+                                  addBookTooBookshelf(bookshelf.id)
+                                }
+                              >
+                                Add
+                              </Button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
               </div>

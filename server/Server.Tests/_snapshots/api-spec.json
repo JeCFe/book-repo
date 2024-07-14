@@ -227,7 +227,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddCustomerBookCommentCommand"
+                "$ref": "#/components/schemas/AddCustomerBookToBookshelfCommand"
               }
             }
           },
@@ -609,6 +609,29 @@
           "comment": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddCustomerBookToBookshelfCommand": {
+        "required": [
+          "bookshelfId",
+          "customerBookId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "additionalProperties": false

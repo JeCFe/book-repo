@@ -169,7 +169,7 @@ public static class ActionRouter
     private static async Task<
         Results<NoContent, BadRequest<string>, ForbidHttpResult>
     > AddCustomerBookToBookshelf(
-        AddCustomerBookCommentCommand command,
+        AddCustomerBookToBookshelfCommand command,
         IMediator mediator,
         IUserContext userContext,
         CancellationToken cancellationToken

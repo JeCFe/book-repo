@@ -56,18 +56,17 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
                 cancellationToken
             );
 
-        if (bookshelfBook is not { })
+        bookshelfBook = new BookshelfBook()
         {
-            bookshelfBook = new BookshelfBook()
-            {
-                CustomerBookId = CustomerBookId,
-                Isbn = customerBook.Isbn,
-                BookshelfId = bookshelf.Id,
-                CustomerBook = customerBook,
-                Bookshelf = bookshelf,
-                Order = dbContext.BookshelfBook.Where(x => x.BookshelfId == BookshelfId).Count() + 1
-            };
-            dbContext.BookshelfBook.Add(bookshelfBook);
-        }
+            CustomerBookId = CustomerBookId,
+            Isbn = customerBook.Isbn,
+            BookshelfId = bookshelf.Id,
+            CustomerBook = customerBook,
+            Bookshelf = bookshelf,
+            Order = dbContext.BookshelfBook.Where(x => x.BookshelfId == BookshelfId).Count() + 1
+        };
+        dbContext.BookshelfBook.Add(bookshelfBook);
+
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
