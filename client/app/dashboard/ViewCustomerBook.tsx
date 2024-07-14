@@ -75,12 +75,14 @@ export function ViewCustomerBook({
       return;
     }
 
-    var updatedBookshelfSummaries = data.bookshelfSummaries.map((bookshelf) => {
-      if (bookshelf.id == bookshelfId) {
-        bookshelf.containsBook = false;
-      }
-      return bookshelf;
-    });
+    const updatedBookshelfSummaries = data.bookshelfSummaries.map(
+      (bookshelf) => {
+        if (bookshelf.id == bookshelfId) {
+          bookshelf.containsBook = false;
+        }
+        return bookshelf;
+      },
+    );
 
     console.log(updatedBookshelfSummaries);
 
@@ -105,12 +107,14 @@ export function ViewCustomerBook({
       return;
     }
 
-    var updatedBookshelfSummaries = data.bookshelfSummaries.map((bookshelf) => {
-      if (bookshelf.id == bookshelfId) {
-        bookshelf.containsBook = true;
-      }
-      return bookshelf;
-    });
+    const updatedBookshelfSummaries = data.bookshelfSummaries.map(
+      (bookshelf) => {
+        if (bookshelf.id == bookshelfId) {
+          bookshelf.containsBook = true;
+        }
+        return bookshelf;
+      },
+    );
 
     toast.promise(
       addCustomerBookBookshelf({
