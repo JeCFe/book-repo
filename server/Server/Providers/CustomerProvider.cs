@@ -49,24 +49,33 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
         CancellationToken cancellationToken
     )
     {
-        if (
-            await dbContext
-                .CustomerBooks
-                .Include(x => x.Book)
-                .SingleOrDefaultAsync(x => x.Id == customerBookId, cancellationToken)
-            is not { } book
-        )
+        var customerBook = await dbContext
+            .CustomerBooks
+            .Include(cb => cb.Book)
+            .Select(
+                x =>
+                    new Models.CustomerBook()
+                    {
+                        Comment = x.Comment,
+                        Book = x.Book,
+                        Id = x.Id,
+                        Ranking = x.Ranking
+                    }
+            )
+            .SingleOrDefaultAsync(cb => cb.Id == customerBookId, cancellationToken);
+
+        if (customerBook == null)
         {
             return null;
         }
 
-        return new Models.CustomerBook()
-        {
-            Id = book.Id,
-            Book = book.Book,
-            Ranking = book.Ranking,
-            Comment = book.Comment
-        };
+        customerBook.BookshelfSummaries = await dbContext
+            .BookshelfBook
+            .Where(x => x.CustomerBookId == customerBook.Id)
+            .Select(y => new BookshelfSummary { Id = y.BookshelfId, Name = y.Bookshelf.Name })
+            .ToListAsync(cancellationToken);
+
+        return customerBook;
     }
 
     public async Task<List<Models.CustomerBook>> GetCustomerBooks(
