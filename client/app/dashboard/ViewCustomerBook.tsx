@@ -48,8 +48,7 @@ export function ViewCustomerBook({
 
   const debounceUpdateComment = useCallback(
     debounce(async (comment: string) => {
-      console.log("Here");
-      if (!data) {
+      if (data === undefined) {
         return;
       }
       toast.promise(
