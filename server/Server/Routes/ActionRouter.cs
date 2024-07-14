@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Server.Context;
 using Server.Domain.Commands;
+using Server.Domain.Exceptions;
 
 public static class ActionRouter
 {
@@ -165,6 +166,36 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
+    private static async Task<
+        Results<NoContent, BadRequest<string>, ForbidHttpResult>
+    > AddCustomerBookToBookshelf(
+        AddCustomerBookToBookshelfCommand command,
+        IMediator mediator,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { } || command.CustomerId != userId)
+        {
+            return TypedResults.Forbid();
+        }
+
+        try
+        {
+            await mediator.Send(command, cancellationToken);
+            return TypedResults.NoContent();
+        }
+        catch (CustomerBookNotFoundException)
+        {
+            return TypedResults.BadRequest("Customer book not found");
+        }
+        catch (BookshelfNotFound)
+        {
+            return TypedResults.BadRequest("Bookshelf not found");
+        }
+    }
+
     public static RouteGroupBuilder MapActionEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Actions");
@@ -178,6 +209,7 @@ public static class ActionRouter
         group.MapPost("/comment-customer-book", CommentCustomerBook);
         group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
         group.MapPost("/update-bookshelf-order", UpdateBookshelfOrder);
+        group.MapPost("/add-customer-book-bookshelf", AddCustomerBookToBookshelf);
 
         return group;
     }

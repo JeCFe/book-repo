@@ -1,10 +1,11 @@
 "use client";
 
-import { Picture, RenderSection, RenderStar } from "@/components";
+import { Picture, RenderSection, RenderStar, Table } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
-import { updateComment, updateRanking } from "@/services";
+import { removeBookshelfBook, updateComment, updateRanking } from "@/services";
+import { addCustomerBookBookshelf } from "@/services/customerBookBookshelf";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
-import { Anchor, Spinner, TextArea } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner, TextArea } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
@@ -43,13 +44,12 @@ export function ViewCustomerBook({
       },
       { id: "autosave" },
     );
-    mutate();
+    mutate({ ...data, ranking }, false);
   };
 
   const debounceUpdateComment = useCallback(
     debounce(async (comment: string) => {
-      console.log("Here");
-      if (!data) {
+      if (data === undefined) {
         return;
       }
       toast.promise(
@@ -65,10 +65,75 @@ export function ViewCustomerBook({
         },
         { id: "autosave" },
       );
-      mutate();
+      mutate({ ...data, comment }, false);
     }, 1000),
     [],
   );
+
+  const removeBookFromBookshelf = async (bookshelfId: string) => {
+    if (data?.bookshelfSummaries === undefined) {
+      return;
+    }
+
+    const updatedBookshelfSummaries = data.bookshelfSummaries.map(
+      (bookshelf) => {
+        if (bookshelf.id == bookshelfId) {
+          bookshelf.containsBook = false;
+        }
+        return bookshelf;
+      },
+    );
+
+    console.log(updatedBookshelfSummaries);
+
+    toast.promise(
+      removeBookshelfBook({
+        customerId: user.sub!,
+        isbn: data.book.isbn,
+        bookshelfId,
+      }),
+      {
+        loading: "Removing book from bookshelf",
+        success: "Removed book from bookshelf",
+        error: "There was an error when removing book from bookshelf",
+      },
+      { id: "remove" },
+    );
+    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, true);
+  };
+
+  const addBookTooBookshelf = async (bookshelfId: string) => {
+    if (data?.bookshelfSummaries === undefined) {
+      return;
+    }
+
+    const updatedBookshelfSummaries = data.bookshelfSummaries.map(
+      (bookshelf) => {
+        if (bookshelf.id == bookshelfId) {
+          bookshelf.containsBook = true;
+        }
+        return bookshelf;
+      },
+    );
+
+    toast.promise(
+      addCustomerBookBookshelf({
+        customerId: user.sub!,
+        customerBookId: data.id,
+        bookshelfId,
+      }),
+      {
+        loading: "Adding book from bookshelf",
+        success: "Added book from bookshelf",
+        error: "There was an error when adding book from bookshelf",
+      },
+      { id: "add" },
+    );
+
+    console.log(updatedBookshelfSummaries);
+    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, true);
+  };
+
   return (
     <div className="text-slate-400">
       <div className="flex flex-row space-x-2">
@@ -148,18 +213,73 @@ export function ViewCustomerBook({
                 size="large"
                 theme="dark"
                 title={<div>Comment &#9998;</div>}
+                className="w-96"
               >
-                <TextArea
-                  onChange={debounceUpdateComment}
-                  autoGrow
-                  border="bottom"
-                  width="large"
-                  defaultValue={data.comment}
-                  placeholder="Add a comment..."
-                  className="mt-4 !max-w-3xl border-b !border-white bg-transparent"
-                />
+                <div className="flex w-full max-w-3xl overflow-x-auto pt-4">
+                  <TextArea
+                    onChange={debounceUpdateComment}
+                    autoGrow
+                    width="full"
+                    border="bottom"
+                    defaultValue={data.comment}
+                    placeholder="Add a comment..."
+                    className="mt-4 border-b !border-white bg-transparent"
+                  />
+                </div>
               </RenderSection>
             </div>
+
+            <RenderSection
+              title="Bookshelves"
+              size="large"
+              theme="dark"
+              className="pt-8"
+            >
+              <div className="flex w-full max-w-3xl overflow-x-auto pt-4">
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Bookshelf</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.bookshelfSummaries
+                      ?.sort((a, b) => a.name!.localeCompare(b.name!))
+                      .map((bookshelf, i) => (
+                        <tr key={`${bookshelf.id}`}>
+                          <td>{bookshelf.name}</td>
+                          <td>
+                            {bookshelf.containsBook ? (
+                              <Button
+                                size="medium"
+                                variant="destructive"
+                                className="w-20 text-black"
+                                onClick={() =>
+                                  removeBookFromBookshelf(bookshelf.id)
+                                }
+                              >
+                                Remove
+                              </Button>
+                            ) : (
+                              <Button
+                                size="medium"
+                                variant="primary"
+                                className="w-20 text-black"
+                                onClick={() =>
+                                  addBookTooBookshelf(bookshelf.id)
+                                }
+                              >
+                                Add
+                              </Button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </Table>
+              </div>
+            </RenderSection>
           </div>
         )}
       </div>

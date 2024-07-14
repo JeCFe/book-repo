@@ -46,27 +46,56 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
 
     public async Task<Models.CustomerBook?> GetCustomerBook(
         Guid customerBookId,
+        string customerId,
         CancellationToken cancellationToken
     )
     {
-        if (
-            await dbContext
-                .CustomerBooks
-                .Include(x => x.Book)
-                .SingleOrDefaultAsync(x => x.Id == customerBookId, cancellationToken)
-            is not { } book
-        )
+        var customerBook = await dbContext
+            .CustomerBooks
+            .Include(cb => cb.Book)
+            .Select(
+                x =>
+                    new Models.CustomerBook()
+                    {
+                        Comment = x.Comment,
+                        Book = x.Book,
+                        Id = x.Id,
+                        Ranking = x.Ranking
+                    }
+            )
+            .SingleOrDefaultAsync(cb => cb.Id == customerBookId, cancellationToken);
+
+        if (customerBook == null)
         {
             return null;
         }
 
-        return new Models.CustomerBook()
+        customerBook.BookshelfSummaries = await dbContext
+            .BookshelfBook
+            .Where(x => x.CustomerBookId == customerBook.Id)
+            .Select(
+                y =>
+                    new BookshelfSummary
+                    {
+                        Id = y.BookshelfId,
+                        Name = y.Bookshelf.Name,
+                        ContainsBook = true
+                    }
+            )
+            .ToListAsync(cancellationToken);
+
+        foreach (var bookshelf in dbContext.Bookshelves.Where(x => x.CustomerId == customerId))
         {
-            Id = book.Id,
-            Book = book.Book,
-            Ranking = book.Ranking,
-            Comment = book.Comment
-        };
+            if (customerBook.BookshelfSummaries.Any(x => x.Id == bookshelf.Id))
+            {
+                continue;
+            }
+            customerBook
+                .BookshelfSummaries
+                .Add(new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name, });
+        }
+
+        return customerBook;
     }
 
     public async Task<List<Models.CustomerBook>> GetCustomerBooks(

@@ -1,4 +1,4 @@
-import { VariantProps, cva } from "class-variance-authority";
+import { VariantProps, cva, cx } from "class-variance-authority";
 import { ReactNode } from "react";
 
 const head = cva("font-bold tracking-tight", {
@@ -40,13 +40,15 @@ export function RenderSection({
   children,
   size,
   theme,
+  className,
 }: {
   title: ReactNode;
   children: ReactNode;
+  className?: string;
 } & VariantProps<typeof head> &
   VariantProps<typeof body>) {
   return (
-    <div className="flex w-full flex-col">
+    <div className={cx("flex w-full flex-col", className)}>
       <h4 className={head({ size, theme })}>{title}</h4>
       <div className={body({ size, theme })}>{children}</div>
     </div>

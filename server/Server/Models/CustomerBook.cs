@@ -8,4 +8,5 @@ public record CustomerBook
     public int? Ranking { get; init; } = 0;
     public string? Comment { get; init; }
     public required Book Book { get; init; }
+    public List<BookshelfSummary>? BookshelfSummaries { get; set; }
 }

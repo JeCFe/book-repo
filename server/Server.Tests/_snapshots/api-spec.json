@@ -218,6 +218,38 @@
         }
       }
     },
+    "/action/add-customer-book-bookshelf": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCustomerBookToBookshelfCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/book/{isbn}": {
       "get": {
         "tags": [
@@ -581,6 +613,29 @@
         },
         "additionalProperties": false
       },
+      "AddCustomerBookToBookshelfCommand": {
+        "required": [
+          "bookshelfId",
+          "customerBookId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
       "Book": {
         "required": [
           "isbn",
@@ -678,6 +733,9 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "containsBook": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -729,6 +787,12 @@
           },
           "book": {
             "$ref": "#/components/schemas/Book"
+          },
+          "bookshelfSummaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookshelfSummary"
+            }
           }
         },
         "additionalProperties": false
