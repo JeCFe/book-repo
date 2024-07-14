@@ -1,10 +1,10 @@
 "use client";
 
-import { Picture, RenderSection, RenderStar } from "@/components";
+import { Picture, RenderSection, RenderStar, Table } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
 import { updateComment, updateRanking } from "@/services";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
-import { Anchor, Spinner, TextArea } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner, TextArea } from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
@@ -147,16 +147,19 @@ export function ViewCustomerBook({
                 size="large"
                 theme="dark"
                 title={<div>Comment &#9998;</div>}
+                className="w-96"
               >
-                <TextArea
-                  onChange={debounceUpdateComment}
-                  autoGrow
-                  border="bottom"
-                  width="large"
-                  defaultValue={data.comment}
-                  placeholder="Add a comment..."
-                  className="mt-4 !max-w-3xl border-b !border-white bg-transparent"
-                />
+                <div className="flex w-full max-w-3xl overflow-x-auto pt-4">
+                  <TextArea
+                    onChange={debounceUpdateComment}
+                    autoGrow
+                    width="full"
+                    border="bottom"
+                    defaultValue={data.comment}
+                    placeholder="Add a comment..."
+                    className="mt-4 border-b !border-white bg-transparent"
+                  />
+                </div>
               </RenderSection>
             </div>
 
@@ -166,7 +169,44 @@ export function ViewCustomerBook({
               theme="dark"
               className="pt-8"
             >
-              {data.bookshelfSummaries?.map((bookshelf) => <>{bookshelf.id}</>)}
+              <div className="flex w-full max-w-3xl overflow-x-auto pt-4">
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Bookshelf</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.bookshelfSummaries?.map((bookshelf, i) => (
+                      <tr key={`${bookshelf.id}`}>
+                        <td>{bookshelf.name}</td>
+                        <td>
+                          {bookshelf.containsBook ? (
+                            <Button
+                              size="medium"
+                              variant="destructive"
+                              className="w-20 text-black"
+                              onClick={() => {}}
+                            >
+                              Remove
+                            </Button>
+                          ) : (
+                            <Button
+                              size="medium"
+                              variant="primary"
+                              className="w-20 text-black"
+                              onClick={() => {}}
+                            >
+                              Add
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
             </RenderSection>
           </div>
         )}
