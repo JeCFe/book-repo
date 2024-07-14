@@ -43,7 +43,7 @@ export function ViewCustomerBook({
       },
       { id: "autosave" },
     );
-    mutate();
+    mutate({ ...data, ranking }, false);
   };
 
   const debounceUpdateComment = useCallback(
@@ -64,7 +64,7 @@ export function ViewCustomerBook({
         },
         { id: "autosave" },
       );
-      mutate();
+      mutate({ ...data, comment }, false);
     }, 1000),
     [],
   );
@@ -159,6 +159,15 @@ export function ViewCustomerBook({
                 />
               </RenderSection>
             </div>
+
+            <RenderSection
+              title="Bookshelves"
+              size="large"
+              theme="dark"
+              className="pt-8"
+            >
+              {data.bookshelfSummaries?.map((bookshelf) => <>{bookshelf.id}</>)}
+            </RenderSection>
           </div>
         )}
       </div>
