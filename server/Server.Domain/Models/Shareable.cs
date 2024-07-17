@@ -11,12 +11,14 @@ public record Shareable
 
 public record ShareableBookshelf
 {
+    public Guid? Id { get; init; }
     public required Bookshelf Bookshelves { get; init; }
     public required int Order { get; init; }
 }
 
 public record ShareableBookShowcase
 {
+    public Guid? Id { get; init; }
     public required CustomerBook CustomerBook { get; init; }
     public bool ShowRanking { get; init; } = true;
     public bool ShowComment { get; init; } = true;
