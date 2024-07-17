@@ -12,6 +12,7 @@ public class BookRepoContext : DbContext
 
     public DbSet<BookshelfBook> BookshelfBook { get; set; }
     public DbSet<CustomerBook> CustomerBooks { get; set; }
+    public DbSet<Shareable> Shareables { get; set; }
 
     public BookRepoContext() { }
 
@@ -35,5 +36,8 @@ public class BookRepoContext : DbContext
         modelBuilder.Entity<CustomerBook>().HasKey(x => x.Id);
         modelBuilder.Entity<CustomerBook>().HasIndex(x => new { x.CustomerId, x.Id }).IsUnique();
         modelBuilder.Entity<CustomerBook>().HasIndex(x => x.Isbn);
+
+        modelBuilder.Entity<ShareableBookshelf>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<ShareableBookShowcase>().Property(x => x.Id).ValueGeneratedOnAdd();
     }
 }
