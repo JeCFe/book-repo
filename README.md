@@ -27,6 +27,7 @@ A service to allow for the visualisation and management of you physical bookshel
 - Be able to raise errors with the book data / cover
 - Admin portal to allow the management of users and errors raised about books
 - Split out the user self service into a dedicated service and app so it's reusable by other apps in the future
+- Trophy / achievements that display on user profiles, and are shareable on the shared pages
 
 
 ## Third Party Providers
