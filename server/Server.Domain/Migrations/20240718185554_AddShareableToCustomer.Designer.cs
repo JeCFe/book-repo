@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Domain;
 
@@ -11,9 +12,11 @@ using Server.Domain;
 namespace Server.Domain.Migrations
 {
     [DbContext(typeof(BookRepoContext))]
-    partial class BookRepoContextModelSnapshot : ModelSnapshot
+    [Migration("20240718185554_AddShareableToCustomer")]
+    partial class AddShareableToCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,7 +212,7 @@ namespace Server.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BookshelfId")
+                    b.Property<Guid>("BookshelvesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Order")
@@ -220,7 +223,7 @@ namespace Server.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookshelfId");
+                    b.HasIndex("BookshelvesId");
 
                     b.HasIndex("ShareableId");
 
@@ -304,9 +307,9 @@ namespace Server.Domain.Migrations
 
             modelBuilder.Entity("Server.Domain.Models.ShareableBookshelf", b =>
                 {
-                    b.HasOne("Server.Domain.Models.Bookshelf", "Bookshelf")
+                    b.HasOne("Server.Domain.Models.Bookshelf", "Bookshelves")
                         .WithMany()
-                        .HasForeignKey("BookshelfId")
+                        .HasForeignKey("BookshelvesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -314,7 +317,7 @@ namespace Server.Domain.Migrations
                         .WithMany("Bookshelves")
                         .HasForeignKey("ShareableId");
 
-                    b.Navigation("Bookshelf");
+                    b.Navigation("Bookshelves");
                 });
 
             modelBuilder.Entity("Server.Domain.Models.Customer", b =>

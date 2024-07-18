@@ -196,6 +196,53 @@ public static class ActionRouter
         }
     }
 
+    private static async Task<
+        Results<NoContent, BadRequest<string>, ForbidHttpResult>
+    > AddShareable(
+        AddShareableCommand command,
+        IMediator mediator,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { } || command.Shareable.CustomerId != userId)
+        {
+            return TypedResults.Forbid();
+        }
+
+        try
+        {
+            await mediator.Send(command, cancellationToken);
+            return TypedResults.NoContent();
+        }
+        catch (CustomerBookNotFoundException)
+        {
+            return TypedResults.BadRequest("Customer book not found");
+        }
+        catch (BookshelfNotFound)
+        {
+            return TypedResults.BadRequest("Bookshelf not found");
+        }
+    }
+
+    private static async Task<Results<NoContent, ForbidHttpResult>> RemoveShareable(
+        RemoveShareableCommand command,
+        IMediator mediator,
+        IUserContext userContext,
+        CancellationToken cancellationToken
+    )
+    {
+        var userId = userContext.UserId;
+        if (userId is not { } || command.CustomerId != userId)
+        {
+            return TypedResults.Forbid();
+        }
+
+        await mediator.Send(command, cancellationToken);
+        return TypedResults.NoContent();
+    }
+
     public static RouteGroupBuilder MapActionEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Actions");
@@ -210,6 +257,9 @@ public static class ActionRouter
         group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
         group.MapPost("/update-bookshelf-order", UpdateBookshelfOrder);
         group.MapPost("/add-customer-book-bookshelf", AddCustomerBookToBookshelf);
+
+        group.MapPost("shareable/add", AddShareable);
+        group.MapPost("shareable/remove", RemoveShareable);
 
         return group;
     }
