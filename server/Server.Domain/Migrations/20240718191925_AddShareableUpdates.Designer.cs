@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Domain;
 
@@ -11,9 +12,11 @@ using Server.Domain;
 namespace Server.Domain.Migrations
 {
     [DbContext(typeof(BookRepoContext))]
-    partial class BookRepoContextModelSnapshot : ModelSnapshot
+    [Migration("20240718191925_AddShareableUpdates")]
+    partial class AddShareableUpdates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
