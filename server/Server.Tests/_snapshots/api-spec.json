@@ -250,6 +250,60 @@
         }
       }
     },
+    "/action/shareable/add": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddShareableCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/action/shareable/remove": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveShareableCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
     "/book/{isbn}": {
       "get": {
         "tags": [
@@ -636,6 +690,18 @@
         },
         "additionalProperties": false
       },
+      "AddShareableCommand": {
+        "required": [
+          "shareable"
+        ],
+        "type": "object",
+        "properties": {
+          "shareable": {
+            "$ref": "#/components/schemas/CommandShareable"
+          }
+        },
+        "additionalProperties": false
+      },
       "Book": {
         "required": [
           "isbn",
@@ -763,6 +829,79 @@
           "ranking": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandBookShowcase": {
+        "required": [
+          "customerBookId",
+          "showComment",
+          "showRanking"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "showRanking": {
+            "type": "boolean"
+          },
+          "showComment": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandBookshelf": {
+        "required": [
+          "bookshelfId",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandShareable": {
+        "required": [
+          "bookshelves",
+          "customerId",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommandBookshelf"
+            },
+            "nullable": true
+          },
+          "showcase": {
+            "$ref": "#/components/schemas/CommandBookShowcase"
           }
         },
         "additionalProperties": false
@@ -969,6 +1108,24 @@
           "bookshelfId": {
             "type": "string",
             "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemoveShareableCommand": {
+        "required": [
+          "customerId",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
