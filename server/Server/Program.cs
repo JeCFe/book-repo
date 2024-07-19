@@ -146,6 +146,7 @@ public class Program
         builder.Services.AddScoped<IUserContext, UserContext>();
         builder.Services.AddTransient<ICustomerProvider, CustomerProvider>();
         builder.Services.AddTransient<IBookshelfProvider, BookshelfProvider>();
+        builder.Services.AddTransient<IShareableProvider, shareableProvider>();
         builder.Services.RegisterCommandHandlers<BookRepoContext>();
         builder
             .Services

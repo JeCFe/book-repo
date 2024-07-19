@@ -1,14 +1,9 @@
-using Auth0.ManagementApi.Models;
-using Azure.Core;
+namespace Server.Routes;
+
 using Microsoft.AspNetCore.Http.HttpResults;
-using Server.Auth0;
 using Server.Context;
 using Server.Domain.Models;
-using Server.Exceptions;
-using Server.Models;
 using Server.Providers;
-
-namespace Server.Routes;
 
 public static class ShareableRouter
 {
@@ -28,13 +23,13 @@ public static class ShareableRouter
     private static async Task<
         Results<Ok<List<ShareableSummary>>, NotFound, ForbidHttpResult>
     > GetShareables(
-        Guid customerId,
+        string customerId,
         IUserContext userContext,
         IShareableProvider shareableProvider,
         CancellationToken cancellationToken
     )
     {
-        if (userContext.UserId is not { } userId)
+        if (userContext.UserId != customerId)
         {
             return TypedResults.Forbid();
         }
