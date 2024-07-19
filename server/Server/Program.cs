@@ -195,6 +195,7 @@ public class Program
         app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
         app.MapGroup("/bookshelf").MapBookshelfEndpoints();
         app.MapGroup("/book").MapBookEndpoints();
+        app.MapGroup("/shareable").MapShareableEndpoints();
         app.Run();
     }
 }
