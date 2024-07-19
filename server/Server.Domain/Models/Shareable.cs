@@ -12,6 +12,7 @@ public record Shareable
 public record ShareableBookshelf
 {
     public Guid? Id { get; init; }
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.Now;
     public required Bookshelf Bookshelf { get; init; }
     public required int Order { get; init; }
 }
