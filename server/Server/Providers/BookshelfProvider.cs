@@ -8,7 +8,7 @@ namespace Server.Providers;
 
 public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
 {
-    public async Task<Models.Bookshelf?> GetBookshelfById(
+    public async Task<Models.CustomerBookshelf?> GetBookshelfById(
         Guid id,
         CancellationToken cancellationToken
     )
@@ -16,7 +16,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
         var customerBookshelf =
             from bookshelf in context.Bookshelves
             where bookshelf.Id == id
-            select new Models.Bookshelf
+            select new Models.CustomerBookshelf
             {
                 Id = bookshelf.Id,
                 Name = bookshelf.Name,
