@@ -19,6 +19,7 @@ A service to allow for the visualisation and management of you physical bookshel
 ## Roadmap
 
 - Shareable uneditable links to bookshelves / account
+- Favourite / "Wish list" book from a shareable link
 - Set reading goals 
 - Be able to see a global catalogue of book other customers use with averaged reviews and anonymous reviews
 - Add books into a series and filter by series 
