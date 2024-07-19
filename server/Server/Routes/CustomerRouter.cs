@@ -88,7 +88,7 @@ public static class CustomerRouter
     }
 
     private static async Task<
-        Results<Ok<CustomerBook>, NotFound, ForbidHttpResult>
+        Results<Ok<ResponseCustomerBook>, NotFound, ForbidHttpResult>
     > GetCustomerBook(
         string customerId,
         Guid customerBookId,
@@ -112,7 +112,7 @@ public static class CustomerRouter
         return TypedResults.Ok(book);
     }
 
-    private static async Task<Ok<List<CustomerBook>>> GetCustomerBooks(
+    private static async Task<Ok<List<ResponseCustomerBook>>> GetCustomerBooks(
         ICustomerProvider customerProvider,
         IUserContext userContext,
         CancellationToken cancellationToken

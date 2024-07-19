@@ -6,10 +6,10 @@ public record CustomerSummary
 {
     public required string Id { get; init; }
     public required DateTimeOffset CreatedOn { get; init; }
-    public required List<Models.Bookshelf> Bookshelves { get; init; }
+    public required List<CustomerBookshelf> Bookshelves { get; init; }
 }
 
-public record Bookshelf()
+public record CustomerBookshelf()
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }

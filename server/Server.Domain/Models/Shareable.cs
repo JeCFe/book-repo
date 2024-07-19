@@ -5,6 +5,7 @@ public record Shareable
     public required Guid Id { get; init; }
     public required string Title { get; init; }
     public required Customer Customer { get; init; }
+    public DateTimeOffset CreatedAt { get; internal set; } = DateTimeOffset.Now;
     public List<ShareableBookshelf> Bookshelves { get; set; } = [ ];
     public ShareableBookShowcase? Showcase { get; set; } = null;
 }
@@ -12,6 +13,7 @@ public record Shareable
 public record ShareableBookshelf
 {
     public Guid? Id { get; init; }
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.Now;
     public required Bookshelf Bookshelf { get; init; }
     public required int Order { get; init; }
 }

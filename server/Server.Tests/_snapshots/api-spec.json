@@ -358,7 +358,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Bookshelf"
+                  "$ref": "#/components/schemas/CustomerBookshelf"
                 }
               }
             }
@@ -521,7 +521,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CustomerBook"
+                    "$ref": "#/components/schemas/ResponseCustomerBook"
                   }
                 }
               }
@@ -582,7 +582,75 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomerBook"
+                  "$ref": "#/components/schemas/ResponseCustomerBook"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/shareable/{ShareId}": {
+      "get": {
+        "tags": [
+          "Shareable"
+        ],
+        "parameters": [
+          {
+            "name": "ShareId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shareable"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/shareable/all/{CustomerId}": {
+      "get": {
+        "tags": [
+          "Shareable"
+        ],
+        "parameters": [
+          {
+            "name": "CustomerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShareableSummary"
+                  }
                 }
               }
             }
@@ -747,7 +815,6 @@
       },
       "Bookshelf": {
         "required": [
-          "books",
           "creationDate",
           "homelessBooks",
           "id",
@@ -760,15 +827,11 @@
             "type": "string",
             "format": "uuid"
           },
+          "customerId": {
+            "type": "string"
+          },
           "name": {
             "type": "string",
-            "nullable": true
-          },
-          "books": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BooktoShelf"
-            },
             "nullable": true
           },
           "creationDate": {
@@ -906,16 +969,60 @@
         },
         "additionalProperties": false
       },
-      "CustomerBook": {
+      "Customer": {
         "required": [
-          "book",
+          "bookshelves",
+          "creationDate",
           "id"
         ],
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bookshelf"
+            },
+            "nullable": true
+          },
+          "shareables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Shareable"
+            }
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerBook": {
+        "required": [
+          "book",
+          "customer",
+          "customerId",
+          "id",
+          "isbn",
+          "ranking"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
             "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
           },
           "ranking": {
             "type": "integer",
@@ -924,14 +1031,51 @@
           "comment": {
             "type": "string"
           },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
           "book": {
             "$ref": "#/components/schemas/Book"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerBookshelf": {
+        "required": [
+          "books",
+          "creationDate",
+          "homelessBooks",
+          "id",
+          "name",
+          "updatedDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
           },
-          "bookshelfSummaries": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "books": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/BookshelfSummary"
-            }
+              "$ref": "#/components/schemas/BooktoShelf"
+            },
+            "nullable": true
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "homelessBooks": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -955,7 +1099,7 @@
           "bookshelves": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Bookshelf"
+              "$ref": "#/components/schemas/CustomerBookshelf"
             },
             "nullable": true
           }
@@ -1130,6 +1274,36 @@
         },
         "additionalProperties": false
       },
+      "ResponseCustomerBook": {
+        "required": [
+          "book",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ranking": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "bookshelfSummaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookshelfSummary"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "SetupCustomerCommand": {
         "required": [
           "id",
@@ -1155,6 +1329,118 @@
           },
           "includeDefaultBookshelves": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Shareable": {
+        "required": [
+          "bookshelves",
+          "createdAt",
+          "customer",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShareableBookshelf"
+            },
+            "nullable": true
+          },
+          "showcase": {
+            "$ref": "#/components/schemas/ShareableBookShowcase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShareableBookShowcase": {
+        "required": [
+          "customerBook",
+          "showComment",
+          "showRanking"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerBook": {
+            "$ref": "#/components/schemas/CustomerBook"
+          },
+          "showRanking": {
+            "type": "boolean"
+          },
+          "showComment": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShareableBookshelf": {
+        "required": [
+          "bookshelf",
+          "createdAt",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bookshelf": {
+            "$ref": "#/components/schemas/Bookshelf"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShareableSummary": {
+        "required": [
+          "created",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

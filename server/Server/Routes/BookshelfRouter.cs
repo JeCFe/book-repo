@@ -9,7 +9,7 @@ using Server.Providers;
 
 public static class BookshelfRouter
 {
-    private static async Task<Results<Ok<Bookshelf>, NotFound>> GetBookshelf(
+    private static async Task<Results<Ok<CustomerBookshelf>, NotFound>> GetBookshelf(
         [FromRoute] Guid bookshelfId,
         [FromServices] IBookshelfProvider bookshelfProvider,
         [FromServices] IUserContext userContext,

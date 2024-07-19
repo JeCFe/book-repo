@@ -27,7 +27,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             CreatedOn = customer.CreationDate,
             Bookshelves =
             [
-                ..customer.Bookshelves.Select(x => new Models.Bookshelf() {
+                ..customer.Bookshelves.Select(x => new Models.CustomerBookshelf() {
                         Name = x.Name,
                         Id = x.Id,
                         CreationDate = x.CreationDate,
@@ -44,7 +44,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
         };
     }
 
-    public async Task<Models.CustomerBook?> GetCustomerBook(
+    public async Task<Models.ResponseCustomerBook?> GetCustomerBook(
         Guid customerBookId,
         string customerId,
         CancellationToken cancellationToken
@@ -55,7 +55,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             .Include(cb => cb.Book)
             .Select(
                 x =>
-                    new Models.CustomerBook()
+                    new Models.ResponseCustomerBook()
                     {
                         Comment = x.Comment,
                         Book = x.Book,
@@ -98,7 +98,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
         return customerBook;
     }
 
-    public async Task<List<Models.CustomerBook>> GetCustomerBooks(
+    public async Task<List<Models.ResponseCustomerBook>> GetCustomerBooks(
         string customerId,
         CancellationToken cancellationToken
     ) =>
@@ -107,7 +107,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
             .Where(x => x.CustomerId == customerId)
             .Select(
                 x =>
-                    new Models.CustomerBook()
+                    new Models.ResponseCustomerBook()
                     {
                         Comment = x.Comment,
                         Book = x.Book,
