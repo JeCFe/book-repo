@@ -2,7 +2,7 @@ using Server.Domain.Models;
 
 namespace Server.Models;
 
-public record CustomerBook
+public record ResponseCustomerBook
 {
     public required Guid Id { get; init; }
     public int? Ranking { get; init; } = 0;

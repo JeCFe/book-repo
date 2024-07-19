@@ -4,7 +4,7 @@ namespace Server.Providers;
 
 public interface IBookshelfProvider
 {
-    public Task<Bookshelf?> GetBookshelfById(Guid id, CancellationToken cancellationToken);
+    public Task<CustomerBookshelf?> GetBookshelfById(Guid id, CancellationToken cancellationToken);
     public Task<List<BookshelfSummary>> GetBookshelfSummary(
         string customerId,
         CancellationToken cancellationToken
