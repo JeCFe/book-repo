@@ -40,7 +40,8 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                             Id = z.CustomerBook.Id,
                     })]
                 })
-            ]
+            ],
+            Trophies =  [ ..customer.Trophies ]
         };
     }
 

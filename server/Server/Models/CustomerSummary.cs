@@ -7,6 +7,7 @@ public record CustomerSummary
     public required string Id { get; init; }
     public required DateTimeOffset CreatedOn { get; init; }
     public required List<CustomerBookshelf> Bookshelves { get; init; }
+    public required List<Trophy> Trophies { get; init; }
 }
 
 public record CustomerBookshelf()

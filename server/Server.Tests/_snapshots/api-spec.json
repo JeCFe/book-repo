@@ -973,7 +973,8 @@
         "required": [
           "bookshelves",
           "creationDate",
-          "id"
+          "id",
+          "trophies"
         ],
         "type": "object",
         "properties": {
@@ -993,6 +994,13 @@
             "items": {
               "$ref": "#/components/schemas/Shareable"
             }
+          },
+          "trophies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trophy"
+            },
+            "nullable": true
           },
           "creationDate": {
             "type": "string",
@@ -1084,7 +1092,8 @@
         "required": [
           "bookshelves",
           "createdOn",
-          "id"
+          "id",
+          "trophies"
         ],
         "type": "object",
         "properties": {
@@ -1100,6 +1109,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CustomerBookshelf"
+            },
+            "nullable": true
+          },
+          "trophies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trophy"
             },
             "nullable": true
           }
@@ -1439,6 +1455,29 @@
             "nullable": true
           },
           "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Trophy": {
+        "required": [
+          "dateAchieved",
+          "description",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateAchieved": {
             "type": "string",
             "format": "date-time"
           }
