@@ -16,68 +16,115 @@ public abstract record Trophy
     public virtual bool CheckApproval() => true;
 }
 
-public record BetaTester(bool isBeta) : Trophy("Thank you for being a beta tester!")
+public sealed record BetaTester : Trophy
 {
+    private readonly bool _isBeta;
+
+    public BetaTester() { }
+
+    public BetaTester(bool isBeta)
+        : base("Thank you for being a beta tester!") => _isBeta = isBeta;
+
     public required DateTimeOffset DateJoined { get; init; }
 
-    public override bool CheckApproval() => isBeta;
+    public override bool CheckApproval() => _isBeta;
 }
 
-public record Contributor() : Trophy("Thank you for contributing!")
+public sealed record Contributor() : Trophy("Thank you for contributing!")
 {
     public required string PRContributed { get; init; }
 }
 
-public record BookAddict(int amount) : Trophy("You've added over 1000 books! Wowie!")
+public sealed record BookAddict : Trophy
 {
     private const int _bookAddictThreshold = 1000;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _bookAddictThreshold;
+    public BookAddict() { }
+
+    public BookAddict(int amount)
+        : base("You've added over 1000 books! Wowie!") => _amount = amount;
+
+    public override bool CheckApproval() => _amount >= _bookAddictThreshold;
 }
 
-public record Sponsor() : Trophy("Thank you for sponsoring, our infra bills thank you") { }
+public sealed record Sponsor() : Trophy("Thank you for sponsoring, our infra bills thank you") { }
 
-public record SharingIsCaring(int amount) : Trophy("You've created 10 sharable links!")
+public sealed record SharingIsCaring : Trophy
 {
     private const int _sharedThreshold = 1000;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _sharedThreshold;
+    public SharingIsCaring() { }
+
+    public SharingIsCaring(int amount)
+        : base("You've created 10 sharable links!") => _amount = amount;
+
+    public override bool CheckApproval() => _amount >= _sharedThreshold;
 }
 
-public record AvidReviewer(int amount) : Trophy("You've rated over 100 books! Keep it up!")
+public sealed record AvidReviewer : Trophy
 {
     public required float AvgRating { get; init; }
     private const int _reviewrThreshold = 100;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _reviewrThreshold;
+    public AvidReviewer(int amount)
+        : base("You've rated over 100 books! Keep it up!") => _amount = amount;
+
+    public AvidReviewer() { }
+
+    public override bool CheckApproval() => _amount >= _reviewrThreshold;
 }
 
-public record Commentator(int amount) : Trophy("You've added over 100 comments to books!")
+public sealed record Commentator : Trophy
 {
     private const int _commentatorThreshold = 100;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _commentatorThreshold;
+    public Commentator() { }
+
+    public Commentator(int amount)
+        : base("You've added over 100 comments to books!") => _amount = amount;
+
+    public override bool CheckApproval() => _amount >= _commentatorThreshold;
 }
 
-public record GoalScored(int amount)
-    : Trophy("You've completed over 10 goals! Keep on the good work!")
+public sealed record GoalScored : Trophy
 {
     private const int _goalScoredThreshold = 10;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _goalScoredThreshold;
+    public GoalScored() { }
+
+    public GoalScored(int amount)
+        : base("You've completed over 10 goals! Keep on the good work!") => _amount = amount;
+
+    public override bool CheckApproval() => _amount >= _goalScoredThreshold;
 }
 
-public record GoalSetter(int amount) : Trophy("You've set yourself over 10 goals! Good luck!")
+public sealed record GoalSetter : Trophy
 {
     private const int _goalSetterThreshold = 10;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _goalSetterThreshold;
+    public GoalSetter() { }
+
+    public GoalSetter(int amount)
+        : base("You've set yourself over 10 goals! Good luck!") => _amount = amount;
+
+    public override bool CheckApproval() => _amount >= _goalSetterThreshold;
 }
 
-public record Alerter(int amount)
-    : Trophy("You've alerted the admins to over 100 Open Library issues!")
+public sealed record Alerter : Trophy
 {
     private const int _goalSetterThreshold = 10;
+    private readonly int _amount;
 
-    public override bool CheckApproval() => amount >= _goalSetterThreshold;
+    public Alerter() { }
+
+    public Alerter(int amount)
+        : base("You've alerted the admins to over 100 Open Library issues!") => _amount = amount;
+
+    public override bool CheckApproval() => _amount >= _goalSetterThreshold;
 }
