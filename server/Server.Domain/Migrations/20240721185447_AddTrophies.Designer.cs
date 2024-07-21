@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Domain;
 
@@ -11,9 +12,11 @@ using Server.Domain;
 namespace Server.Domain.Migrations
 {
     [DbContext(typeof(BookRepoContext))]
-    partial class BookRepoContextModelSnapshot : ModelSnapshot
+    [Migration("20240721185447_AddTrophies")]
+    partial class AddTrophies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,7 +261,7 @@ namespace Server.Domain.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Trophies");
+                    b.ToTable("Trophy");
 
                     b.HasDiscriminator<string>("TrophyType").HasValue("Trophy");
 
@@ -268,6 +271,18 @@ namespace Server.Domain.Migrations
             modelBuilder.Entity("Server.Domain.Models.AvidReviewer", b =>
                 {
                     b.HasBaseType("Server.Domain.Models.Trophy");
+
+                    b.Property<float>("AvgRating")
+                        .HasColumnType("real");
+
+                    b.Property<int>("amount")
+                        .HasColumnType("int");
+
+                    b.ToTable("Trophy", t =>
+                        {
+                            t.Property("amount")
+                                .HasColumnName("AvidReviewer_amount");
+                        });
 
                     b.HasDiscriminator().HasValue("AvidReviewer");
                 });
@@ -279,6 +294,9 @@ namespace Server.Domain.Migrations
                     b.Property<DateTimeOffset>("DateJoined")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("isBeta")
+                        .HasColumnType("bit");
+
                     b.HasDiscriminator().HasValue("BetaTester");
                 });
 
@@ -286,12 +304,30 @@ namespace Server.Domain.Migrations
                 {
                     b.HasBaseType("Server.Domain.Models.Trophy");
 
+                    b.Property<int>("amount")
+                        .HasColumnType("int");
+
+                    b.ToTable("Trophy", t =>
+                        {
+                            t.Property("amount")
+                                .HasColumnName("BookAddict_amount");
+                        });
+
                     b.HasDiscriminator().HasValue("BookAddict");
                 });
 
             modelBuilder.Entity("Server.Domain.Models.Commentator", b =>
                 {
                     b.HasBaseType("Server.Domain.Models.Trophy");
+
+                    b.Property<int>("amount")
+                        .HasColumnType("int");
+
+                    b.ToTable("Trophy", t =>
+                        {
+                            t.Property("amount")
+                                .HasColumnName("Commentator_amount");
+                        });
 
                     b.HasDiscriminator().HasValue("Commentator");
                 });
@@ -310,6 +346,9 @@ namespace Server.Domain.Migrations
             modelBuilder.Entity("Server.Domain.Models.SharingIsCaring", b =>
                 {
                     b.HasBaseType("Server.Domain.Models.Trophy");
+
+                    b.Property<int>("amount")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("SharingIsCaring");
                 });

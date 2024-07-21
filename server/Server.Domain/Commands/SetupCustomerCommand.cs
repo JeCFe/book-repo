@@ -3,9 +3,10 @@ namespace Server.Domain.Commands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Server.Domain;
+using Server.Domain.Events;
 using Server.Domain.Models;
 
-public class SetupCustomerCommand : ICommand<BookRepoContext>
+public class SetupCustomerCommand() : ICommand<BookRepoContext>
 {
     public required string Id { get; init; }
     public List<string>? BookshelvesNames { get; init; }
@@ -106,6 +107,15 @@ public class SetupCustomerCommand : ICommand<BookRepoContext>
             }
             customer.Bookshelves =  [ ..customer.Bookshelves, ..customBookshelves ];
         }
+
+        // TOOO: Come back to use options to handle whether in beta
+        await ctx.Publish(
+            new GiveCustomerTrophyEvent(
+                customer.Id,
+                new BetaTester(true) { DateJoined = ctx.time.GetUtcNow() }
+            ),
+            cancellationToken
+        );
 
         dbContext.Customer.Add(customer);
 

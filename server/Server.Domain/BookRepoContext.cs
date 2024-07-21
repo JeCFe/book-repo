@@ -13,6 +13,7 @@ public class BookRepoContext : DbContext
     public DbSet<BookshelfBook> BookshelfBook { get; set; }
     public DbSet<CustomerBook> CustomerBooks { get; set; }
     public DbSet<Shareable> Shareables { get; set; }
+    public DbSet<Trophy> Trophies { get; set; }
 
     public BookRepoContext() { }
 
@@ -39,5 +40,17 @@ public class BookRepoContext : DbContext
 
         modelBuilder.Entity<ShareableBookshelf>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<ShareableBookShowcase>().Property(x => x.Id).ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Trophy>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder
+            .Entity<Trophy>()
+            .HasDiscriminator<string>("TrophyType")
+            .HasValue<BetaTester>("BetaTester")
+            .HasValue<Contributor>("Contributor")
+            .HasValue<BookAddict>("BookAddict")
+            .HasValue<Sponsor>("Sponsor")
+            .HasValue<SharingIsCaring>("SharingIsCaring")
+            .HasValue<AvidReviewer>("AvidReviewer")
+            .HasValue<Commentator>("Commentator");
     }
 }
