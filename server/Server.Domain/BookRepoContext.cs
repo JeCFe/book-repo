@@ -13,6 +13,7 @@ public class BookRepoContext : DbContext
     public DbSet<BookshelfBook> BookshelfBook { get; set; }
     public DbSet<CustomerBook> CustomerBooks { get; set; }
     public DbSet<Shareable> Shareables { get; set; }
+    public DbSet<Trophy> Trophies { get; set; }
 
     public BookRepoContext() { }
 
