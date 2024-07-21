@@ -6,5 +6,5 @@ public record Customer
     public ICollection<Bookshelf> Bookshelves { get; set; } = [ ];
     public ICollection<Shareable>? Shareables { get; set; } = [ ];
     public ICollection<Trophy> Trophies { get; set; } = [ ];
-    public required DateTimeOffset CreationDate { get; init; }
+    public DateTimeOffset CreationDate { get; init; } = DateTimeOffset.UtcNow;
 }
