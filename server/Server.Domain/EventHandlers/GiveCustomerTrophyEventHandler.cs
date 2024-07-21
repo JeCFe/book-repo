@@ -20,6 +20,11 @@ public class GiveCustomerTrophyEventHandler(BookRepoContext context)
             return;
         }
 
+        if (!notification.Trophy.CheckApproval())
+        {
+            return;
+        }
+
         customer.Trophies.Add(notification.Trophy);
         await context.SaveChangesAsync(cancellationToken);
     }
