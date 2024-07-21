@@ -1,7 +1,10 @@
 namespace Server.Domain.Commands;
 
+using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Domain.Events;
 using Server.Domain.Exceptions;
+using Server.Domain.Models;
 
 public class AddCustomerBookCommentCommand : ICommand<BookRepoContext>
 {
@@ -27,6 +30,21 @@ public class AddCustomerBookCommentCommand : ICommand<BookRepoContext>
         {
             throw new CustomerBookNotFoundException();
         }
+
+        await ctx.Publish(
+            new GiveCustomerTrophyEvent(
+                CustomerId,
+                new Commentator(
+                    await dbContext
+                        .CustomerBooks
+                        .Where(cb => cb.CustomerId == CustomerId && cb.Comment != null)
+                        .CountAsync(cancellationToken)
+                )
+                {
+                    }
+            ),
+            cancellationToken
+        );
 
         customerBook.Comment = Comment;
         await dbContext.SaveChangesAsync(cancellationToken);

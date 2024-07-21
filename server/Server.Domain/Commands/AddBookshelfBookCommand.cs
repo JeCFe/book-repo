@@ -3,6 +3,7 @@ namespace Server.Domain.Commands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Server.Domain;
+using Server.Domain.Events;
 using Server.Domain.Models;
 
 public class AddBookshelfBookCommand : ICommand<BookRepoContext>
@@ -116,6 +117,19 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
                     }
                 );
         }
+
+        await ctx.Publish(
+            new GiveCustomerTrophyEvent(
+                Id,
+                new BookAddict(
+                    await dbContext
+                        .CustomerBooks
+                        .Where(x => x.Customer.Id == Id)
+                        .CountAsync(cancellationToken)
+                )
+            ),
+            cancellationToken
+        );
 
         await dbContext.SaveChangesAsync(cancellationToken);
     }

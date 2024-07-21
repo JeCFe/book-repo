@@ -2,6 +2,7 @@ namespace Server.Domain.Commands;
 
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Domain.Events;
 using Server.Domain.Exceptions;
 using Server.Domain.Models;
 
@@ -82,6 +83,21 @@ public class AddShareableCommand : ICommand<BookRepoContext>
                 ShowComment = Shareable.Showcase.ShowComment
             };
         }
+
+        await ctx.Publish(
+            new GiveCustomerTrophyEvent(
+                Shareable.CustomerId,
+                new SharingIsCaring(
+                    await dbContext
+                        .Shareables
+                        .Where(s => s.Customer.Id == Shareable.CustomerId)
+                        .CountAsync(cancellationToken)
+                )
+                {
+                    }
+            ),
+            cancellationToken
+        );
 
         dbContext.Shareables.Add(shareable);
         await dbContext.SaveChangesAsync(cancellationToken);

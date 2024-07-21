@@ -10,7 +10,7 @@ public abstract record Trophy
     public Trophy() { }
 
     public Guid Id { get; init; }
-    public required string Description { get; set; }
+    public string Description { get; set; } = "Not set";
     public DateTimeOffset DateAchieved { get; init; } = DateTimeOffset.UtcNow;
 
     public virtual bool CheckApproval() => true;
@@ -65,7 +65,6 @@ public sealed record SharingIsCaring : Trophy
 
 public sealed record AvidReviewer : Trophy
 {
-    public required float AvgRating { get; init; }
     private const int _reviewrThreshold = 100;
     private readonly int _amount;
 
