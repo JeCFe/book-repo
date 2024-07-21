@@ -7,6 +7,8 @@ public abstract record Trophy
         Description = description;
     }
 
+    public Trophy() { }
+
     public Guid Id { get; init; }
     public required string Description { get; set; }
     public DateTimeOffset DateAchieved { get; init; } = DateTimeOffset.UtcNow;
@@ -14,11 +16,11 @@ public abstract record Trophy
     public virtual bool CheckApproval() => true;
 }
 
-public record BetaTester(BetaTestOptions Options) : Trophy("Thank you for being a beta tester!")
+public record BetaTester(bool isBeta) : Trophy("Thank you for being a beta tester!")
 {
     public required DateTimeOffset DateJoined { get; init; }
 
-    public override bool CheckApproval() => Options.Enabled;
+    public override bool CheckApproval() => isBeta;
 }
 
 public record Contributor() : Trophy("Thank you for contributing!")
