@@ -1,4 +1,4 @@
-namespace Server.Domain.Models;
+namespace Server.Models;
 
 public record BetaTestOptions
 {
