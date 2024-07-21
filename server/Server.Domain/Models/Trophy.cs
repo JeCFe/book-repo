@@ -7,6 +7,7 @@ public abstract record Trophy
         Description = description;
     }
 
+    public Guid Id { get; init; }
     public required string Description { get; set; }
     public DateTimeOffset DateAchieved { get; init; } = DateTimeOffset.UtcNow;
 
