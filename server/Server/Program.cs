@@ -8,7 +8,9 @@ using Server.Auth0;
 using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
+using Server.Domain.Models;
 using Server.filters;
+using Server.Models;
 using Server.OpenLibrary;
 using Server.OpenLibrary.Blob;
 using Server.Providers;
@@ -159,6 +161,8 @@ public class Program
 
         builder.Services.Configure<BlobOptions>(builder.Configuration.GetSection("Blob"));
         builder.Services.AddSingleton<IBlobClient, BlobClient>();
+
+        builder.Services.Configure<BetaTestOptions>(builder.Configuration.GetSection("BetaTest"));
 
         builder.Services.AddAuthorization();
 
