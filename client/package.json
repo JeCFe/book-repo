@@ -57,6 +57,6 @@
     "ts-node": "^10.9.2",
     "typescript": "^5",
     "usehooks-ts": "^3.1.0",
-    "openapi-typescript": "^6.7.5"
+    "openapi-typescript": "^7.1.1"
   }
 }
