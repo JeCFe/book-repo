@@ -1,17 +1,5 @@
 "use client";
 
-import {
-  Alerter,
-  AvidReviewer,
-  BetaTester,
-  BookAddict,
-  Commentor,
-  Contributor,
-  GoalScorer,
-  GoalSetter,
-  Sharing,
-  Sponsor,
-} from "@/assets/trophies";
 import { Accordion, Picture, SideNav } from "@/components";
 import { useBookWizard, useGetCustomerSummary, useSetupWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -19,6 +7,7 @@ import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShowBookDetailsModal } from "./ShowBookDetailsModal";
+import Trophies from "./Trophies";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
@@ -83,35 +72,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
             </>
           </SideNav>
           <div className="flex w-full flex-col space-y-10 overflow-x-auto px-12 py-24 text-slate-500">
-            {data.trophies && (
-              <Accordion title="Trophies" sideStyle={false} containerSize="max">
-                {data.trophies.map((x) => {
-                  const className = "w-24 md:w-36";
-                  switch (x.type) {
-                    case "beta-tester":
-                      return <BetaTester className={className} />;
-                    case "alerter":
-                      return <Alerter className={className} />;
-                    case "avid-reviewer":
-                      return <AvidReviewer className={className} />;
-                    case "book-addict":
-                      return <BookAddict className={className} />;
-                    case "commentator":
-                      return <Commentor className={className} />;
-                    case "contributor":
-                      return <Contributor className={className} />;
-                    case "goal-scored":
-                      return <GoalScorer className={className} />;
-                    case "goal-setter":
-                      return <GoalSetter className={className} />;
-                    case "sharing-is-caring":
-                      return <Sharing className={className} />;
-                    case "sponsor":
-                      return <Sponsor className={className} />;
-                  }
-                })}
-              </Accordion>
-            )}
+            <Trophies trophies={data.trophies} />
             {data.bookshelves &&
               data.bookshelves?.map((bookshelf) => (
                 <div key={bookshelf.id}>
