@@ -1,4 +1,4 @@
-namespace Server.filters;
+namespace Server.Filters;
 
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;

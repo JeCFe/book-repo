@@ -1672,8 +1672,20 @@
         "additionalProperties": false
       },
       "TrophyType": {
-        "type": "object",
-        "additionalProperties": false
+        "enum": [
+          "alerter",
+          "basic",
+          "beta-tester",
+          "contributor",
+          "book-addict",
+          "sponsor",
+          "sharing-is-caring",
+          "avid-reviewer",
+          "commentator",
+          "goal-scored",
+          "goal-setter"
+        ],
+        "type": "string"
       },
       "UpdateBook": {
         "required": [

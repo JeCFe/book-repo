@@ -34,6 +34,8 @@ public sealed record TrophyType : IStringEnum<TrophyType>
 
     private readonly string _value;
 
+    public override string ToString() => _value;
+
     private TrophyType(string value)
     {
         _value = value;
