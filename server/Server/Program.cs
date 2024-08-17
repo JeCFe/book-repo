@@ -58,6 +58,7 @@ public class Program
             .Services
             .AddSwaggerGen(options =>
             {
+                options.UseOneOfForPolymorphism();
                 options.SwaggerDoc(
                     "v1",
                     new OpenApiInfo { Version = "0.1.0", Title = "Backend Service" }
