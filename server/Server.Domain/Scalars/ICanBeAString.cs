@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Server.Domain.Scalars;
 
 public interface ICanBeAString<T>

@@ -1,19 +1,15 @@
 namespace Server.Domain.Models;
 
-using Server.Domain.Scalars;
-
 public abstract record Trophy
 {
-    public Trophy(string description, TrophyType type)
+    public Trophy(string description)
     {
         Description = description;
-        Type = type;
     }
 
     public Trophy() { }
 
     public Guid Id { get; init; }
-    public TrophyType Type { get; init; } = TrophyType.Basic;
     public string Description { get; set; } = "Not set";
     public DateTimeOffset DateAchieved { get; init; } = DateTimeOffset.UtcNow;
 
@@ -27,14 +23,14 @@ public sealed record BetaTester : Trophy
     public BetaTester() { }
 
     public BetaTester(bool isBeta)
-        : base("Thank you for being a beta tester!", TrophyType.BetaTester) => _isBeta = isBeta;
+        : base("Thank you for being a beta tester!") => _isBeta = isBeta;
 
     public required DateTimeOffset DateJoined { get; init; }
 
     public override bool CheckApproval() => _isBeta;
 }
 
-public sealed record Contributor() : Trophy("Thank you for contributing!", TrophyType.Contributor)
+public sealed record Contributor() : Trophy("Thank you for contributing!")
 {
     public required string PRContributed { get; init; }
 }
@@ -47,13 +43,12 @@ public sealed record BookAddict : Trophy
     public BookAddict() { }
 
     public BookAddict(int amount)
-        : base("You've added over 1000 books! Wowie!", TrophyType.BookAddict) => _amount = amount;
+        : base("You've added over 1000 books! Wowie!") => _amount = amount;
 
     public override bool CheckApproval() => _amount >= _bookAddictThreshold;
 }
 
-public sealed record Sponsor()
-    : Trophy("Thank you for sponsoring, our infra bills thank you", TrophyType.Sponsor) { }
+public sealed record Sponsor() : Trophy("Thank you for sponsoring, our infra bills thank you") { }
 
 public sealed record SharingIsCaring : Trophy
 {
@@ -63,7 +58,7 @@ public sealed record SharingIsCaring : Trophy
     public SharingIsCaring() { }
 
     public SharingIsCaring(int amount)
-        : base("You've created 10 sharable links!", TrophyType.SharingIsCaring) => _amount = amount;
+        : base("You've created 10 sharable links!") => _amount = amount;
 
     public override bool CheckApproval() => _amount >= _sharedThreshold;
 }
@@ -74,8 +69,7 @@ public sealed record AvidReviewer : Trophy
     private readonly int _amount;
 
     public AvidReviewer(int amount)
-        : base("You've rated over 100 books! Keep it up!", TrophyType.AvidReviewer) =>
-        _amount = amount;
+        : base("You've rated over 100 books! Keep it up!") => _amount = amount;
 
     public AvidReviewer() { }
 
@@ -90,8 +84,7 @@ public sealed record Commentator : Trophy
     public Commentator() { }
 
     public Commentator(int amount)
-        : base("You've added over 100 comments to books!", TrophyType.Commentator) =>
-        _amount = amount;
+        : base("You've added over 100 comments to books!") => _amount = amount;
 
     public override bool CheckApproval() => _amount >= _commentatorThreshold;
 }
@@ -104,8 +97,7 @@ public sealed record GoalScored : Trophy
     public GoalScored() { }
 
     public GoalScored(int amount)
-        : base("You've completed over 10 goals! Keep on the good work!", TrophyType.GoalScored) =>
-        _amount = amount;
+        : base("You've completed over 10 goals! Keep on the good work!") => _amount = amount;
 
     public override bool CheckApproval() => _amount >= _goalScoredThreshold;
 }
@@ -118,8 +110,7 @@ public sealed record GoalSetter : Trophy
     public GoalSetter() { }
 
     public GoalSetter(int amount)
-        : base("You've set yourself over 10 goals! Good luck!", TrophyType.GoalSetter) =>
-        _amount = amount;
+        : base("You've set yourself over 10 goals! Good luck!") => _amount = amount;
 
     public override bool CheckApproval() => _amount >= _goalSetterThreshold;
 }
@@ -132,8 +123,7 @@ public sealed record Alerter : Trophy
     public Alerter() { }
 
     public Alerter(int amount)
-        : base("You've alerted the admins to over 100 Open Library issues!", TrophyType.Alerter) =>
-        _amount = amount;
+        : base("You've alerted the admins to over 100 Open Library issues!") => _amount = amount;
 
     public override bool CheckApproval() => _amount >= _goalSetterThreshold;
 }

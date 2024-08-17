@@ -1218,38 +1218,7 @@
           "trophies": {
             "type": "array",
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/BetaTester"
-                },
-                {
-                  "$ref": "#/components/schemas/Contributor"
-                },
-                {
-                  "$ref": "#/components/schemas/BookAddict"
-                },
-                {
-                  "$ref": "#/components/schemas/Sponsor"
-                },
-                {
-                  "$ref": "#/components/schemas/SharingIsCaring"
-                },
-                {
-                  "$ref": "#/components/schemas/AvidReviewer"
-                },
-                {
-                  "$ref": "#/components/schemas/Commentator"
-                },
-                {
-                  "$ref": "#/components/schemas/GoalScored"
-                },
-                {
-                  "$ref": "#/components/schemas/GoalSetter"
-                },
-                {
-                  "$ref": "#/components/schemas/Alerter"
-                }
-              ]
+              "$ref": "#/components/schemas/TrophyData"
             },
             "nullable": true
           }
@@ -1652,6 +1621,58 @@
             "format": "date-time"
           }
         },
+        "additionalProperties": false
+      },
+      "TrophyData": {
+        "required": [
+          "trophy",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "trophy": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BetaTester"
+              },
+              {
+                "$ref": "#/components/schemas/Contributor"
+              },
+              {
+                "$ref": "#/components/schemas/BookAddict"
+              },
+              {
+                "$ref": "#/components/schemas/Sponsor"
+              },
+              {
+                "$ref": "#/components/schemas/SharingIsCaring"
+              },
+              {
+                "$ref": "#/components/schemas/AvidReviewer"
+              },
+              {
+                "$ref": "#/components/schemas/Commentator"
+              },
+              {
+                "$ref": "#/components/schemas/GoalScored"
+              },
+              {
+                "$ref": "#/components/schemas/GoalSetter"
+              },
+              {
+                "$ref": "#/components/schemas/Alerter"
+              }
+            ],
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/TrophyType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrophyType": {
+        "type": "object",
         "additionalProperties": false
       },
       "UpdateBook": {
