@@ -8,11 +8,11 @@ using Server.Domain.Models;
 using Server.Exceptions;
 using Server.Models;
 
-public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
+public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOptions> betaOptions)
+    : ICustomerProvider
 {
     public async Task<CustomerSummary> GetCustomerSummary(
         string userId,
-        IOptions<BetaTestOptions> betaOptions,
         CancellationToken cancellationToken
     )
     {
