@@ -15,7 +15,7 @@ import { Trophy } from "@/types";
 import { ReactNode } from "react";
 
 export default function Trophies({ trophies }: { trophies: Trophy[] | null }) {
-  var getTrophy = (x: Trophy): ReactNode => {
+  const getTrophy = (x: Trophy): ReactNode => {
     const className = "w-24 md:w-36";
     switch (x.type) {
       case "beta-tester":
@@ -46,7 +46,7 @@ export default function Trophies({ trophies }: { trophies: Trophy[] | null }) {
         <Accordion title="Trophies" sideStyle={false} containerSize="max">
           <span className="flex space-x-4">
             {trophies.map((x) => (
-              <div>{getTrophy(x)}</div>
+              <div key={x.type}>{getTrophy(x)}</div>
             ))}
           </span>
         </Accordion>
