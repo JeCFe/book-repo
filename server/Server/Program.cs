@@ -8,7 +8,8 @@ using Server.Auth0;
 using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
-using Server.filters;
+using Server.Filter;
+using Server.Filters;
 using Server.Models;
 using Server.OpenLibrary;
 using Server.OpenLibrary.Blob;
@@ -58,11 +59,17 @@ public class Program
             .Services
             .AddSwaggerGen(options =>
             {
+                options.UseOneOfForPolymorphism();
+
                 options.SwaggerDoc(
                     "v1",
                     new OpenApiInfo { Version = "0.1.0", Title = "Backend Service" }
                 );
+                options.ParameterFilter<StringEnumParamFilter>();
                 options.SchemaFilter<NullabilityFilter>();
+                options.SchemaFilter<StringEnumSchemaFilter>();
+                options.SchemaFilter<CanBeAStringSchemaFilter>();
+
                 options.AddSecurityDefinition(
                     "Bearer",
                     new OpenApiSecurityScheme

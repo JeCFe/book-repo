@@ -3,6 +3,7 @@ namespace Server.Domain;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain.Models;
+using Server.Domain.Scalars;
 
 public class BookRepoContext : DbContext
 {
@@ -42,6 +43,7 @@ public class BookRepoContext : DbContext
         modelBuilder.Entity<ShareableBookShowcase>().Property(x => x.Id).ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Trophy>().Property(x => x.Id).ValueGeneratedOnAdd();
+
         modelBuilder
             .Entity<Trophy>()
             .HasDiscriminator<string>("TrophyType")
