@@ -2,6 +2,7 @@ namespace Server.Providers;
 
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Server.Domain;
 using Server.Domain.Models;
 using Server.Exceptions;
@@ -11,6 +12,7 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
 {
     public async Task<CustomerSummary> GetCustomerSummary(
         string userId,
+        IOptions<BetaTestOptions> betaOptions,
         CancellationToken cancellationToken
     )
     {
@@ -20,6 +22,12 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                 .Include(x => x.Bookshelves)
                 .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken)
             ?? throw new UserNotFoundException();
+
+        if (betaOptions.Value.Enabled && !customer.Trophies.OfType<BetaTester>().Any())
+        {
+            customer.Trophies.Add(new BetaTester(true) { DateJoined = customer.CreationDate });
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
 
         return new()
         {

@@ -1,10 +1,15 @@
 namespace Server.Providers;
 
+using Microsoft.Extensions.Options;
 using Server.Models;
 
 public interface ICustomerProvider
 {
-    Task<CustomerSummary> GetCustomerSummary(string userId, CancellationToken cancellationToken);
+    Task<CustomerSummary> GetCustomerSummary(
+        string userId,
+        IOptions<BetaTestOptions> betaOptions,
+        CancellationToken cancellationToken
+    );
     Task<ResponseCustomerBook?> GetCustomerBook(
         Guid customerBookId,
         string customerId,
