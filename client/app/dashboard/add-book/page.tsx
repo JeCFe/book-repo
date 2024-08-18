@@ -91,6 +91,7 @@ export default withPageAuthRequired(function AddBook() {
               ISBN
             </RadioButton>
             <RadioButton
+              disabled
               size="large"
               {...register("radio", {
                 required: { value: true, message: "A selection is required" },

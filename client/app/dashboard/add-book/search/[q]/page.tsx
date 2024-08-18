@@ -68,7 +68,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
         <Anchor href="/dashboard/add-book"> {"< Choose how to add"}</Anchor>
-        <Anchor href="/dashboard/add-book/search">{`< Dashboard`}</Anchor>
+        <Anchor href="/dashboard/add-book/search">{`< Search`}</Anchor>
         <div className="text-slate-400 underline underline-offset-4">
           {"< Search results"}
         </div>
