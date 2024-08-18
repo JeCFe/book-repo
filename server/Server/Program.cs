@@ -1,8 +1,10 @@
 namespace Server;
 
 using System.Reflection;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Server.Auth0;
 using Server.Context;
@@ -40,6 +42,11 @@ public class Program
             {
                 options.Authority = $"https://{configuration["Auth0:Domain"]}";
                 options.Audience = configuration["Auth0:Audience"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = "Roles",
+                    RoleClaimType = "https://schemas.quickstarts.com/roles"
+                };
             });
         builder.Services.AddHttpContextAccessor();
 
@@ -65,6 +72,12 @@ public class Program
                     "v1",
                     new OpenApiInfo { Version = "0.1.0", Title = "Backend Service" }
                 );
+
+                options.SwaggerDoc(
+                    "admin",
+                    new OpenApiInfo { Version = "0.1.0", Title = "Admin - Backend Service" }
+                );
+
                 options.ParameterFilter<StringEnumParamFilter>();
                 options.SchemaFilter<NullabilityFilter>();
                 options.SchemaFilter<StringEnumSchemaFilter>();
@@ -174,9 +187,12 @@ public class Program
 
         builder
             .Services
-            .AddMediatR(
-                config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
-            );
+            .AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+                config.RegisterServicesFromAssemblyContaining<BookRepoContext>();
+                config.AddOpenBehavior(typeof(RequestPreProcessorBehavior<,>));
+            });
         builder.Services.AddAutoMapper(typeof(Program));
 
         var app = builder.Build();
@@ -192,9 +208,12 @@ public class Program
         app.UseSwaggerUI(settings =>
         {
             settings.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1.0");
+            settings.SwaggerEndpoint("/swagger/admin/swagger.json", "API v1.0");
+            settings.DocumentTitle = Assembly.GetExecutingAssembly().GetName().Name;
             settings.OAuthClientId(configuration["Auth0:ClientId"]);
             settings.OAuthClientSecret(configuration["Auth0:ClientSecret"]);
             settings.OAuthUsePkce();
+            settings.OAuthScopeSeparator(" ");
         });
 
         app.UseCors();
@@ -207,6 +226,12 @@ public class Program
         app.MapGroup("/bookshelf").MapBookshelfEndpoints();
         app.MapGroup("/book").MapBookEndpoints();
         app.MapGroup("/shareable").MapShareableEndpoints();
+
+        app.MapGroup("/admin")
+            .WithGroupName("admin")
+            .MapAdminEndpoints()
+            .RequireAuthorization(Permission.BookRepoAdmin);
+
         app.Run();
     }
 }
