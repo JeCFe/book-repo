@@ -2,12 +2,15 @@ namespace Server.Providers;
 
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Server.Domain;
 using Server.Domain.Models;
+using Server.Domain.Scalars;
 using Server.Exceptions;
 using Server.Models;
 
-public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
+public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOptions> betaOptions)
+    : ICustomerProvider
 {
     public async Task<CustomerSummary> GetCustomerSummary(
         string userId,
@@ -20,6 +23,12 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                 .Include(x => x.Bookshelves)
                 .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken)
             ?? throw new UserNotFoundException();
+
+        if (betaOptions.Value.Enabled && !customer.Trophies.OfType<BetaTester>().Any())
+        {
+            customer.Trophies.Add(new BetaTester(true) { DateJoined = customer.CreationDate });
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
 
         return new()
         {
@@ -41,7 +50,30 @@ public class CustomerProvider(BookRepoContext dbContext) : ICustomerProvider
                     })]
                 })
             ],
-            Trophies =  [ ..customer.Trophies ]
+            Trophies = customer
+                .Trophies
+                .Select(
+                    x =>
+                        new TrophyData()
+                        {
+                            Trophy = x,
+                            Type = x switch
+                            {
+                                BetaTester => TrophyType.BetaTester,
+                                Alerter => TrophyType.Alerter,
+                                Contributor => TrophyType.Contributor,
+                                BookAddict => TrophyType.BookAddict,
+                                Sponsor => TrophyType.Sponsor,
+                                SharingIsCaring => TrophyType.SharingIsCaring,
+                                AvidReviewer => TrophyType.AvidReviewer,
+                                Commentator => TrophyType.Commentator,
+                                GoalScored => TrophyType.GoalScored,
+                                GoalSetter => TrophyType.GoalSetter,
+                                _ => throw new NotImplementedException()
+                            }
+                        }
+                )
+                .ToList()
         };
     }
 

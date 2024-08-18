@@ -770,6 +770,42 @@
         },
         "additionalProperties": false
       },
+      "Alerter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "AvidReviewer": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "BetaTester": {
+        "required": [
+          "dateJoined"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "properties": {
+          "dateJoined": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "Book": {
         "required": [
           "isbn",
@@ -811,6 +847,15 @@
             "format": "int32"
           }
         },
+        "additionalProperties": false
+      },
+      "BookAddict": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
         "additionalProperties": false
       },
       "Bookshelf": {
@@ -969,6 +1014,33 @@
         },
         "additionalProperties": false
       },
+      "Commentator": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Contributor": {
+        "required": [
+          "prContributed"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "properties": {
+          "prContributed": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Customer": {
         "required": [
           "bookshelves",
@@ -998,7 +1070,38 @@
           "trophies": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Trophy"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/BetaTester"
+                },
+                {
+                  "$ref": "#/components/schemas/Contributor"
+                },
+                {
+                  "$ref": "#/components/schemas/BookAddict"
+                },
+                {
+                  "$ref": "#/components/schemas/Sponsor"
+                },
+                {
+                  "$ref": "#/components/schemas/SharingIsCaring"
+                },
+                {
+                  "$ref": "#/components/schemas/AvidReviewer"
+                },
+                {
+                  "$ref": "#/components/schemas/Commentator"
+                },
+                {
+                  "$ref": "#/components/schemas/GoalScored"
+                },
+                {
+                  "$ref": "#/components/schemas/GoalSetter"
+                },
+                {
+                  "$ref": "#/components/schemas/Alerter"
+                }
+              ]
             },
             "nullable": true
           },
@@ -1115,7 +1218,7 @@
           "trophies": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Trophy"
+              "$ref": "#/components/schemas/TrophyData"
             },
             "nullable": true
           }
@@ -1162,6 +1265,24 @@
             "nullable": true
           }
         },
+        "additionalProperties": false
+      },
+      "GoalScored": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "GoalSetter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
         "additionalProperties": false
       },
       "Identity": {
@@ -1461,6 +1582,24 @@
         },
         "additionalProperties": false
       },
+      "SharingIsCaring": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Sponsor": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
       "Trophy": {
         "required": [
           "dateAchieved",
@@ -1483,6 +1622,70 @@
           }
         },
         "additionalProperties": false
+      },
+      "TrophyData": {
+        "required": [
+          "trophy",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "trophy": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BetaTester"
+              },
+              {
+                "$ref": "#/components/schemas/Contributor"
+              },
+              {
+                "$ref": "#/components/schemas/BookAddict"
+              },
+              {
+                "$ref": "#/components/schemas/Sponsor"
+              },
+              {
+                "$ref": "#/components/schemas/SharingIsCaring"
+              },
+              {
+                "$ref": "#/components/schemas/AvidReviewer"
+              },
+              {
+                "$ref": "#/components/schemas/Commentator"
+              },
+              {
+                "$ref": "#/components/schemas/GoalScored"
+              },
+              {
+                "$ref": "#/components/schemas/GoalSetter"
+              },
+              {
+                "$ref": "#/components/schemas/Alerter"
+              }
+            ],
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/TrophyType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrophyType": {
+        "enum": [
+          "alerter",
+          "basic",
+          "beta-tester",
+          "contributor",
+          "book-addict",
+          "sponsor",
+          "sharing-is-caring",
+          "avid-reviewer",
+          "commentator",
+          "goal-scored",
+          "goal-setter"
+        ],
+        "type": "string"
       },
       "UpdateBook": {
         "required": [
@@ -1530,42 +1733,12 @@
       },
       "User": {
         "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          }
+        ],
         "properties": {
-          "appMetadata": {},
-          "email": {
-            "type": "string"
-          },
-          "emailVerified": {
-            "type": "boolean"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "phoneVerified": {
-            "type": "boolean"
-          },
-          "userMetadata": {},
-          "userName": {
-            "type": "string"
-          },
-          "nickName": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "fullName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "picture": {
-            "type": "string"
-          },
-          "blocked": {
-            "type": "boolean"
-          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -1611,6 +1784,99 @@
             "items": {
               "type": "string"
             }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserBase": {
+        "type": "object",
+        "properties": {
+          "appMetadata": {},
+          "email": {
+            "type": "string"
+          },
+          "emailVerified": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "phoneVerified": {
+            "type": "boolean"
+          },
+          "userMetadata": {},
+          "userName": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "picture": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserCreateRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          }
+        ],
+        "properties": {
+          "connection": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "verifyEmail": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          }
+        ],
+        "properties": {
+          "connection": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "verifyEmail": {
+            "type": "boolean"
+          },
+          "verifyPassword": {
+            "type": "boolean"
+          },
+          "verifyPhoneNumber": {
+            "type": "boolean"
+          },
+          "clientId": {
+            "type": "string"
           }
         },
         "additionalProperties": false

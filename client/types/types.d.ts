@@ -1,3 +1,5 @@
+import { components } from "@/server-client";
+
 export type Book = {
   book: {
     isbn: string | null;
@@ -12,3 +14,5 @@ export type Book = {
   order?: number;
   ranking?: number;
 };
+
+export type Trophy = components["schemas"]["TrophyData"];

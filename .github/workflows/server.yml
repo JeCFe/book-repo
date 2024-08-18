@@ -50,7 +50,7 @@ jobs:
           Auth0__Audience: ${{ secrets.AUTH0_AUDIENCE }}
           Auth0__ClientId: ${{ secrets.AUTH0_CLIENT_ID }}
           Auth0__ClientSecret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-        run: docker-compose up -d server
+        run: docker compose up -d server
 
       # - name: Wait for
       #   run: npx wait-on http://localhost:5247/healthz --verbose --timeout 25000

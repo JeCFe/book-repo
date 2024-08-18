@@ -1,13 +1,20 @@
 namespace Server.Models;
 
 using Server.Domain.Models;
+using Server.Domain.Scalars;
 
 public record CustomerSummary
 {
     public required string Id { get; init; }
     public required DateTimeOffset CreatedOn { get; init; }
     public required List<CustomerBookshelf> Bookshelves { get; init; }
-    public required List<Trophy> Trophies { get; init; }
+    public required List<TrophyData> Trophies { get; init; }
+}
+
+public record TrophyData()
+{
+    public required Trophy Trophy { get; init; }
+    public required TrophyType Type { get; init; }
 }
 
 public record CustomerBookshelf()
