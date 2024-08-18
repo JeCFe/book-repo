@@ -7,6 +7,7 @@ import {
   useBookWizard,
   useGetBookshelf,
   useGetBookshelfSummary,
+  useGetCustomerSummary,
 } from "@/hooks";
 import { getApiClient } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -36,14 +37,11 @@ export default withPageAuthRequired(function AddBook({
     mutate,
   } = useGetBookshelf(bookshelfId);
   const [open, setOpen] = useState<boolean>(false);
-
   const { books, updateBook } = useBookWizard();
-
   const router = useRouter();
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
   const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
-  const [currentSearch, setCurrentSearch] = useState<string | undefined>();
   const [isSavingBooks, setIsSavingBooks] = useState<boolean>(false);
 
   useEffect(() => {
@@ -98,13 +96,17 @@ export default withPageAuthRequired(function AddBook({
         >
           {"< Manage bookshelf"}
         </Anchor>
-
+        <Anchor
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add`}
+        >
+          {"< Choose how to add"}
+        </Anchor>
         <div className="text-slate-400 underline underline-offset-4">
-          {"< Add book"}
+          {"< ISBN"}
         </div>
       </div>
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        Add Book
+        Add book via ISBN
       </h1>
       <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
         {`Search for the book you wish to add - these books will be added to ${data?.name}`}
@@ -119,34 +121,6 @@ export default withPageAuthRequired(function AddBook({
         setOpen={setOpen}
       />
 
-      <div className="mt-10">
-        <div className="mb-4 text-xl text-slate-300">{`Search for book by name and author`}</div>
-        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-          <input
-            type="text"
-            value={currentSearch ?? ""}
-            onChange={(e) => {
-              setCurrentSearch(e.target.value);
-            }}
-            placeholder="Enter search criteria"
-            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
-          />
-          <Button
-            size="large"
-            variant="primary"
-            onClick={() =>
-              router.push(
-                `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/${encodeURIComponent(currentSearch!)}`,
-              )
-            }
-            type="button"
-            disabled={currentSearch === undefined || currentSearch === ""}
-          >
-            Lookup Book
-          </Button>
-        </div>
-      </div>
-
       {setupBooks && setupBooks.length > 0 && (
         <ProposedBooks
           setSetupBooks={setSetupBooks}
@@ -160,7 +134,11 @@ export default withPageAuthRequired(function AddBook({
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard")}
+          onClick={() =>
+            router.push(
+              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add`,
+            )
+          }
         >
           Back
         </Button>
