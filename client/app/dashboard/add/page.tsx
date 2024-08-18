@@ -10,7 +10,7 @@ type FormValues = {
   radio: "isbn" | "search" | "csv";
 };
 
-export default withPageAuthRequired(function AddBook({ user }) {
+export default withPageAuthRequired(function AddBook() {
   const router = useRouter();
   const {
     register,
@@ -22,6 +22,11 @@ export default withPageAuthRequired(function AddBook({ user }) {
     switch (data.radio) {
       case "search":
         router.push("/dashboard/add/search");
+        return;
+
+      case "isbn":
+        router.push("/dashboard/add/isbn");
+        return;
     }
   };
 
