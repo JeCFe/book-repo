@@ -52,7 +52,11 @@ export default withPageAuthRequired(function AddBook({
     setIsSavingBooks(true);
     for (const book of setupBooks) {
       await toast.promise(
-        addBookshelfBook({ id: user.sub!, bookshelfId: [], isbn: book.isbn }),
+        addBookshelfBook({
+          id: user.sub!,
+          bookshelfId: [bookshelfId],
+          isbn: book.isbn,
+        }),
         {
           loading: `Adding ${book.name}`,
           success: `Added ${book.name}`,
@@ -61,8 +65,9 @@ export default withPageAuthRequired(function AddBook({
       );
     }
     mutate();
+    setSetupBooks([]);
     router.push(
-      `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add`,
+      `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`,
     );
     setIsSavingBooks(false);
   };

@@ -2,16 +2,10 @@
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
-import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-
-const addBookshelfBook = getApiClient()
-  .path("/action/add-book-shelf-book")
-  .method("post")
-  .create();
 
 export default withPageAuthRequired(function SearchBookByQuery({
   params,
@@ -73,7 +67,8 @@ export default withPageAuthRequired(function SearchBookByQuery({
       />
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
-        <Anchor href={`/dashboard/add-book`}>{`< Add book`}</Anchor>
+        <Anchor href="/dashboard/add-book"> {"< Choose how to add"}</Anchor>
+        <Anchor href="/dashboard/add-book/search">{`< Dashboard`}</Anchor>
         <div className="text-slate-400 underline underline-offset-4">
           {"< Search results"}
         </div>
@@ -130,18 +125,24 @@ export default withPageAuthRequired(function SearchBookByQuery({
         </div>
       )}
       {setupBooks && setupBooks.length > 0 && (
-        <ProposedBooks
-          setSetupBooks={setSetupBooks}
-          setupBooks={setupBooks}
-          removeBook={removeBook}
-        />
+        <div className="space-y-8 pt-12">
+          <div className="flex max-w-md flex-row text-lg font-bold tracking-tight text-slate-300 md:max-w-4xl md:text-xl">
+            {`Confirm these books on the previous page: `}
+          </div>
+          <ProposedBooks
+            setSetupBooks={setSetupBooks}
+            setupBooks={setupBooks}
+            removeBook={removeBook}
+            className="space-y-3"
+          />
+        </div>
       )}
       <div className="mb-10 mt-20 flex flex-row space-x-6">
         <Button
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard/add-book")}
+          onClick={() => router.push("/dashboard/add-book/search")}
         >
           Back
         </Button>

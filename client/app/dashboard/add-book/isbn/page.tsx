@@ -1,24 +1,14 @@
 "use client";
 
 import { ProposedBooks } from "@/components";
-import {
-  SetupBook,
-  useBookWizard,
-  useGetBookshelfSummary,
-  useGetCustomerSummary,
-} from "@/hooks";
-import { getApiClient } from "@/services";
+import { SetupBook, useBookWizard } from "@/hooks";
+import { addBookshelfBook } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AddBookByIsbn } from "../../AddBookByIsbn";
-
-const addBookshelfBook = getApiClient()
-  .path("/action/add-book-shelf-book")
-  .method("post")
-  .create();
 
 export default withPageAuthRequired(function AddBook({ user }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -29,7 +19,6 @@ export default withPageAuthRequired(function AddBook({ user }) {
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
   const [currentIsbn, setCurrentIsbn] = useState<string | undefined>();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
-  const [currentSearch, setCurrentSearch] = useState<string | undefined>();
   const [isSavingBooks, setIsSavingBooks] = useState<boolean>(false);
 
   useEffect(() => {
@@ -65,7 +54,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
     <div className="flex flex-col">
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
-        <Anchor href="/dashboard/add"> {"< Choose how to add"}</Anchor>
+        <Anchor href="/dashboard/add-book"> {"< Choose how to add"}</Anchor>
         <div className="text-slate-400 underline underline-offset-4">
           {"< ISBN"}
         </div>
@@ -99,7 +88,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
           type="button"
           size="large"
           variant="secondary"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push("/dashboard/add-book")}
         >
           Back
         </Button>

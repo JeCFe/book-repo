@@ -1,5 +1,6 @@
 export * from "./addAuth";
 export * from "./addBaseUrl";
+export * from "./addBookshelfBook";
 export * from "./getApiClient";
 export * from "./getEndpoints";
 export * from "./removeBookshelf";

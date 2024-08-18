@@ -73,6 +73,7 @@ export default withPageAuthRequired(function AddBook({
       );
     }
     mutate();
+    setSetupBooks([]);
     router.push(
       `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`,
     );

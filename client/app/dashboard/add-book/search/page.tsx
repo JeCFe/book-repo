@@ -2,17 +2,12 @@
 
 import { ProposedBooks } from "@/components";
 import { SetupBook, useBookWizard, useGetBookshelfSummary } from "@/hooks";
-import { getApiClient } from "@/services";
+import { addBookshelfBook, getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const addBookshelfBook = getApiClient()
-  .path("/action/add-book-shelf-book")
-  .method("post")
-  .create();
 
 export default withPageAuthRequired(function AddBook({ user }) {
   const { books, updateBook } = useBookWizard();
@@ -42,7 +37,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
       );
     }
 
-    router.push("/dashboard/add");
+    router.push("/dashboard/add-book");
     setIsSavingBooks(false);
   };
 
@@ -50,7 +45,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
     <div className="flex flex-col">
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
-        <Anchor href="/dashboard/add"> {"< Choose how to add"}</Anchor>
+        <Anchor href="/dashboard/add-book"> {"< Choose how to add"}</Anchor>
         <div className="text-slate-400 underline underline-offset-4">
           {"< Search"}
         </div>
@@ -79,7 +74,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
             variant="primary"
             onClick={() =>
               router.push(
-                `/dashboard/add/search/${encodeURIComponent(currentSearch!)}`,
+                `/dashboard/add-book/search/${encodeURIComponent(currentSearch!)}`,
               )
             }
             type="button"
