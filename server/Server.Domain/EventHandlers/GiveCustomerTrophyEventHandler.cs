@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Server.Domain.Events;
 
 namespace Server.Domain.EventHandlers;

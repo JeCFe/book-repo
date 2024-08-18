@@ -1,6 +1,7 @@
 namespace Server;
 
 using System.Reflection;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -186,9 +187,12 @@ public class Program
 
         builder
             .Services
-            .AddMediatR(
-                config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
-            );
+            .AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+                config.RegisterServicesFromAssemblyContaining<BookRepoContext>();
+                config.AddOpenBehavior(typeof(RequestPreProcessorBehavior<,>));
+            });
         builder.Services.AddAutoMapper(typeof(Program));
 
         var app = builder.Build();
