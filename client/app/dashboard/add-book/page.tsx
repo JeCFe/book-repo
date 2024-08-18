@@ -47,7 +47,7 @@ export default withPageAuthRequired(function AddBook() {
         </div>
       </div>
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        Choose how you'd like to add books
+        {`Choose how you'd like to add books`}
       </h1>
       <div className="my-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
         {`Select in what way you'd like to add books`}
