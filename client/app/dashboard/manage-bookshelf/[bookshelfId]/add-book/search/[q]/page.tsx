@@ -1,22 +1,11 @@
 "use client";
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { ProposedBooks, Table } from "@/components";
-import {
-  SetupBook,
-  useBookWizard,
-  useGetBookshelf,
-  useSearchForBooks,
-} from "@/hooks";
-import { getApiClient } from "@/services";
-import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-
-const addBookshelfBook = getApiClient()
-  .path("/action/add-book-shelf-book")
-  .method("post")
-  .create();
 
 type Props = {
   params: { bookshelfId: string; q: string };
@@ -25,10 +14,8 @@ type Props = {
 export default withPageAuthRequired(function SearchBookByQuery({
   params,
 }: Props) {
-  const { bookshelfId, q } = params;
+  const { q, bookshelfId } = params;
   const { data, isLoading } = useSearchForBooks(q);
-  const { data: bookshelfData, isLoading: bookshelfLoading } =
-    useGetBookshelf(bookshelfId);
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
@@ -52,24 +39,17 @@ export default withPageAuthRequired(function SearchBookByQuery({
   };
 
   const filteredBooks = useMemo(() => {
-    if (isLoading || data === undefined || bookshelfLoading) {
+    if (isLoading || data === undefined) {
       return;
     }
     const isbnSet = new Set(setupBooks.map((book) => book.isbn));
-    const existingIsbnSet = new Set(
-      bookshelfData?.books?.map((x) => x.book.isbn),
-    );
 
     return data.docs.filter((work) =>
       work.editions.docs.some((editionDoc) => {
         if (!editionDoc.isbn) {
           return false;
         }
-
-        return (
-          !isbnSet.has(editionDoc.isbn![0]) ||
-          !existingIsbnSet.has(editionDoc.isbn![0])
-        );
+        return !isbnSet.has(editionDoc.isbn[0]);
       }),
     );
   }, [books, data, isLoading, setupBooks]);
@@ -87,18 +67,30 @@ export default withPageAuthRequired(function SearchBookByQuery({
         setShowModal={setOpen}
         setPassingIsbn={setPassingIsbn}
       />
+
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
         <Anchor
           href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`}
         >
-          Manage bookshelf
+          {"< Manage bookshelf"}
         </Anchor>
-        <Anchor href={`/dashboard/add-book`}>{`< Add book`}</Anchor>
+        <Anchor
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book`}
+        >
+          {"< Choose how to add"}
+        </Anchor>
+        <Anchor
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/search`}
+        >
+          {"< Search"}
+        </Anchor>
+
         <div className="text-slate-400 underline underline-offset-4">
           {"< Search results"}
         </div>
       </div>
+
       <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
         Select book/s
       </h1>
@@ -106,7 +98,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
         {`Search results:`}
       </div>
       {isLoading ? (
-        <Spinner />
+        <Spinner fast={isLoading} />
       ) : (
         <div className="flex overflow-auto pb-4">
           <Table>
@@ -151,11 +143,17 @@ export default withPageAuthRequired(function SearchBookByQuery({
         </div>
       )}
       {setupBooks && setupBooks.length > 0 && (
-        <ProposedBooks
-          setSetupBooks={setSetupBooks}
-          setupBooks={setupBooks}
-          removeBook={removeBook}
-        />
+        <div className="space-y-8 pt-12">
+          <div className="flex max-w-md flex-row text-lg font-bold tracking-tight text-slate-300 md:max-w-4xl md:text-xl">
+            {`Confirm these books on the previous page: `}
+          </div>
+          <ProposedBooks
+            setSetupBooks={setSetupBooks}
+            setupBooks={setupBooks}
+            removeBook={removeBook}
+            className="space-y-3"
+          />
+        </div>
       )}
       <div className="mb-10 mt-20 flex flex-row space-x-6">
         <Button
@@ -164,7 +162,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
           variant="secondary"
           onClick={() =>
             router.push(
-              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book`,
+              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/search`,
             )
           }
         >

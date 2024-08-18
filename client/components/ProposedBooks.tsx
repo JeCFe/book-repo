@@ -7,16 +7,18 @@ type Props = {
   setupBooks: SetupBook[];
   setSetupBooks: Dispatch<SetStateAction<SetupBook[]>>;
   removeBook?: (isbn: string) => void;
+  className?: string;
 };
 
 export function ProposedBooks({
   setupBooks,
   setSetupBooks,
   removeBook,
+  className = "space-y-3 pt-12",
 }: Props) {
   return (
     <AccordionManager
-      className="space-y-3 pt-12"
+      className={className}
       accordions={[
         {
           title: "Proposed books",
