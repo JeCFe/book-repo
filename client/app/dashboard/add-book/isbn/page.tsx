@@ -45,8 +45,7 @@ export default withPageAuthRequired(function AddBook({ user }) {
         },
       );
     }
-
-    router.push("/dashboard");
+    router.push("/dashboard/add-book");
     setIsSavingBooks(false);
   };
 

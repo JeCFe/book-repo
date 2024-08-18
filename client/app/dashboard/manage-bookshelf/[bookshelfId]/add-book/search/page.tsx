@@ -7,17 +7,12 @@ import {
   useGetBookshelf,
   useGetBookshelfSummary,
 } from "@/hooks";
-import { getApiClient } from "@/services";
+import { addBookshelfBook } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-const addBookshelfBook = getApiClient()
-  .path("/action/add-book-shelf-book")
-  .method("post")
-  .create();
 
 type Props = {
   params: { bookshelfId: string };
@@ -65,9 +60,8 @@ export default withPageAuthRequired(function AddBook({
       );
     }
     mutate();
-    setSetupBooks([]);
     router.push(
-      `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}`,
+      `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book`,
     );
     setIsSavingBooks(false);
   };
@@ -90,7 +84,7 @@ export default withPageAuthRequired(function AddBook({
           {"< Manage bookshelf"}
         </Anchor>
         <Anchor
-          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add`}
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book`}
         >
           {"< Choose how to add"}
         </Anchor>
@@ -123,7 +117,7 @@ export default withPageAuthRequired(function AddBook({
             variant="primary"
             onClick={() =>
               router.push(
-                `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add/search/${encodeURIComponent(currentSearch!)}`,
+                `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/search/${encodeURIComponent(currentSearch!)}`,
               )
             }
             type="button"
@@ -149,7 +143,7 @@ export default withPageAuthRequired(function AddBook({
           variant="secondary"
           onClick={() =>
             router.push(
-              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add`,
+              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book`,
             )
           }
         >

@@ -2,16 +2,10 @@
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
-import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-
-const addBookshelfBook = getApiClient()
-  .path("/action/add-book-shelf-book")
-  .method("post")
-  .create();
 
 type Props = {
   params: { bookshelfId: string; q: string };
@@ -82,12 +76,12 @@ export default withPageAuthRequired(function SearchBookByQuery({
           {"< Manage bookshelf"}
         </Anchor>
         <Anchor
-          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add`}
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book`}
         >
           {"< Choose how to add"}
         </Anchor>
         <Anchor
-          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add/search`}
+          href={`/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/search`}
         >
           {"< Search"}
         </Anchor>
@@ -168,7 +162,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
           variant="secondary"
           onClick={() =>
             router.push(
-              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add/search`,
+              `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/search`,
             )
           }
         >

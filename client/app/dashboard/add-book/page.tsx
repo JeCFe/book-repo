@@ -1,9 +1,11 @@
 "use client";
 
 import { RadioButton } from "@/components";
+import { useBookWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -11,7 +13,12 @@ type FormValues = {
 };
 
 export default withPageAuthRequired(function AddBook() {
+  const { updateBook } = useBookWizard();
   const router = useRouter();
+
+  useEffect(() => {
+    updateBook({ type: "default" });
+  }, []);
   const {
     register,
     handleSubmit,

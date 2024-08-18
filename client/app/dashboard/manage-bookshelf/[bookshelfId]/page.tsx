@@ -208,7 +208,7 @@ export default withPageAuthRequired(function ManageBookshelf({
             className="text-black"
             disabled={isDeletingBookshelf}
             onClick={() =>
-              router.push(`/dashboard/manage-bookshelf/${bookshelfId}/add`)
+              router.push(`/dashboard/manage-bookshelf/${bookshelfId}/add-book`)
             }
           >
             Add book

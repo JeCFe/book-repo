@@ -1,9 +1,11 @@
 "use client";
 
 import { RadioButton } from "@/components";
+import { useBookWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
@@ -13,8 +15,13 @@ type Props = {
   params: { bookshelfId: string };
 };
 export default withPageAuthRequired(function AddBook({ params }: Props) {
+  const { updateBook } = useBookWizard();
   const router = useRouter();
   const { bookshelfId } = params;
+
+  useEffect(() => {
+    updateBook({ type: "default" });
+  }, []);
   const {
     register,
     handleSubmit,
@@ -25,13 +32,13 @@ export default withPageAuthRequired(function AddBook({ params }: Props) {
     switch (data.radio) {
       case "search":
         router.push(
-          `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add/search`,
+          `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/search`,
         );
         return;
 
       case "isbn":
         router.push(
-          `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add/isbn`,
+          `/dashboard/manage-bookshelf/${encodeURIComponent(bookshelfId)}/add-book/isbn`,
         );
         return;
     }
