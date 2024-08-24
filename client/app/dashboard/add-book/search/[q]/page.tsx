@@ -43,35 +43,6 @@ export default withPageAuthRequired(function SearchBookByQuery({
     return x;
   }, [books, data, isLoading, setupBooks]);
 
-  // const filteredBooks = useMemo(() => {
-  //   if (isLoading || data === undefined) {
-  //     return;
-  //   }
-  //   const isbnSet = new Set(setupBooks.map((book) => book.isbn));
-
-  //   var y = data.docs.map((work) =>
-  //     work.editions.docs.map((editionDoc) =>
-  //       editionDoc.isbn?.filter((isbn) => {
-  //         return isbnSet.has(isbn);
-  //       }),
-  //     ),
-  //   );
-
-  //   console.log("y", y);
-
-  //   var x = data.docs.filter((work) =>
-  //     work.editions.docs.some((editionDoc) => {
-  //       var y = editionDoc.isbn?.filter((isbn) => {
-  //         return isbnSet.has(isbn);
-  //       });
-  //       return y !== undefined;
-  //     }),
-  //   );
-
-  //   console.log(x);
-  //   return x;
-  // }, [books, data, isLoading, setupBooks]);
-
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });
   };
