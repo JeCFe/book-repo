@@ -46,6 +46,7 @@ export function BookRow({ work, index }: { work: Works; index: number }) {
                   onChange={(x) => {
                     setPassingIsbn(x?.value);
                   }}
+                  isDisabled={edition.isbn.length === 0}
                 />
               </td>
               <td>
