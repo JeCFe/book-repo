@@ -1,5 +1,6 @@
 export * from "./Accordion";
 export * from "./AccordionManager";
+export * from "./BookRow";
 export * from "./Checkbox";
 export * from "./LinkButton";
 export * from "./ManagedAccordion";

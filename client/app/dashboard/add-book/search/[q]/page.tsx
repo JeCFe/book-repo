@@ -1,11 +1,10 @@
 "use client";
-import { ProposedBooks, Table } from "@/components";
+import { BookRow, ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { BookRow } from "./BookRow";
 
 export default withPageAuthRequired(function SearchBookByQuery({
   params,
