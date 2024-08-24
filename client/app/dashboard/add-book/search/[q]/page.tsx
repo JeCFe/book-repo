@@ -1,6 +1,7 @@
 "use client";
 import { BookRow, ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
+import { filterBooks } from "@/lib";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
@@ -28,17 +29,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
     if (isLoading || data === undefined) {
       return;
     }
-    const isbnSet = new Set(setupBooks.map((book) => book.isbn));
-    return data.docs.map((work) => ({
-      ...work,
-      editions: {
-        ...work.editions,
-        docs: work.editions.docs.map((doc) => ({
-          ...doc,
-          isbn: doc.isbn?.filter((isbn) => !isbnSet.has(isbn)) ?? [],
-        })),
-      },
-    }));
+    return filterBooks(data, new Set(setupBooks.map((book) => book.isbn)));
   }, [books, data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
