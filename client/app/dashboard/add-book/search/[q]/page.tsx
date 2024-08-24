@@ -1,11 +1,11 @@
 "use client";
-import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { BookRow } from "./BookRow";
 
 export default withPageAuthRequired(function SearchBookByQuery({
   params,
@@ -14,17 +14,10 @@ export default withPageAuthRequired(function SearchBookByQuery({
 }) {
   const { q } = params;
   const { data, isLoading } = useSearchForBooks(q);
-  const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
-  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
   const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
-
   const { books, updateBook } = useBookWizard();
 
-  const viewBook = (isbn: string) => {
-    setPassingIsbn(isbn);
-    setOpen(true);
-  };
   useEffect(() => {
     if (isLoading) {
       return;
@@ -32,25 +25,53 @@ export default withPageAuthRequired(function SearchBookByQuery({
     setSetupBooks(books ?? []);
   }, [isLoading, books]);
 
-  const addBook = async (book: SetupBook) => {
-    updateBook({ type: "add-books", setupBook: book });
-  };
-
   const filteredBooks = useMemo(() => {
     if (isLoading || data === undefined) {
       return;
     }
     const isbnSet = new Set(setupBooks.map((book) => book.isbn));
-
-    return data.docs.filter((work) =>
-      work.editions.docs.some((editionDoc) => {
-        if (!editionDoc.isbn) {
-          return false;
-        }
-        return !isbnSet.has(editionDoc.isbn[0]);
-      }),
-    );
+    var x = data.docs.map((work) => ({
+      ...work,
+      editions: {
+        ...work.editions,
+        docs: work.editions.docs.map((doc) => ({
+          ...doc,
+          isbn: doc.isbn?.filter((isbn) => !isbnSet.has(isbn)) ?? [],
+        })),
+      },
+    }));
+    console.log(x);
+    return x;
   }, [books, data, isLoading, setupBooks]);
+
+  // const filteredBooks = useMemo(() => {
+  //   if (isLoading || data === undefined) {
+  //     return;
+  //   }
+  //   const isbnSet = new Set(setupBooks.map((book) => book.isbn));
+
+  //   var y = data.docs.map((work) =>
+  //     work.editions.docs.map((editionDoc) =>
+  //       editionDoc.isbn?.filter((isbn) => {
+  //         return isbnSet.has(isbn);
+  //       }),
+  //     ),
+  //   );
+
+  //   console.log("y", y);
+
+  //   var x = data.docs.filter((work) =>
+  //     work.editions.docs.some((editionDoc) => {
+  //       var y = editionDoc.isbn?.filter((isbn) => {
+  //         return isbnSet.has(isbn);
+  //       });
+  //       return y !== undefined;
+  //     }),
+  //   );
+
+  //   console.log(x);
+  //   return x;
+  // }, [books, data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });
@@ -58,13 +79,6 @@ export default withPageAuthRequired(function SearchBookByQuery({
 
   return (
     <div className="flex flex-col">
-      <AddBookModal
-        isbn={passingIsbn as string}
-        addBook={addBook}
-        showModal={open}
-        setShowModal={setOpen}
-        setPassingIsbn={setPassingIsbn}
-      />
       <div className="flex flex-row space-x-2 pb-6">
         <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
         <Anchor href="/dashboard/add-book"> {"< Choose how to add"}</Anchor>
@@ -89,36 +103,13 @@ export default withPageAuthRequired(function SearchBookByQuery({
                 <th className="w-[15px]">Order</th>
                 <th>Title</th>
                 <th>Author</th>
-                <th>ISBN</th>
+                <th className="min-w-[200px]">ISBN</th>
                 <th className="min-w-[150px]">Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredBooks?.map((work, i) => (
-                <>
-                  {work.editions.docs.map((edition) => (
-                    <>
-                      {edition.isbn !== undefined && (
-                        <tr key={`${work.key}-${edition.isbn}-${i}`}>
-                          <td>{i}</td>
-                          <td>{work.title}</td>
-                          <td>{work.author_name}</td>
-                          <td>{edition.isbn[0]}</td>
-                          <td>
-                            <Button
-                              size="small"
-                              variant="primary"
-                              className="text-black"
-                              onClick={() => viewBook(edition.isbn![0])}
-                            >
-                              View book
-                            </Button>
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  ))}
-                </>
+                <BookRow work={work} index={i} />
               ))}
             </tbody>
           </Table>
