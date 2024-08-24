@@ -3,7 +3,7 @@
 import { RenderBookGrid, RenderBookTable, ToggleSwitch } from "@/components";
 import { useGetCustomerBooks } from "@/hooks";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

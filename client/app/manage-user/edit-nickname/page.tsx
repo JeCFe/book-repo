@@ -19,7 +19,6 @@ const updateNickname = getApiClient()
 
 export default withPageAuthRequired(function Nickname({ user }) {
   const router = useRouter();
-  const [isActioning, setIsActioning] = useState<boolean>(false);
 
   const onSubmit = (data: FormValues) => {
     toast.promise(
@@ -34,7 +33,6 @@ export default withPageAuthRequired(function Nickname({ user }) {
           return "Nickname updated successfully";
         },
         error: () => {
-          setIsActioning(false);
           return "Something went wrong with updating your username, you will be able to update this later";
         },
       },

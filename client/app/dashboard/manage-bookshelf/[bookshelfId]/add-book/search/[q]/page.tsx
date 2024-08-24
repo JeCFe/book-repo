@@ -40,7 +40,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
       return;
     }
     return filterBooks(data, new Set(setupBooks.map((book) => book.isbn)));
-  }, [books, data, isLoading, setupBooks]);
+  }, [data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });
@@ -101,7 +101,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
             </thead>
             <tbody>
               {filteredBooks?.map((work, i) => (
-                <BookRow work={work} index={i} />
+                <BookRow key={`book-row.${i}`} work={work} index={i} />
               ))}
             </tbody>
           </Table>
