@@ -4,7 +4,6 @@ import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Info } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -19,7 +18,6 @@ const updateNickname = getApiClient()
 
 export default withPageAuthRequired(function Nickname({ user }) {
   const router = useRouter();
-  const [isActioning, setIsActioning] = useState<boolean>(false);
 
   const onSubmit = (data: FormValues) => {
     toast.promise(
@@ -34,7 +32,6 @@ export default withPageAuthRequired(function Nickname({ user }) {
           return "Nickname updated successfully";
         },
         error: () => {
-          setIsActioning(false);
           return "Something went wrong with updating your username, you will be able to update this later";
         },
       },

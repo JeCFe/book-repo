@@ -1,7 +1,7 @@
 "use client";
 
-import { Accordion, Picture, SideNav } from "@/components";
-import { useBookWizard, useGetCustomerSummary, useSetupWizard } from "@/hooks";
+import { Picture, SideNav } from "@/components";
+import { useBookWizard, useGetCustomerSummary } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
@@ -21,13 +21,13 @@ export default withPageAuthRequired(function Dashboard({ user }) {
 
   useEffect(() => {
     updateBook({ type: "default" });
-  }, []);
+  }, [updateBook]);
 
   useEffect(() => {
     if (!isLoading && !data) {
       router.push("/setup");
     }
-  }, [data, error, isLoading]);
+  }, [data, error, isLoading, router]);
 
   if (isLoading && !data) {
     return (

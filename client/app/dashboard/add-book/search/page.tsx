@@ -1,10 +1,10 @@
 "use client";
 
 import { ProposedBooks } from "@/components";
-import { SetupBook, useBookWizard, useGetBookshelfSummary } from "@/hooks";
-import { addBookshelfBook, getApiClient } from "@/services";
+import { SetupBook, useBookWizard } from "@/hooks";
+import { addBookshelfBook } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";

@@ -1,7 +1,8 @@
 "use client";
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
-import { ProposedBooks, Table } from "@/components";
+import { BookRow, ProposedBooks, Table } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
+import { filterBooks } from "@/lib";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
@@ -23,10 +24,6 @@ export default withPageAuthRequired(function SearchBookByQuery({
 
   const { books, updateBook } = useBookWizard();
 
-  const viewBook = (isbn: string) => {
-    setPassingIsbn(isbn);
-    setOpen(true);
-  };
   useEffect(() => {
     if (isLoading) {
       return;
@@ -42,17 +39,8 @@ export default withPageAuthRequired(function SearchBookByQuery({
     if (isLoading || data === undefined) {
       return;
     }
-    const isbnSet = new Set(setupBooks.map((book) => book.isbn));
-
-    return data.docs.filter((work) =>
-      work.editions.docs.some((editionDoc) => {
-        if (!editionDoc.isbn) {
-          return false;
-        }
-        return !isbnSet.has(editionDoc.isbn[0]);
-      }),
-    );
-  }, [books, data, isLoading, setupBooks]);
+    return filterBooks(data, new Set(setupBooks.map((book) => book.isbn)));
+  }, [data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
     updateBook({ type: "remove-book", isbn });
@@ -113,30 +101,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
             </thead>
             <tbody>
               {filteredBooks?.map((work, i) => (
-                <>
-                  {work.editions.docs.map((edition) => (
-                    <>
-                      {edition.isbn !== undefined && (
-                        <tr key={`${work.key}-${edition.isbn}-${i}`}>
-                          <td>{i}</td>
-                          <td>{work.title}</td>
-                          <td>{work.author_name}</td>
-                          <td>{edition.isbn[0]}</td>
-                          <td>
-                            <Button
-                              size="small"
-                              variant="primary"
-                              className="text-black"
-                              onClick={() => viewBook(edition.isbn![0])}
-                            >
-                              View book
-                            </Button>
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  ))}
-                </>
+                <BookRow key={`book-row.${i}`} work={work} index={i} />
               ))}
             </tbody>
           </Table>
