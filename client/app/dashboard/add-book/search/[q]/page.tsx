@@ -29,7 +29,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
       return;
     }
     const isbnSet = new Set(setupBooks.map((book) => book.isbn));
-    var x = data.docs.map((work) => ({
+    return data.docs.map((work) => ({
       ...work,
       editions: {
         ...work.editions,
@@ -39,8 +39,6 @@ export default withPageAuthRequired(function SearchBookByQuery({
         })),
       },
     }));
-    console.log(x);
-    return x;
   }, [books, data, isLoading, setupBooks]);
 
   const removeBook = (isbn: string) => {
