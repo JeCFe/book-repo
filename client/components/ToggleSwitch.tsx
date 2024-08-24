@@ -52,6 +52,7 @@ export function ToggleSwitch({
       className={cx("w-max", className)}
       onClick={handleClick}
       role="switch"
+      aria-checked={checked}
       aria-label={label || "Toggle Switch"}
       tabIndex={0}
     >

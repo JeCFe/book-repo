@@ -1,6 +1,8 @@
+using Microsoft.Extensions.Options;
 using Moq;
 using Server.Domain.Models;
 using Server.Exceptions;
+using Server.Models;
 using Server.Providers;
 using Server.Tests.Fixtures;
 
@@ -8,6 +10,10 @@ namespace Server.Tests;
 
 public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
 {
+    private readonly IOptions<BetaTestOptions> _options = Options.Create<BetaTestOptions>(
+        new() { Enabled = false }
+    );
+
     [Fact]
     public async Task Will_throw_an_exception_if_customer_not_found()
     {
@@ -18,7 +24,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         var existingCustomer = context.Customer.SingleOrDefault(x => x.Id == customerId);
         Assert.Null(existingCustomer);
 
-        var provider = new CustomerProvider(context);
+        var provider = new CustomerProvider(context, _options);
 
         await Assert.ThrowsAsync<UserNotFoundException>(
             async () => await provider.GetCustomerSummary(customerId, CancellationToken.None)
@@ -49,7 +55,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         context.Customer.Add(customer);
         context.SaveChanges();
 
-        var provider = new CustomerProvider(context);
+        var provider = new CustomerProvider(context, _options);
         var actual = await provider.GetCustomerSummary(customerId, CancellationToken.None);
 
         Assert.NotNull(actual);

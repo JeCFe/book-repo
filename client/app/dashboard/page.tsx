@@ -1,12 +1,13 @@
 "use client";
 
 import { Picture, SideNav } from "@/components";
-import { useBookWizard, useGetCustomerSummary, useSetupWizard } from "@/hooks";
+import { useBookWizard, useGetCustomerSummary } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Anchor, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ShowBookDetailsModal } from "./ShowBookDetailsModal";
+import Trophies from "./Trophies";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
@@ -20,13 +21,13 @@ export default withPageAuthRequired(function Dashboard({ user }) {
 
   useEffect(() => {
     updateBook({ type: "default" });
-  }, []);
+  }, [updateBook]);
 
   useEffect(() => {
     if (!isLoading && !data) {
       router.push("/setup");
     }
-  }, [data, error, isLoading]);
+  }, [data, error, isLoading, router]);
 
   if (isLoading && !data) {
     return (
@@ -71,6 +72,7 @@ export default withPageAuthRequired(function Dashboard({ user }) {
             </>
           </SideNav>
           <div className="flex w-full flex-col space-y-10 overflow-x-auto px-12 py-24 text-slate-500">
+            <Trophies trophies={data.trophies} />
             {data.bookshelves &&
               data.bookshelves?.map((bookshelf) => (
                 <div key={bookshelf.id}>

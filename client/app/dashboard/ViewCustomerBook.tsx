@@ -246,7 +246,7 @@ export function ViewCustomerBook({
                   <tbody>
                     {data.bookshelfSummaries
                       ?.sort((a, b) => a.name!.localeCompare(b.name!))
-                      .map((bookshelf, i) => (
+                      .map((bookshelf) => (
                         <tr key={`${bookshelf.id}`}>
                           <td>{bookshelf.name}</td>
                           <td>

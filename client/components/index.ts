@@ -1,5 +1,6 @@
 export * from "./Accordion";
 export * from "./AccordionManager";
+export * from "./BookRow";
 export * from "./Checkbox";
 export * from "./LinkButton";
 export * from "./ManagedAccordion";
@@ -11,7 +12,8 @@ export * from "./RenderBookGrid";
 export * from "./RenderBookTable";
 export * from "./RenderSection";
 export * from "./RenderStar";
+export * from "./Selector";
 export * from "./SideNav";
 export * from "./SummaryTable";
-export * from "./ToggleSwitch";
 export * from "./table";
+export * from "./ToggleSwitch";

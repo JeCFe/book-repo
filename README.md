@@ -14,6 +14,7 @@ A service to allow for the visualisation and management of you physical bookshel
 - Ability to add books by ISBN and fuzzy searching
 - Allow to rate books
 - Allow to add comments onto books
+- Trophy / achievements that display on user profiles
 
 
 ## Roadmap
@@ -29,7 +30,7 @@ A service to allow for the visualisation and management of you physical bookshel
 - Be able to raise errors with the book data / cover
 - Admin portal to allow the management of users and errors raised about books
 - Split out the user self service into a dedicated service and app so it's reusable by other apps in the future
-- Trophy / achievements that display on user profiles, and are shareable on the shared pages
+- ~~Trophy / achievements that display on user profiles~~, and are shareable on the shared pages
 
 
 ## Third Party Providers
