@@ -10,8 +10,9 @@ public sealed record BookErrorType : IStringEnum<BookErrorType>
     public static readonly BookErrorType Picture = new("picture");
     public static readonly BookErrorType Author = new("author");
     public static readonly BookErrorType Release = new("release");
-    public static readonly BookErrorType Genre = new("genre");
-    public static BookErrorType[] Values => [ Title, Picture, Author, Release, Genre ];
+    public static readonly BookErrorType Subjects = new("subjects");
+    public static readonly BookErrorType Pages = new("pages")
+    public static BookErrorType[] Values => [ Title, Picture, Author, Release, Subjects, Pages ];
 
     private readonly string _value;
 
