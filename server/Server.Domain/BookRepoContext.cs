@@ -15,6 +15,7 @@ public class BookRepoContext : DbContext
     public DbSet<CustomerBook> CustomerBooks { get; set; }
     public DbSet<Shareable> Shareables { get; set; }
     public DbSet<Trophy> Trophies { get; set; }
+    public DbSet<BookError> BookErrors { get; set; }
 
     public BookRepoContext() { }
 
@@ -24,6 +25,8 @@ public class BookRepoContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.Entity<BookError>().HasKey(x => new { x.Isbn, x.Error });
 
         modelBuilder.Entity<Customer>().HasKey(x => x.Id);
 
