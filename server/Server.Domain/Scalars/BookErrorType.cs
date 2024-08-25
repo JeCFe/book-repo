@@ -11,7 +11,7 @@ public sealed record BookErrorType : IStringEnum<BookErrorType>
     public static readonly BookErrorType Author = new("author");
     public static readonly BookErrorType Release = new("release");
     public static readonly BookErrorType Subjects = new("subjects");
-    public static readonly BookErrorType Pages = new("pages")
+    public static readonly BookErrorType Pages = new("pages");
     public static BookErrorType[] Values => [ Title, Picture, Author, Release, Subjects, Pages ];
 
     private readonly string _value;
