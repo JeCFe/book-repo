@@ -1,4 +1,4 @@
-namespace Server.Context;
+namespace Common.Context;
 
 using System.Security.Claims;
 
