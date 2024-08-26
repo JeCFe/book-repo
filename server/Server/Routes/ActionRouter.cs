@@ -2,7 +2,6 @@ namespace Server.Routes;
 
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Server.Context;
 using Server.Domain.Commands;
 using Server.Domain.Exceptions;
@@ -226,6 +225,29 @@ public static class ActionRouter
         }
     }
 
+    private static async Task<
+        Results<NoContent, BadRequest<string>, ForbidHttpResult>
+    > RaiseBookError(
+        AddBookErrorCommand command,
+        IMediator mediator,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await mediator.Send(command, cancellationToken);
+            return TypedResults.NoContent();
+        }
+        catch (BookNotFoundException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+        catch (BookContainsErrorException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
+
     private static async Task<Results<NoContent, ForbidHttpResult>> RemoveShareable(
         RemoveShareableCommand command,
         IMediator mediator,
@@ -250,6 +272,7 @@ public static class ActionRouter
         group.MapPost("/forget-me", ForgetMe);
         group.MapPost("/add-bookshelf", AddBookshelf);
         group.MapPost("/setup-customer", SetupCustomer);
+        group.MapPost("/raise-book-error", RaiseBookError);
         group.MapPost("/remove-bookshelf", RemoveBookshelf);
         group.MapPost("/rate-customer-book", RateCustomerBook);
         group.MapPost("/add-book-shelf-book", AddBookshelfBook);

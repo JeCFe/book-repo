@@ -30,5 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Server.Domain\Server.Domain.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\Server\Server.csproj" />
+  </ItemGroup>
 </Project>
