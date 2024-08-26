@@ -6,7 +6,7 @@ using Common.Scalars.Types;
 using Server.Domain;
 using Server.Domain.Models;
 
-public class CloseBookErrorCommand : ICommand<BookRepoContext>
+public class CompletedBookErrorCommand : ICommand<BookRepoContext>
 {
     public required string Isbn { get; init; }
     public required BookErrorType Type { get; init; }
@@ -27,7 +27,7 @@ public class CloseBookErrorCommand : ICommand<BookRepoContext>
         }
 
         bookError.UpdateStatus(
-            BookErrorStatus.Closed,
+            BookErrorStatus.Completed,
             new AdminComment() { Comment = Comment, AdminUsername = ctx.userName }
         );
 
