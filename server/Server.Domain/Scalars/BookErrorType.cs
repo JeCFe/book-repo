@@ -3,7 +3,7 @@ namespace Server.Domain.Scalars;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-[JsonConverter(typeof(StringJsonConverter<TrophyType>))]
+[JsonConverter(typeof(StringJsonConverter<BookErrorType>))]
 public sealed record BookErrorType : IStringEnum<BookErrorType>
 {
     public static readonly BookErrorType Title = new("title");

@@ -3,7 +3,7 @@ namespace Server.Domain.Scalars;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-[JsonConverter(typeof(StringJsonConverter<TrophyType>))]
+[JsonConverter(typeof(StringJsonConverter<BookErrorStatus>))]
 public sealed record BookErrorStatus : IStringEnum<BookErrorStatus>
 {
     public static readonly BookErrorStatus Pending = new("pending");
