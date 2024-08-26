@@ -74,6 +74,38 @@
         }
       }
     },
+    "/action/raise-book-error": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookErrorCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/action/remove-bookshelf": {
       "post": {
         "tags": [
@@ -664,6 +696,26 @@
   },
   "components": {
     "schemas": {
+      "AddBookErrorCommand": {
+        "required": [
+          "isbn",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/BookErrorType"
+          }
+        },
+        "additionalProperties": false
+      },
       "AddBookshelfBookCommand": {
         "required": [
           "bookshelfId",

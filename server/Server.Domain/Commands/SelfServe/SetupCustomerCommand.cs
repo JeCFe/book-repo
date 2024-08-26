@@ -26,7 +26,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
             return;
         }
 
-        Customer customer = new() { Id = Id, CreationDate = ctx.time.GetUtcNow(), };
+        Customer customer = new() { Id = Id, CreationDate = ctx.Time.GetUtcNow(), };
 
         if (Isbns is { } isbns)
         {
@@ -112,7 +112,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
         await ctx.Publish(
             new GiveCustomerTrophyEvent(
                 customer.Id,
-                new BetaTester(true) { DateJoined = ctx.time.GetUtcNow() }
+                new BetaTester(true) { DateJoined = ctx.Time.GetUtcNow() }
             ),
             cancellationToken
         );

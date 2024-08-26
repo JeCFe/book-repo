@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Server.Domain.Commands.Admin;
+using Server.Domain.Exceptions;
 
 namespace Server.Routes;
 
@@ -21,6 +21,23 @@ public static class AdminEndpoints
         //TODO: Need to try catch for a bad request
         await mediator.Send(command, cancellationToken);
         return TypedResults.Ok();
+    }
+
+    private static async Task<Results<Ok, BadRequest<string>>> UpdateBookError(
+        UpdateBookErrorCommand command,
+        IMediator mediator,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            await mediator.Send(command, cancellationToken);
+            return TypedResults.Ok();
+        }
+        catch (NotFoundException ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
     }
 
     public static RouteGroupBuilder MapAdminEndpoints(this RouteGroupBuilder group)

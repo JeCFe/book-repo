@@ -12,7 +12,7 @@ public class CommandHandler<TDbContext, TCommand>(
     where TDbContext : DbContext
 {
     public Task Handle(TCommand cmd, CancellationToken cancellationToken) =>
-        cmd.Execute(dbContext, new(mediator, time), cancellationToken);
+        cmd.Execute(dbContext, new(mediator, time, "Unknown"), cancellationToken);
 }
 
 public class CommandHandler<TDbContext, TCommand, TResult>(
@@ -24,5 +24,5 @@ public class CommandHandler<TDbContext, TCommand, TResult>(
     where TDbContext : DbContext
 {
     public Task<TResult> Handle(TCommand cmd, CancellationToken cancellationToken) =>
-        cmd.Execute(dbContext, new(mediator, time), cancellationToken);
+        cmd.Execute(dbContext, new(mediator, time, "Unknown"), cancellationToken);
 }
