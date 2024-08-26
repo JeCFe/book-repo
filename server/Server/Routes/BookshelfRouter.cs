@@ -1,8 +1,8 @@
 namespace Server.Routes;
 
+using Common.Context;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Server.Context;
 using Server.Exceptions;
 using Server.Models;
 using Server.Providers;

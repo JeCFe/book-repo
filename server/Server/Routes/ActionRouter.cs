@@ -1,7 +1,6 @@
 namespace Server.Routes;
 
 using Common.Context;
-using Common.Context;
 using Common.MediatR;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
