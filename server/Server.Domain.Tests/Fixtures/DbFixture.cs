@@ -5,6 +5,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
+using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
 
@@ -28,23 +29,28 @@ public class DbFixture : IDisposable
 
     public BookRepoContext CreateContext() => new BookRepoContext(_contextOptions);
 
-    public Task Execute(BookRepoContext dbContext, ICommand<BookRepoContext> command)
+    public Task Execute(
+        BookRepoContext dbContext,
+        ICommand<BookRepoContext> command,
+        string? user = null
+    )
     {
         return command.Execute(
             dbContext,
-            new(_publisher, TimeProvider.System),
+            new(_publisher, TimeProvider.System, user ?? "Test User"),
             CancellationToken.None
         );
     }
 
     public async Task<TResult> Execute<TResult>(
         BookRepoContext dbContext,
-        ICommand<BookRepoContext, TResult> command
+        ICommand<BookRepoContext, TResult> command,
+        string? user = null
     )
     {
         return await command.Execute(
             dbContext,
-            new(_publisher, TimeProvider.System),
+            new(_publisher, TimeProvider.System, user ?? "Test User"),
             CancellationToken.None
         );
     }
