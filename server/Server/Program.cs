@@ -1,15 +1,15 @@
 namespace Server;
 
 using System.Reflection;
+using Common.Context;
+using Common.MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Server.Auth0;
-using Server.Context;
 using Server.Domain;
-using Server.Domain.Commands;
 using Server.Filter;
 using Server.Filters;
 using Server.Models;

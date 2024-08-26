@@ -3,7 +3,7 @@ namespace Server.Filters;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using static StringEnumValues;
+using static Common.Scalars.StringEnumValues;
 
 public class StringEnumSchemaFilter : ISchemaFilter
 {

@@ -1,7 +1,7 @@
+using Common.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Server.Domain.Commands.Admin;
-using Server.Domain.Exceptions;
 
 namespace Server.Routes;
 

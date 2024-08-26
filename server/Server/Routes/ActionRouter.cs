@@ -1,10 +1,11 @@
 namespace Server.Routes;
 
+using Common.Context;
+using Common.Exceptions;
+using Common.MediatR;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Server.Context;
 using Server.Domain.Commands;
-using Server.Domain.Exceptions;
 
 public static class ActionRouter
 {

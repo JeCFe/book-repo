@@ -1,9 +1,10 @@
 namespace Server.Domain.Commands.Admin;
 
+using Common.Exceptions;
+using Common.MediatR;
+using Common.Scalars.Types;
 using Server.Domain;
-using Server.Domain.Exceptions;
 using Server.Domain.Models;
-using Server.Domain.Scalars;
 
 public class UpdateBookErrorCommand : ICommand<BookRepoContext>
 {

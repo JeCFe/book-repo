@@ -1,7 +1,7 @@
 namespace Server.Routes;
 
+using Common.Context;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Server.Context;
 using Server.Domain.Models;
 using Server.Providers;
 

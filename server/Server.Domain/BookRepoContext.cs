@@ -1,9 +1,10 @@
 namespace Server.Domain;
 
 using System.Reflection;
+using Common.Scalars;
+using Common.Scalars.Types;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain.Models;
-using Server.Domain.Scalars;
 
 public class BookRepoContext : DbContext
 {

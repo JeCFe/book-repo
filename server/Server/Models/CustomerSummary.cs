@@ -1,7 +1,7 @@
 namespace Server.Models;
 
+using Common.Scalars.Types;
 using Server.Domain.Models;
-using Server.Domain.Scalars;
 
 public record CustomerSummary
 {

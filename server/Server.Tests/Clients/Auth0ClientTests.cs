@@ -1,10 +1,10 @@
 using Auth0.Core.Exceptions;
 using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
+using Common.Exceptions;
 using Microsoft.Extensions.Options;
 using Moq;
 using Server.Auth0;
-using Server.Exceptions;
 using Server.Models;
 
 namespace Server.Tests.Clients;

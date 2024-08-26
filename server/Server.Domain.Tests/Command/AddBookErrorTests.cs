@@ -1,9 +1,9 @@
 namespace Server.Domain.Tests.Commands;
 
+using Common.Exceptions;
+using Common.Scalars.Types;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain.Commands;
-using Server.Domain.Exceptions;
-using Server.Domain.Scalars;
 using Server.Domain.Tests.Fixtures;
 
 public class AddBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>

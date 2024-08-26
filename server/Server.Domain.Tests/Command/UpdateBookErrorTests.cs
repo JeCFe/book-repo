@@ -1,8 +1,8 @@
 namespace Server.Domain.Tests.Commands;
 
+using Common.Exceptions;
+using Common.Scalars.Types;
 using Server.Domain.Commands.Admin;
-using Server.Domain.Exceptions;
-using Server.Domain.Scalars;
 using Server.Domain.Tests.Fixtures;
 
 public class UpdateBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>

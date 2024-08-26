@@ -1,11 +1,11 @@
 namespace Server.Domain.Tests.Fixtures;
 
+using Common.MediatR;
 using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Server.Domain;
-using Server.Domain.Commands;
 
 public class DbFixture : IDisposable
 {

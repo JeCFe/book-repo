@@ -1,6 +1,5 @@
-using Moq;
+using Common.Exceptions;
 using Server.Domain.Models;
-using Server.Exceptions;
 using Server.Providers;
 using Server.Tests.Fixtures;
 
