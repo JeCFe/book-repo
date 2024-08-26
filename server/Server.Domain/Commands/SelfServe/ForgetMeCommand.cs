@@ -1,6 +1,6 @@
 namespace Server.Domain.Commands;
 
-using MediatR;
+using Common.MediatR;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 

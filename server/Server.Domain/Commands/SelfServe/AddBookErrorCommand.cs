@@ -1,5 +1,6 @@
 namespace Server.Domain.Commands;
 
+using Common.MediatR;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 using Server.Domain.Exceptions;

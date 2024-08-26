@@ -1,6 +1,6 @@
 namespace Server.Domain.Commands;
 
-using System.Security.Cryptography.X509Certificates;
+using Common.MediatR;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 using Server.Domain.Models;

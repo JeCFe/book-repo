@@ -1,7 +1,7 @@
 namespace Server.Domain.Commands;
 
+using Common.MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Server.Domain;
 using Server.Domain.Exceptions;
 using Server.Domain.Models;

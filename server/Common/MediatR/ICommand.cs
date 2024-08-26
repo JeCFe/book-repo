@@ -1,6 +1,6 @@
 ﻿namespace Common.MediatR;
 
-using MediatR;
+using global::MediatR;
 using Microsoft.EntityFrameworkCore;
 
 public interface ICommand<TDbContext> : IRequest

@@ -1,5 +1,6 @@
 namespace Server.Domain.Commands.Admin;
 
+using Common.MediatR;
 using Server.Domain;
 using Server.Domain.Exceptions;
 using Server.Domain.Models;

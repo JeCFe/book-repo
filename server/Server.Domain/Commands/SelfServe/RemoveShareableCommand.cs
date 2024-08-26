@@ -1,9 +1,8 @@
 namespace Server.Domain.Commands;
 
-using Microsoft.EntityFrameworkCore;
+using Common.MediatR;
 using Server.Domain;
 using Server.Domain.Exceptions;
-using Server.Domain.Models;
 
 public class RemoveShareableCommand : ICommand<BookRepoContext>
 {

@@ -1,6 +1,6 @@
 namespace Common.MediatR;
 
-using MediatR;
+using global::MediatR;
 
 public record struct CommandContext(IPublisher Publisher, TimeProvider Time, string userName)
 {
