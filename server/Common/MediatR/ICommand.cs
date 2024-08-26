@@ -1,4 +1,4 @@
-﻿namespace Server.Domain.Commands;
+﻿namespace Common.MediatR;
 
 using MediatR;
 using Microsoft.EntityFrameworkCore;
