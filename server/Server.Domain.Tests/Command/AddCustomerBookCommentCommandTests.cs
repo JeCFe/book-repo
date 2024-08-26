@@ -70,7 +70,8 @@ public class AddCustomerBookCommentCommandTests(DbFixture fixture) : IClassFixtu
                     Book = book,
                     Isbn = book.Isbn,
                     Customer = customer,
-                    CustomerId = customer.Id
+                    CustomerId = customer.Id,
+                    Ranking = ranking
                 }
             );
         await context.SaveChangesAsync();
