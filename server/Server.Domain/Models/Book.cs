@@ -9,7 +9,7 @@ public record Book
     public string? Release { get; set; }
     public string? Picture { get; set; }
     public int PageCount { get; init; }
-    public virtual ICollection<BookError> BookErrors { get; init; } = [ ];
+    public ICollection<BookError> BookErrors { get; set; } = [ ];
 
     public bool AddError(BookError error)
     {

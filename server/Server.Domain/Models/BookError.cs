@@ -4,19 +4,27 @@ using Server.Domain.Scalars;
 
 public record BookError
 {
-    public required Book Book { get; init; }
-    public required string Isbn { get; init; }
-    public required BookErrorType Error { get; init; }
     public string? AdditionalCustomerComment { get; init; }
-    public ICollection<AdminComment> AdminComment { get; set; } = [ ];
 
     public DateTimeOffset CreatedAt { get; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset? UpdatedAt { get; set; }
 
-    public BookErrorStatus Status { get; set; } = BookErrorStatus.Pending;
+    public Book Book { get; private set; }
+    public string Isbn { get; private set; }
+    public BookErrorType Error { get; private set; }
+    public ICollection<AdminComment> AdminComment { get; private set; } = [ ];
+    public BookErrorStatus Status { get; private set; } = BookErrorStatus.Pending;
+    public DateTimeOffset? UpdatedAt { get; private set; } = DateTimeOffset.UtcNow;
 
-    public BookError(Book book)
+    private BookError()
     {
+        Error = null!;
+        Book = null!;
+        Isbn = null!;
+    }
+
+    public BookError(Book book, BookErrorType error)
+    {
+        Error = error;
         Book = book;
         Isbn = book.Isbn;
     }
@@ -53,6 +61,7 @@ public record BookError
 
 public record AdminComment
 {
+    public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
     public required string Comment { get; init; }
     public required string AdminUsername { get; init; }
 }
