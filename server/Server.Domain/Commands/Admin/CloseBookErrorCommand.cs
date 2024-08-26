@@ -26,9 +26,21 @@ public class CloseBookErrorCommand : ICommand<BookRepoContext>
             throw new NotFoundException($"Error type {Type} for {Isbn} not found");
         }
 
+        if (bookError.Status == BookErrorStatus.Completed)
+        {
+            throw new InvalidOperationException(
+                $"Unable to close {Isbn} as this is marked as completed"
+            );
+        }
+
+        if (bookError.Status == BookErrorStatus.Closed)
+        {
+            return;
+        }
+
         bookError.UpdateStatus(
             BookErrorStatus.Closed,
-            new AdminComment() { Comment = Comment, AdminUsername = ctx.userName }
+            new AdminComment() { Comment = Comment ?? "", AdminUsername = ctx.userName }
         );
 
         await dbContext.SaveChangesAsync(cancellationToken);

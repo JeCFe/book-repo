@@ -37,7 +37,7 @@ public record BookError
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public bool UpdateStatus(BookErrorStatus status, AdminComment adminComment)
+    public bool UpdateStatus(BookErrorStatus status, AdminComment? adminComment = null)
     {
         if (isPending())
         {
