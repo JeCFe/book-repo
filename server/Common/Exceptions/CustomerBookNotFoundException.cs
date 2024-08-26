@@ -1,4 +1,4 @@
-namespace Server.Domain.Exceptions;
+namespace Common.Exceptions;
 
 public class CustomerBookNotFoundException : Exception
 {

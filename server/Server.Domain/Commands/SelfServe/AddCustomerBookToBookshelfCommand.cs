@@ -1,9 +1,9 @@
 namespace Server.Domain.Commands;
 
+using Common.Exceptions;
 using Common.MediatR;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
-using Server.Domain.Exceptions;
 using Server.Domain.Models;
 
 public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>

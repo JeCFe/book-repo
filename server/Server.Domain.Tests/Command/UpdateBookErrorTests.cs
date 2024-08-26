@@ -1,7 +1,7 @@
 namespace Server.Domain.Tests.Commands;
 
+using Common.Exceptions;
 using Server.Domain.Commands.Admin;
-using Server.Domain.Exceptions;
 using Server.Domain.Scalars;
 using Server.Domain.Tests.Fixtures;
 

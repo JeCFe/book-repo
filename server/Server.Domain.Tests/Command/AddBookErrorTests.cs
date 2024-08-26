@@ -1,8 +1,8 @@
 namespace Server.Domain.Tests.Commands;
 
+using Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain.Commands;
-using Server.Domain.Exceptions;
 using Server.Domain.Scalars;
 using Server.Domain.Tests.Fixtures;
 

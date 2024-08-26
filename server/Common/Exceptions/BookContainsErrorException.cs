@@ -1,6 +1,6 @@
-using Server.Domain.Scalars;
+namespace Common.Exceptions;
 
-namespace Server.Domain.Exceptions;
+using Server.Domain.Scalars;
 
 public class BookContainsErrorException(string isbn, BookErrorType type)
     : Exception($"Book for {isbn} already contains error for type {type}") { }

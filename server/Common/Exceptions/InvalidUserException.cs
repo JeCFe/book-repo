@@ -1,4 +1,4 @@
-﻿namespace Server.Exceptions;
+﻿namespace Common.Exceptions;
 
 public class InvalidUserException : Exception
 {

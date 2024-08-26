@@ -1,8 +1,8 @@
 namespace Server.Domain.Commands.Admin;
 
+using Common.Exceptions;
 using Common.MediatR;
 using Server.Domain;
-using Server.Domain.Exceptions;
 using Server.Domain.Models;
 using Server.Domain.Scalars;
 

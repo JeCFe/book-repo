@@ -1,8 +1,8 @@
 namespace Server.Domain.Tests.Commands;
 
+using Common.Exceptions;
 using Microsoft.Identity.Client;
 using Server.Domain.Commands;
-using Server.Domain.Exceptions;
 using Server.Domain.Models;
 using Server.Domain.Tests.Fixtures;
 
