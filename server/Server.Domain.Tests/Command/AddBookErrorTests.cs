@@ -19,7 +19,7 @@ public class AddBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         await fixture.Execute(
             context,
-            new AddBookError()
+            new AddBookErrorCommand()
             {
                 Isbn = isbn,
                 Comment = comment,
@@ -50,7 +50,7 @@ public class AddBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
             async () =>
                 await fixture.Execute(
                     context,
-                    new AddBookError() { Isbn = isbn, Type = BookErrorType.Title }
+                    new AddBookErrorCommand() { Isbn = isbn, Type = BookErrorType.Title }
                 )
         );
 
@@ -70,7 +70,10 @@ public class AddBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         var message = await Assert.ThrowsAsync<BookContainsErrorException>(
             async () =>
-                await fixture.Execute(context, new AddBookError() { Isbn = isbn, Type = type })
+                await fixture.Execute(
+                    context,
+                    new AddBookErrorCommand() { Isbn = isbn, Type = type }
+                )
         );
 
         Assert.Equal($"Book for {isbn} already contains error for type {type}", message.Message);

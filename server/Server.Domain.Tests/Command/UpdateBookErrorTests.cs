@@ -1,7 +1,6 @@
 namespace Server.Domain.Tests.Commands;
 
-using Microsoft.EntityFrameworkCore;
-using Server.Domain.Commands;
+using Server.Domain.Commands.Admin;
 using Server.Domain.Exceptions;
 using Server.Domain.Scalars;
 using Server.Domain.Tests.Fixtures;
@@ -24,7 +23,7 @@ public class UpdateBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         await fixture.Execute(
             context,
-            new UpdateBookError()
+            new UpdateBookErrorCommand()
             {
                 Isbn = isbn,
                 Comment = comment,
@@ -50,7 +49,7 @@ public class UpdateBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
             async () =>
                 await fixture.Execute(
                     context,
-                    new UpdateBookError()
+                    new UpdateBookErrorCommand()
                     {
                         Isbn = isbn,
                         Type = BookErrorType.Title,

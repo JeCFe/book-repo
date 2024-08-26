@@ -1,12 +1,11 @@
-namespace Server.Domain.Commands;
+namespace Server.Domain.Commands.Admin;
 
-using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 using Server.Domain.Exceptions;
 using Server.Domain.Models;
 using Server.Domain.Scalars;
 
-public class UpdateBookError : ICommand<BookRepoContext>
+public class UpdateBookErrorCommand : ICommand<BookRepoContext>
 {
     public required string Isbn { get; init; }
     public required BookErrorType Type { get; init; }

@@ -6,7 +6,7 @@ using Server.Domain.Exceptions;
 using Server.Domain.Models;
 using Server.Domain.Scalars;
 
-public class AddBookError : ICommand<BookRepoContext>
+public class AddBookErrorCommand : ICommand<BookRepoContext>
 {
     public required string Isbn { get; init; }
     public string? Comment { get; init; }
