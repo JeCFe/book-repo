@@ -2,10 +2,10 @@ namespace Server.Domain.Commands;
 
 using Common.Exceptions;
 using Common.MediatR;
+using Common.Scalars.Types;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 using Server.Domain.Models;
-using Server.Domain.Scalars;
 
 public class AddBookErrorCommand : ICommand<BookRepoContext>
 {

@@ -1,6 +1,6 @@
 namespace Server.Domain.Models;
 
-using Server.Domain.Scalars;
+using Common.Scalars.Types;
 
 public record BookError
 {

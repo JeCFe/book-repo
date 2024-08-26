@@ -2,9 +2,8 @@ using System.Net;
 using Auth0.Core.Exceptions;
 using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Common.Exceptions;
 using Microsoft.Extensions.Options;
-using Server.Exceptions;
 using Server.Models;
 
 namespace Server.Auth0;

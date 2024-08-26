@@ -1,12 +1,12 @@
 namespace Server.Providers;
 
 using System.Collections.Generic;
+using Common.Exceptions;
+using Common.Scalars.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Server.Domain;
 using Server.Domain.Models;
-using Server.Domain.Scalars;
-using Server.Exceptions;
 using Server.Models;
 
 public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOptions> betaOptions)

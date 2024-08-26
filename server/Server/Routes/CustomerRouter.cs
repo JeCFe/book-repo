@@ -1,8 +1,8 @@
 using Auth0.ManagementApi.Models;
 using Common.Context;
+using Common.Exceptions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Server.Auth0;
-using Server.Exceptions;
 using Server.Models;
 using Server.Providers;
 

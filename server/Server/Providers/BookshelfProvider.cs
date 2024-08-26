@@ -1,7 +1,7 @@
+using Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 using Server.Domain.Models;
-using Server.Exceptions;
 using Server.Models;
 
 namespace Server.Providers;
