@@ -770,6 +770,29 @@
         },
         "additionalProperties": false
       },
+      "AdminComment": {
+        "required": [
+          "adminUsername",
+          "comment",
+          "created"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "adminUsername": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Alerter": {
         "type": "object",
         "allOf": [
@@ -808,6 +831,7 @@
       },
       "Book": {
         "required": [
+          "bookErrors",
           "isbn",
           "name",
           "pageCount",
@@ -845,6 +869,13 @@
           "pageCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "bookErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookError"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -857,6 +888,74 @@
           }
         ],
         "additionalProperties": false
+      },
+      "BookError": {
+        "required": [
+          "adminComment",
+          "book",
+          "createdAt",
+          "error",
+          "isbn",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "additionalCustomerComment": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "error": {
+            "$ref": "#/components/schemas/BookErrorType"
+          },
+          "adminComment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminComment"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/BookErrorStatus"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BookErrorStatus": {
+        "enum": [
+          "pending",
+          "closed",
+          "completed"
+        ],
+        "type": "string"
+      },
+      "BookErrorType": {
+        "enum": [
+          "title",
+          "picture",
+          "author",
+          "release",
+          "subjects",
+          "pages"
+        ],
+        "type": "string"
       },
       "Bookshelf": {
         "required": [

@@ -15,15 +15,37 @@ public class BookRepoContext : DbContext
     public DbSet<CustomerBook> CustomerBooks { get; set; }
     public DbSet<Shareable> Shareables { get; set; }
     public DbSet<Trophy> Trophies { get; set; }
+    public DbSet<BookError> BookErrors { get; set; }
 
     public BookRepoContext() { }
 
     public BookRepoContext(DbContextOptions<BookRepoContext> options)
         : base(options) { }
 
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Conventions.Add(_ => new StringEnumConstraintConvention());
+        base.ConfigureConventions(configurationBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.Entity<AdminComment>().HasKey(x => new { x.AdminUsername, x.Created });
+
+        modelBuilder
+            .Entity<BookError>()
+            .Property(x => x.Error)
+            .HasStringEnumConversion()
+            .HasMaxLength(BookErrorType.Values.Max(x => x.ToString().Length));
+
+        modelBuilder
+            .Entity<BookError>()
+            .Property(x => x.Status)
+            .HasStringEnumConversion()
+            .HasMaxLength(BookErrorStatus.Values.Max(x => x.ToString().Length));
+
+        modelBuilder.Entity<BookError>().HasKey(x => new { x.Isbn, x.Error });
 
         modelBuilder.Entity<Customer>().HasKey(x => x.Id);
 
