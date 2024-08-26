@@ -8,7 +8,7 @@ using Server.Domain.Commands.Admin;
 using Server.Domain.Models;
 using Server.Domain.Tests.Fixtures;
 
-public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
+public class CompleteBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 {
     [Fact]
     public async Task Will_successfully_close_book_error()
@@ -16,14 +16,14 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
         using var context = fixture.CreateContext();
         var isbn = Guid.NewGuid().ToString();
         var comment = "Unable to resolve soz";
-        var book = new Models.Book() { Isbn = isbn, Name = "Test Book" };
+        var book = new Book() { Isbn = isbn, Name = "Test Book" };
         book.AddError(new(book, BookErrorType.Title));
         context.Books.Add(book);
         context.SaveChanges();
 
         await fixture.Execute(
             context,
-            new CloseBookErrorCommand()
+            new CompletedBookErrorCommand()
             {
                 Isbn = isbn,
                 Comment = comment,
@@ -41,7 +41,7 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
 
         Assert.Single(booksErrors);
         Assert.Equal(comment, booksErrors[0].AdditionalCustomerComment);
-        Assert.Equal(BookErrorStatus.Closed, booksErrors[0].Status);
+        Assert.Equal(BookErrorStatus.Completed, booksErrors[0].Status);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
             async () =>
                 await fixture.Execute(
                     context,
-                    new CloseBookErrorCommand() { Isbn = isbn, Type = BookErrorType.Title }
+                    new CompletedBookErrorCommand() { Isbn = isbn, Type = BookErrorType.Title }
                 )
         );
 
@@ -62,14 +62,14 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
     }
 
     [Fact]
-    public async Task Will_throw_exception_if_book_already_marked_as_completed()
+    public async Task Will_throw_exception_if_book_already_marked_as_closed()
     {
         using var context = fixture.CreateContext();
         var isbn = Guid.NewGuid().ToString();
         BookErrorType type = BookErrorType.Title;
         var book = new Book() { Isbn = isbn, Name = "Test Book" };
         var error = new BookError(book, type) { };
-        error.UpdateStatus(BookErrorStatus.Completed);
+        error.UpdateStatus(BookErrorStatus.Closed);
         book.AddError(error);
         context.Books.Add(book);
         context.SaveChanges();
@@ -78,7 +78,7 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
             async () =>
                 await fixture.Execute(
                     context,
-                    new CloseBookErrorCommand() { Isbn = isbn, Type = type }
+                    new CompletedBookErrorCommand() { Isbn = isbn, Type = type }
                 )
         );
     }

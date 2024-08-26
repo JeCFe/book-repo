@@ -40,7 +40,9 @@ public class CloseBookErrorCommand : ICommand<BookRepoContext>
 
         bookError.UpdateStatus(
             BookErrorStatus.Closed,
-            new AdminComment() { Comment = Comment ?? "", AdminUsername = ctx.userName }
+            Comment is { } comment
+                ? new AdminComment() { Comment = comment, AdminUsername = ctx.userName }
+                : null
         );
 
         await dbContext.SaveChangesAsync(cancellationToken);
