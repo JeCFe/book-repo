@@ -1,12 +1,13 @@
-﻿namespace Server.Domain.Commands;
+﻿namespace Common.MediatR;
 
-using MediatR;
+using global::MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 public static class MediatrRegistrationExtensions
 {
     public static void RegisterCommandHandlers<TDbContext>(this IServiceCollection services)
-        where TDbContext : BookRepoContext
+        where TDbContext : DbContext
     {
         foreach (var (type, response) in GetCommands<TDbContext>())
         {
