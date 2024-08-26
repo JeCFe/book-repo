@@ -1,9 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+namespace Common.Scalars;
+
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Server.Domain.Scalars;
-
-namespace Server.Domain;
 
 public static class PropertyBuilderExtensionss
 {

@@ -1,4 +1,4 @@
-namespace Server;
+namespace Common.Scalars;
 
 public class StringEnumValues
 {

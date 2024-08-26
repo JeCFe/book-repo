@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Server.Domain.Scalars;
+namespace Common.Scalars;
 
-namespace Server.Domain;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 public class StringEnumValueConverter<T> : ValueConverter<T, string>
     where T : class, IStringEnum<T>

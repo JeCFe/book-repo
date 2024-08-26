@@ -1,4 +1,4 @@
-namespace Server.Domain.Scalars;
+namespace Common.Scalars.Types;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;

@@ -1,4 +1,4 @@
-namespace Server.Domain.Scalars;
+namespace Common.Scalars;
 
 using System.Diagnostics.CodeAnalysis;
 

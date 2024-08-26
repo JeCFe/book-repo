@@ -1,6 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
+namespace Common.Scalars;
 
-namespace Server.Domain.Scalars;
+using System.Diagnostics.CodeAnalysis;
 
 public interface ICanBeAString<T>
     where T : ICanBeAString<T>?

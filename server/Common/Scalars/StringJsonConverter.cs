@@ -1,4 +1,4 @@
-namespace Server.Domain.Scalars;
+namespace Common.Scalars;
 
 using System.Text.Json;
 using System.Text.Json.Serialization;

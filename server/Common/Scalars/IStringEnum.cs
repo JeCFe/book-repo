@@ -1,4 +1,4 @@
-namespace Server.Domain.Scalars;
+namespace Common.Scalars;
 
 public interface IStringEnum<T> : ICanBeAString<T>
     where T : IStringEnum<T>
