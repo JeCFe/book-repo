@@ -38,7 +38,6 @@ public class StringEnumConstraintConvention : IModelFinalizingConvention
     {
         foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
         {
-            // Ignore owned types
             if (entityType.IsOwned())
             {
                 continue;
