@@ -31,15 +31,10 @@ public record BookError
 
     private bool isPending() => Status != BookErrorStatus.Pending;
 
-    public bool AddAdminComment(AdminComment adminComment)
+    public void AddAdminComment(AdminComment adminComment)
     {
-        if (isPending())
-        {
-            return false;
-        }
         AdminComment.Add(adminComment);
         UpdatedAt = DateTimeOffset.UtcNow;
-        return true;
     }
 
     public bool UpdateStatus(BookErrorStatus status, AdminComment adminComment)

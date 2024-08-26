@@ -1,13 +1,7 @@
-using Auth0.ManagementApi.Models;
-using Azure.Core;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Server.Auth0;
 using Server.Context;
 using Server.Domain.Models;
-using Server.Exceptions;
-using Server.Models;
 using Server.OpenLibrary;
-using Server.Providers;
 
 namespace Server.Routes;
 

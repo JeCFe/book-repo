@@ -3,9 +3,7 @@ namespace Server.Domain.Tests.Fixtures;
 using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
-using Server.Context;
 using Server.Domain;
 using Server.Domain.Commands;
 

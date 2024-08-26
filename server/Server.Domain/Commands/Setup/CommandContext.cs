@@ -1,7 +1,6 @@
 namespace Server.Domain.Commands;
 
 using MediatR;
-using Server.Context;
 
 public record struct CommandContext(IPublisher Publisher, TimeProvider Time, string userName)
 {
