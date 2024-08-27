@@ -33,15 +33,9 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
 
         using var context2 = fixture.CreateContext();
 
-        var booksErrors = context2
-            .Books
-            .Include(x => x.BookErrors)
-            .Single(x => x.Isbn == isbn)
-            .BookErrors;
-
-        Assert.Single(booksErrors);
-        Assert.Equal(comment, booksErrors[0].AdditionalCustomerComment);
-        Assert.Equal(BookErrorStatus.Closed, booksErrors[0].Status);
+        Assert.Single(book.BookErrors);
+        Assert.Equal(comment, book.BookErrors[0].AdminComment[0].Comment);
+        Assert.Equal(BookErrorStatus.Closed, book.BookErrors[0].Status);
     }
 
     [Fact]
@@ -50,7 +44,7 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
         using var context = fixture.CreateContext();
         var isbn = Guid.NewGuid().ToString();
 
-        var message = await Assert.ThrowsAsync<BookNotFoundException>(
+        var message = await Assert.ThrowsAsync<NotFoundException>(
             async () =>
                 await fixture.Execute(
                     context,
@@ -58,7 +52,7 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
                 )
         );
 
-        Assert.Equal($"Book for {isbn} can not be found.", message.Message);
+        Assert.Equal($"Error type {BookErrorType.Title} for {isbn} not found", message.Message);
     }
 
     [Fact]
