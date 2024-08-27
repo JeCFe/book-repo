@@ -48,7 +48,7 @@ public static class ShareableRouter
     {
         group.WithTags("Shareable");
         group.MapGet("/{ShareId}", GetShareable);
-        group.MapGet("/all/{CustomerId}", GetShareables).RequireAuthorization();
+        group.MapGet("/all/{CustomerId}", GetShareables);
 
         return group;
     }
