@@ -2,7 +2,6 @@ namespace Server.Routes;
 
 using Common.Context;
 using Common.Exceptions;
-using Common.MediatR;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Server.Domain.Commands;
@@ -98,7 +97,7 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
-    private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> RemoveBookshelf(
+    private static async Task<Results<NoContent, ForbidHttpResult>> RemoveBookshelf(
         RemoveBookshelfCommand command,
         IMediator mediator,
         IUserContext userContext,
@@ -115,7 +114,7 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
-    private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> AddBookshelf(
+    private static async Task<Results<NoContent, ForbidHttpResult>> AddBookshelf(
         AddBookshelfCommand command,
         IMediator mediator,
         IUserContext userContext,
@@ -132,7 +131,7 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
-    private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> RateCustomerBook(
+    private static async Task<Results<NoContent, ForbidHttpResult>> RateCustomerBook(
         RateCustomerBookCommand command,
         IMediator mediator,
         IUserContext userContext,
@@ -149,7 +148,7 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
-    private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> CommentCustomerBook(
+    private static async Task<Results<NoContent, ForbidHttpResult>> CommentCustomerBook(
         AddCustomerBookCommentCommand command,
         IMediator mediator,
         IUserContext userContext,
