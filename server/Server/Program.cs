@@ -221,11 +221,11 @@ public class Program
         app.UseAuthorization();
 
         app.MapHealthChecks("/healthz");
-        app.MapGroup("/customer").MapCustomerEndpoints();
+        app.MapGroup("/customer").MapCustomerEndpoints().RequireAuthorization();
         app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
-        app.MapGroup("/bookshelf").MapBookshelfEndpoints();
-        app.MapGroup("/book").MapBookEndpoints();
-        app.MapGroup("/shareable").MapShareableEndpoints();
+        app.MapGroup("/bookshelf").MapBookshelfEndpoints().RequireAuthorization();
+        app.MapGroup("/book").MapBookEndpoints().RequireAuthorization();
+        app.MapGroup("/shareable").MapShareableEndpoints().RequireAuthorization();
 
         app.MapGroup("/admin")
             .WithGroupName("admin")
