@@ -207,8 +207,8 @@ public class Program
         app.UseSwagger();
         app.UseSwaggerUI(settings =>
         {
-            settings.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1.0");
-            settings.SwaggerEndpoint("/swagger/admin/swagger.json", "API v1.0");
+            settings.SwaggerEndpoint("/swagger/v1/swagger.json", "self-serve");
+            settings.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
             settings.DocumentTitle = Assembly.GetExecutingAssembly().GetName().Name;
             settings.OAuthClientId(configuration["Auth0:ClientId"]);
             settings.OAuthClientSecret(configuration["Auth0:ClientSecret"]);
@@ -221,11 +221,11 @@ public class Program
         app.UseAuthorization();
 
         app.MapHealthChecks("/healthz");
-        app.MapGroup("/customer").MapCustomerEndpoints();
+        app.MapGroup("/customer").MapCustomerEndpoints().RequireAuthorization();
         app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
-        app.MapGroup("/bookshelf").MapBookshelfEndpoints();
-        app.MapGroup("/book").MapBookEndpoints();
-        app.MapGroup("/shareable").MapShareableEndpoints();
+        app.MapGroup("/bookshelf").MapBookshelfEndpoints().RequireAuthorization();
+        app.MapGroup("/book").MapBookEndpoints().RequireAuthorization();
+        app.MapGroup("/shareable").MapShareableEndpoints().RequireAuthorization();
 
         app.MapGroup("/admin")
             .WithGroupName("admin")

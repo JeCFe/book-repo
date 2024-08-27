@@ -123,11 +123,11 @@ public static class CustomerRouter
     public static RouteGroupBuilder MapCustomerEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Customer");
-        group.MapPost("/delete", Delete).RequireAuthorization();
-        group.MapPost("/update", Update).RequireAuthorization();
-        group.MapGet("/books", GetCustomerBooks).RequireAuthorization();
-        group.MapGet("/get-customer-summary", GetCustomerSummary).RequireAuthorization();
-        group.MapGet("/{customerId}/{customerBookId}", GetCustomerBook).RequireAuthorization();
+        group.MapPost("/delete", Delete);
+        group.MapPost("/update", Update);
+        group.MapGet("/books", GetCustomerBooks);
+        group.MapGet("/get-customer-summary", GetCustomerSummary);
+        group.MapGet("/{customerId}/{customerBookId}", GetCustomerBook);
         return group;
     }
 }
