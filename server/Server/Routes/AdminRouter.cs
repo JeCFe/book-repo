@@ -6,6 +6,7 @@ public static class AdminEndpoints
 {
     public static RouteGroupBuilder MapAdminEndpoints(this RouteGroupBuilder group)
     {
+        group.WithTags("Admin");
         group.MapPost(
             "/add-contributor-trophy",
             CommandExecutor.Execute<AddContributorTrophyCommand>
