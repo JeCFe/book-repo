@@ -29,10 +29,7 @@ public class SwaggerTesting
                 });
             })
             .CreateClient();
-        var response = await client.GetAsync(
-            "/swagger/common/swagger.json",
-            CancellationToken.None
-        );
+        var response = await client.GetAsync("/swagger/v1/swagger.json", CancellationToken.None);
         string actual = await response.Content.ReadAsStringAsync(CancellationToken.None);
         Assert.True(response.IsSuccessStatusCode, actual);
         actual.ShouldMatchSnapshot(SnapshotSettings.New().SnapshotFileName("api-spec"));

@@ -69,7 +69,7 @@ public class Program
                 options.UseOneOfForPolymorphism();
 
                 options.SwaggerDoc(
-                    "common",
+                    "v1",
                     new OpenApiInfo { Version = "0.1.0", Title = "Backend Service" }
                 );
 
@@ -207,7 +207,7 @@ public class Program
         app.UseSwagger();
         app.UseSwaggerUI(settings =>
         {
-            settings.SwaggerEndpoint("/swagger/common/swagger.json", "common");
+            settings.SwaggerEndpoint("/swagger/v1/swagger.json", "self-serve");
             settings.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
             settings.DocumentTitle = Assembly.GetExecutingAssembly().GetName().Name;
             settings.OAuthClientId(configuration["Auth0:ClientId"]);
@@ -221,15 +221,11 @@ public class Program
         app.UseAuthorization();
 
         app.MapHealthChecks("/healthz");
-
-        app.MapGroup("/common")
-            .WithGroupName("common")
-            .MapCustomerEndpoints()
-            .MapActionEndpoints()
-            .MapBookshelfEndpoints()
-            .MapBookEndpoints()
-            .MapShareableEndpoints()
-            .RequireAuthorization();
+        app.MapGroup("/customer").MapCustomerEndpoints();
+        app.MapGroup("/action").MapActionEndpoints().RequireAuthorization();
+        app.MapGroup("/bookshelf").MapBookshelfEndpoints();
+        app.MapGroup("/book").MapBookEndpoints();
+        app.MapGroup("/shareable").MapShareableEndpoints();
 
         app.MapGroup("/admin")
             .WithGroupName("admin")
