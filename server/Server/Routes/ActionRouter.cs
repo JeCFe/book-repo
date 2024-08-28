@@ -8,74 +8,6 @@ using Server.Domain.Commands;
 
 public static class ActionRouter
 {
-    private static async Task<Results<Ok, ForbidHttpResult>> ForgetMe(
-        ForgetMeCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.Id != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.Ok();
-    }
-
-    private static async Task<Results<Ok, ForbidHttpResult>> SetupCustomer(
-        SetupCustomerCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.Id != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.Ok();
-    }
-
-    private static async Task<Results<Ok, ForbidHttpResult>> AddBookshelfBook(
-        AddBookshelfBookCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.Id != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.Ok();
-    }
-
-    private static async Task<Results<Ok, ForbidHttpResult>> UpdateBookshelfOrder(
-        UpdateBookcaseOrderCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.CustomerId != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.Ok();
-    }
-
     private static async Task<Results<NoContent, NotFound, ForbidHttpResult>> RemoveBookshelfBook(
         RemoveBookshelfBookCommand command,
         IMediator mediator,
@@ -114,42 +46,8 @@ public static class ActionRouter
         return TypedResults.NoContent();
     }
 
-    private static async Task<Results<NoContent, ForbidHttpResult>> AddBookshelf(
-        AddBookshelfCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.Id != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.NoContent();
-    }
-
     private static async Task<Results<NoContent, ForbidHttpResult>> RateCustomerBook(
         RateCustomerBookCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.CustomerId != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.NoContent();
-    }
-
-    private static async Task<Results<NoContent, ForbidHttpResult>> CommentCustomerBook(
-        AddCustomerBookCommentCommand command,
         IMediator mediator,
         IUserContext userContext,
         CancellationToken cancellationToken
@@ -248,41 +146,31 @@ public static class ActionRouter
         }
     }
 
-    private static async Task<Results<NoContent, ForbidHttpResult>> RemoveShareable(
-        RemoveShareableCommand command,
-        IMediator mediator,
-        IUserContext userContext,
-        CancellationToken cancellationToken
-    )
-    {
-        var userId = userContext.UserId;
-        if (userId is not { } || command.CustomerId != userId)
-        {
-            return TypedResults.Forbid();
-        }
-
-        await mediator.Send(command, cancellationToken);
-        return TypedResults.NoContent();
-    }
-
     public static RouteGroupBuilder MapActionEndpoints(this RouteGroupBuilder group)
     {
         group.WithTags("Actions");
 
-        group.MapPost("/forget-me", ForgetMe);
-        group.MapPost("/add-bookshelf", AddBookshelf);
-        group.MapPost("/setup-customer", SetupCustomer);
-        group.MapPost("/raise-book-error", RaiseBookError);
-        group.MapPost("/remove-bookshelf", RemoveBookshelf);
-        group.MapPost("/rate-customer-book", RateCustomerBook);
-        group.MapPost("/add-book-shelf-book", AddBookshelfBook);
-        group.MapPost("/comment-customer-book", CommentCustomerBook);
-        group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
-        group.MapPost("/update-bookshelf-order", UpdateBookshelfOrder);
-        group.MapPost("/add-customer-book-bookshelf", AddCustomerBookToBookshelf);
+        group.MapPost("/forget-me", CommandExecutor.Execute<ForgetMeCommand>);
+        group.MapPost("/add-bookshelf", CommandExecutor.Execute<AddBookshelfCommand>);
+        group.MapPost("/setup-customer", CommandExecutor.Execute<SetupCustomerCommand>);
+        group.MapPost("/remove-bookshelf", CommandExecutor.Execute<RemoveBookshelfCommand>);
+        group.MapPost("/add-book-shelf-book", CommandExecutor.Execute<AddBookshelfBookCommand>);
+        group.MapPost(
+            "/comment-customer-book",
+            CommandExecutor.Execute<AddCustomerBookCommentCommand>
+        );
+        group.MapPost(
+            "/update-bookshelf-order",
+            CommandExecutor.Execute<UpdateBookcaseOrderCommand>
+        );
+        group.MapPost("shareable/remove", CommandExecutor.Execute<RemoveShareableCommand>);
 
         group.MapPost("shareable/add", AddShareable);
-        group.MapPost("shareable/remove", RemoveShareable);
+
+        group.MapPost("/raise-book-error", RaiseBookError);
+        group.MapPost("/rate-customer-book", RateCustomerBook);
+        group.MapPost("/remove-bookshelf-book", RemoveBookshelfBook);
+        group.MapPost("/add-customer-book-bookshelf", AddCustomerBookToBookshelf);
 
         return group;
     }
