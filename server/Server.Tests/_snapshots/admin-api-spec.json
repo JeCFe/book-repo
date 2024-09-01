@@ -17,21 +17,12 @@
                 "$ref": "#/components/schemas/ForgetMeCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
             "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
@@ -48,21 +39,12 @@
                 "$ref": "#/components/schemas/AddBookshelfCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+          "204": {
+            "description": "No Content"
           }
         }
       }
@@ -79,11 +61,34 @@
                 "$ref": "#/components/schemas/SetupCustomerCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
             "description": "Success"
+          }
+        }
+      }
+    },
+    "/action/raise-book-error": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookErrorCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",
@@ -110,21 +115,34 @@
                 "$ref": "#/components/schemas/RemoveBookshelfCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/action/rate-customer-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateCustomerBookCommand"
               }
             }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
           }
         }
       }
@@ -141,21 +159,12 @@
                 "$ref": "#/components/schemas/AddBookshelfBookCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
             "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
@@ -172,21 +181,37 @@
                 "$ref": "#/components/schemas/AddCustomerBookCommentCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/action/remove-bookshelf-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBookshelfBookCommand"
               }
             }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -203,26 +228,17 @@
                 "$ref": "#/components/schemas/UpdateBookcaseOrderCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
             "description": "Success"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
     },
-    "/action/shareable/remove": {
+    "/action/add-customer-book-bookshelf": {
       "post": {
         "tags": [
           "Actions"
@@ -231,14 +247,15 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RemoveShareableCommand"
+                "$ref": "#/components/schemas/AddCustomerBookToBookshelfCommand"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
-          "200": {
-            "description": "Success"
+          "204": {
+            "description": "No Content"
           },
           "400": {
             "description": "Bad Request",
@@ -285,7 +302,7 @@
         }
       }
     },
-    "/action/raise-book-error": {
+    "/action/shareable/remove": {
       "post": {
         "tags": [
           "Actions"
@@ -294,7 +311,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddBookErrorCommand"
+                "$ref": "#/components/schemas/RemoveShareableCommand"
               }
             }
           },
@@ -303,95 +320,6 @@
         "responses": {
           "204": {
             "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/action/rate-customer-book": {
-      "post": {
-        "tags": [
-          "Actions"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RateCustomerBookCommand"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        }
-      }
-    },
-    "/action/remove-bookshelf-book": {
-      "post": {
-        "tags": [
-          "Actions"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RemoveBookshelfBookCommand"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/action/add-customer-book-bookshelf": {
-      "post": {
-        "tags": [
-          "Actions"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AddCustomerBookToBookshelfCommand"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
