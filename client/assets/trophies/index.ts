@@ -1,0 +1,10 @@
+export { default as Alerter } from "./alerter.svg";
+export { default as AvidReviewer } from "./avid-reviewer.svg";
+export { default as BetaTester } from "./beta-tester.svg";
+export { default as BookAddict } from "./book-addict.svg";
+export { default as Commentor } from "./commentor.svg";
+export { default as Contributor } from "./contributor.svg";
+export { default as GoalScorer } from "./goal-scorer.svg";
+export { default as GoalSetter } from "./goal-setter.svg";
+export { default as Sharing } from "./sharing-is-caring.svg";
+export { default as Sponsor } from "./sponsor.svg";

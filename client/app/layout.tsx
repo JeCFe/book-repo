@@ -1,17 +1,11 @@
 import { UserProvider } from "@auth0/nextjs-auth0/client";
-import {
-  Footer,
-  Header,
-  JecfeLogo,
-  JecfeLogoBlack,
-  NextUser,
-} from "@jecfe/react-design-system";
 import "@jecfe/react-design-system/src/tailwind.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "Auth0 Client",
+  title: "Book Repo",
 };
 
 const poppins = Poppins({
@@ -28,16 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className="flex min-h-screen flex-col bg-white font-poppins">
-          <Header
-            logo={<JecfeLogo height="48" />}
-            title="JeCFe - Template"
-            user={<NextUser />}
-          />
-          <div className="container mx-auto flex-1">{children}</div>
-          <Footer logo={<JecfeLogoBlack height="32" />}>
-            <div className="flex justify-center"> JeCFe - Template</div>
-          </Footer>
+        <body
+          className={`${poppins.variable} flex min-h-screen flex-col bg-slate-900 font-poppins`}
+        >
+          <Toaster position="top-right" reverseOrder={false} />
+          <div>{children}</div>
         </body>
       </UserProvider>
     </html>
