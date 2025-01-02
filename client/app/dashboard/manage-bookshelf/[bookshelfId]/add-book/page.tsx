@@ -1,9 +1,8 @@
 "use client";
 
-import { RadioButton } from "@/components";
 import { useBookWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Info } from "@jecfe/react-design-system";
+import { Anchor, Button, Info, RadioButton } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -86,8 +85,6 @@ export default withPageAuthRequired(function AddBook({ params }: Props) {
               value="search"
               theme="pink"
               size="large"
-              hintClassName="max-w-sm md:max-w-lg"
-              hint="Add books via seraching based on title and/or author"
             >
               Search
             </RadioButton>
@@ -97,8 +94,6 @@ export default withPageAuthRequired(function AddBook({ params }: Props) {
                 required: { value: true, message: "A selection is required" },
               })}
               value="isbn"
-              hint="Add books via ISBN search"
-              hintClassName="max-w-sm md:max-w-lg"
               theme="cyan"
             >
               ISBN
@@ -110,8 +105,6 @@ export default withPageAuthRequired(function AddBook({ params }: Props) {
                 required: { value: true, message: "A selection is required" },
               })}
               value="csv"
-              hint="Add books via a CSV import"
-              hintClassName="max-w-sm md:max-w-lg"
               theme="pink"
             >
               CSV Import

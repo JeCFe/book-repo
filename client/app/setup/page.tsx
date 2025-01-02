@@ -1,9 +1,8 @@
 "use client";
 
-import { RadioButton } from "@/components";
 import { Config, useSetupWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Button, Info } from "@jecfe/react-design-system";
+import { Button, Info, RadioButton } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { SetupModal } from "./SetupModal";
@@ -62,8 +61,6 @@ export default withPageAuthRequired(function SetupPath() {
             value="express"
             theme="pink"
             size="large"
-            hintClassName="max-w-sm md:max-w-lg"
-            hint="The quickest way for you to get organising. We will setup your account using all our defaults - this included 3 default bookshelves for all your read books, currently reading, and wanting to read. You can add all your custom bookshelves and add books later."
           >
             Express
           </RadioButton>
@@ -73,8 +70,6 @@ export default withPageAuthRequired(function SetupPath() {
               required: { value: true, message: "A selection is required" },
             })}
             value="advanced"
-            hint="Want to control how we set your account up? This paths allows you to choose which defaults you want, add as many bookshelves you want, and even start adding books!"
-            hintClassName="max-w-sm md:max-w-lg"
             theme="cyan"
           >
             Advanced

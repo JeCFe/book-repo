@@ -1,10 +1,10 @@
 "use client";
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
-import { BookRow, ProposedBooks, Table } from "@/components";
+import { BookRow, ProposedBooks } from "@/components";
 import { SetupBook, useBookWizard, useSearchForBooks } from "@/hooks";
 import { filterBooks } from "@/lib";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Anchor, Button, Spinner, Table } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 

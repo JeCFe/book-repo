@@ -1,11 +1,17 @@
 "use client";
 
-import { Picture, RenderSection, RenderStar, Table } from "@/components";
+import { Picture, RenderSection, RenderStar } from "@/components";
 import { useGetCustomerBook } from "@/hooks";
 import { removeBookshelfBook, updateComment, updateRanking } from "@/services";
 import { addCustomerBookBookshelf } from "@/services/customerBookBookshelf";
 import { UserProfile } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner, TextArea } from "@jecfe/react-design-system";
+import {
+  Anchor,
+  Button,
+  Spinner,
+  Table,
+  TextArea,
+} from "@jecfe/react-design-system";
 import debounce from "lodash.debounce";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
