@@ -1,9 +1,9 @@
 "use client";
-import { Checkbox, Modal, SummaryTable } from "@/components";
+import { Modal, SummaryTable } from "@/components";
 import { useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button } from "@jecfe/react-design-system";
+import { Anchor, Button, Checkbox } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -101,7 +101,7 @@ export default withPageAuthRequired(function ManageUser({ user }) {
         {`Here you can view and manage the customer details we have about you. Both authentication account detail and details held in our databases.`}
       </div>
 
-      <div className="flex max-w-3xl flex-row  space-x-4 py-4">
+      <div className="flex max-w-3xl flex-row space-x-4 py-4">
         <Button
           variant="primary"
           size="large"

@@ -1,7 +1,7 @@
-import { Checkbox, Modal } from "@/components";
+import { Modal } from "@/components";
 import { getApiClient } from "@/services";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Anchor } from "@jecfe/react-design-system";
+import { Anchor, Checkbox } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
