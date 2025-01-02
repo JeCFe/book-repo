@@ -1,7 +1,8 @@
 "use client";
 import { BookLogo, JecfeLogo } from "@/assets";
 import { AccordionManager } from "@/components";
-import { Anchor, Button } from "@jecfe/react-design-system/dist/esm/";
+import { Anchor, Button } from "@jecfe/react-design-system";
+
 import { useRouter } from "next/navigation";
 
 export default function Home() {

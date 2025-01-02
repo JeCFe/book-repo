@@ -1,10 +1,10 @@
 import { useGetCustomerBooks } from "@/hooks";
 import { updateRanking } from "@/services";
 import { Book } from "@/types";
-import { Anchor, Button } from "@jecfe/react-design-system";
+import { Anchor, Button, Table } from "@jecfe/react-design-system";
 import { DragEvent } from "react";
 import toast from "react-hot-toast";
-import { RenderStar, Table } from ".";
+import { RenderStar } from ".";
 
 type Props = {
   books: Book[];
