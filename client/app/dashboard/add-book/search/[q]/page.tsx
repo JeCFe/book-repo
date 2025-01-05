@@ -1,15 +1,11 @@
 "use client";
-import { BookRow, Breadcrumb, PageTitle, ProposedBooks } from "@/components";
-import {
-  SetupBook,
-  useBookWizard,
-  useGetCustomerBooks,
-  useSearchForBooks,
-} from "@/hooks";
+import { BookTable } from "@/app/(add-book)";
+import { Breadcrumb, PageTitle } from "@/components";
+import { useGetCustomerBooks, useSearchForBooks } from "@/hooks";
 import { filterBooks } from "@/lib";
 import { addBookshelfBook } from "@/services";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Button, Spinner, Table } from "@jecfe/react-design-system";
+import { Button, Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import toast from "react-hot-toast";
@@ -45,10 +41,10 @@ export default withPageAuthRequired(function SearchBookByQuery({
     toast.promise(addBookshelfBook({ id: user.sub!, bookshelfId: [], isbn }), {
       success: () => {
         mutate();
-        return "Bookshelves added successfully";
+        return "Book added successfully";
       },
-      loading: "Adding new bookshelves",
-      error: "There was an issue adding bookshelves",
+      loading: "Adding new book",
+      error: "There was an issue adding book",
     });
   };
 
@@ -68,29 +64,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
       {isLoading || isCustomerBooksLoading ? (
         <Spinner fast={isLoading} />
       ) : (
-        <div className="flex overflow-auto pb-4">
-          <Table>
-            <thead>
-              <tr>
-                <th className="w-[15px]">Order</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th className="min-w-[200px]">ISBN</th>
-                <th className="min-w-[150px]">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredBooks?.map((work, i) => (
-                <BookRow
-                  key={`book-row.${i}`}
-                  work={work}
-                  index={i}
-                  saveBook={saveBook}
-                />
-              ))}
-            </tbody>
-          </Table>
-        </div>
+        <BookTable filteredBooks={filteredBooks} saveBook={saveBook} />
       )}
 
       <div className="mb-10 mt-20 flex flex-row space-x-6">

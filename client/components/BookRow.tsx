@@ -1,6 +1,6 @@
 import { AddBookModal } from "@/app/setup/books/AddBookModal";
 import { Selector } from "@/components";
-import { SetupBook, useBookWizard, Works } from "@/hooks";
+import { SetupBook, Works } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useState } from "react";
 
@@ -30,7 +30,6 @@ export function BookRow({ work, index, saveBook = () => {} }: Props) {
         addBook={addBook}
         showModal={open}
         setShowModal={setOpen}
-        setPassingIsbn={setPassingIsbn}
       />
       {work.editions.docs.map((edition) => (
         <>

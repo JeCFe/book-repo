@@ -8,7 +8,6 @@ export * from "./ManagedAccordion";
 export * from "./Modal";
 export * from "./PageTitle";
 export * from "./Picture";
-export * from "./ProposedBooks";
 export * from "./RenderBookGrid";
 export * from "./RenderBookTable";
 export * from "./RenderSection";
