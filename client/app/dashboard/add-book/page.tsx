@@ -1,27 +1,18 @@
 "use client";
 
-import { Breadcrumb, ErrorSummary, PageTitle } from "@/components";
-import { useBookWizard } from "@/hooks";
+import { ChooseFormValues, ChooseHowToAdd } from "@/app/(add-book)";
+import { Breadcrumb } from "@/components";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Button, RadioGroup } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 
-type FormValues = {
-  radio: "isbn" | "search" | "csv";
-};
+import { FormProvider, useForm } from "react-hook-form";
 
 export default withPageAuthRequired(function AddBook() {
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const methods = useForm<ChooseFormValues>();
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: ChooseFormValues) => {
     switch (data.radio) {
       case "search":
         router.push("/dashboard/add-book/search");
@@ -42,50 +33,9 @@ export default withPageAuthRequired(function AddBook() {
         ]}
       />
 
-      <PageTitle>Add a book</PageTitle>
-
-      {errors.radio && (
-        <ErrorSummary
-          errors={
-            errors.radio && errors.radio.message
-              ? [{ message: errors.radio.message }]
-              : undefined
-          }
-        />
-      )}
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <RadioGroup<FormValues>
-          required
-          radioButtons={[
-            { children: "Search", theme: "cyan", value: "search" },
-            { children: "ISBN", theme: "cyan", value: "isbn" },
-            { children: "CSV Import", theme: "cyan", value: "csv" },
-          ]}
-          name={"radio"}
-          register={register}
-          legend={`Choose how you'd like to add books`}
-          hint={`Select in what way you'd like to add books`}
-          size="large"
-          errors={
-            errors.radio && errors.radio.message
-              ? [{ message: errors.radio.message }]
-              : undefined
-          }
-        />
-        <div className="mt-10 flex flex-col-reverse gap-y-4 md:flex-row md:gap-y-0 md:space-x-4">
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => router.push("/dashboard")}
-          >
-            Return to dashboard
-          </Button>
-          <Button type="submit" disabled={!!errors.radio}>
-            Continue
-          </Button>
-        </div>
-      </form>
+      <FormProvider {...methods}>
+        <ChooseHowToAdd onSubmit={onSubmit} />
+      </FormProvider>
     </div>
   );
 });

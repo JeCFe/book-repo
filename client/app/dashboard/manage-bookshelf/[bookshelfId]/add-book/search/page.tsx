@@ -1,20 +1,12 @@
 "use client";
 
 import { FormValues, SearchForBook } from "@/app/(add-book)";
-import { Breadcrumb, ProposedBooks } from "@/components";
-import {
-  SetupBook,
-  useBookWizard,
-  useGetBookshelf,
-  useGetBookshelfSummary,
-} from "@/hooks";
-import { addBookshelfBook } from "@/services";
+import { Breadcrumb } from "@/components";
+import { useGetBookshelf } from "@/hooks";
 import { UserProfile, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button, Spinner } from "@jecfe/react-design-system";
+import { Spinner } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 type Props = {
   params: { bookshelfId: string };
