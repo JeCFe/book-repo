@@ -1,64 +1,74 @@
+import { ErrorSummary } from "@/components";
 import { SetupBook } from "@/hooks";
-import { Button } from "@jecfe/react-design-system";
-import { Dispatch, SetStateAction } from "react";
+import { Button, Input } from "@jecfe/react-design-system";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { AddBookModal } from "../setup/books/AddBookModal";
 
-type Props = {
-  passingIsbn: string | undefined;
-  setPassingIsbn: Dispatch<SetStateAction<string | undefined>>;
-  currentIsbn: string | undefined;
-  setCurrentIsbn: Dispatch<SetStateAction<string | undefined>>;
-  addBook: (book: SetupBook) => Promise<void>;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+type FormValues = {
+  search: string;
 };
 
-export function AddBookByIsbn({
-  passingIsbn,
-  setPassingIsbn,
-  currentIsbn,
-  setCurrentIsbn,
-  addBook,
-  open,
-  setOpen,
-}: Props) {
+type Props = {
+  addBook: (book: SetupBook) => Promise<void>;
+  backClick: () => void;
+  hint?: string;
+};
+
+export function AddBookByIsbn({ addBook, backClick, hint }: Props) {
+  const [open, setOpen] = useState<boolean>(false);
+  const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>();
+
+  const onSubmit = (data: FormValues) => {
+    setPassingIsbn(data.search);
+    setOpen(true);
+  };
+
+  const mappedErrors = useMemo(
+    () =>
+      errors.search && errors.search.message
+        ? [{ message: errors.search.message }]
+        : undefined,
+    [errors],
+  );
+
   return (
     <>
+      {errors.search && <ErrorSummary errors={mappedErrors} />}
+
       <AddBookModal
         isbn={passingIsbn as string}
         addBook={addBook}
         showModal={open}
         setShowModal={setOpen}
-        setPassingIsbn={setPassingIsbn}
-        setCurrentIsbn={setCurrentIsbn}
       />
 
-      <div className="mt-10">
-        <div className="mb-4 text-xl text-slate-300">{`Enter the book's ISBN`}</div>
-        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-          <input
-            type="text"
-            value={currentIsbn ?? ""}
-            onChange={(e) => {
-              setCurrentIsbn(e.target.value);
-            }}
-            placeholder="Enter ISBN..."
-            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
-          />
-          <Button
-            size="large"
-            variant="primary"
-            onClick={() => {
-              setPassingIsbn(currentIsbn);
-              setOpen(true);
-            }}
-            type="button"
-            disabled={currentIsbn === undefined || currentIsbn === ""}
-          >
-            Lookup Book
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          {...register("search", {
+            required: "You must give content to search",
+          })}
+          legend="Search for a book via ISBN"
+          hint={hint}
+          errors={mappedErrors}
+        />
+
+        <div className="mt-10 flex flex-col-reverse gap-y-4 md:flex-row md:gap-y-0 md:space-x-4">
+          <Button type="button" variant="secondary" onClick={backClick}>
+            Back
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Search
           </Button>
         </div>
-      </div>
+      </form>
     </>
   );
 }

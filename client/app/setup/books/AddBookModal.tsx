@@ -10,8 +10,6 @@ type Props = {
   addBook: (book: SetupBook) => void;
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  setPassingIsbn: Dispatch<SetStateAction<string | undefined>>;
-  setCurrentIsbn?: Dispatch<SetStateAction<string | undefined>>;
 };
 
 export function AddBookModal({
@@ -19,8 +17,6 @@ export function AddBookModal({
   addBook,
   showModal,
   setShowModal,
-  setPassingIsbn,
-  setCurrentIsbn,
 }: Props) {
   const { data, isLoading } = useGetBook(isbn);
   const setupBook = useMemo(() => {
@@ -43,7 +39,6 @@ export function AddBookModal({
       confirmText="Add Book"
       isOpen={showModal}
       onClose={() => {
-        setPassingIsbn(undefined);
         setShowModal(false);
       }}
       onConfirm={() => {
@@ -51,11 +46,7 @@ export function AddBookModal({
           return;
         }
         addBook(setupBook);
-        setPassingIsbn(undefined);
         setShowModal(false);
-        if (setCurrentIsbn !== undefined) {
-          setCurrentIsbn(undefined);
-        }
       }}
       error=""
       actioning={isLoading}

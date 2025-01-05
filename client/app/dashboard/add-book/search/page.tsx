@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 type FormValues = {
-  search: "string";
+  search: string;
 };
 
 export default withPageAuthRequired(function AddBook({ user }) {
