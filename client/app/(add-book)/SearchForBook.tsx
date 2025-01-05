@@ -33,9 +33,6 @@ export function SearchForBook({
     [errors],
   );
 
-  useEffect(() => {
-    console.log(mappedErrors);
-  }, [errors]);
   return (
     <>
       <PageTitle>Search</PageTitle>
