@@ -40,6 +40,7 @@ export function AddBookModal({
 
   return (
     <Modal
+      confirmText="Add Book"
       isOpen={showModal}
       onClose={() => {
         setPassingIsbn(undefined);

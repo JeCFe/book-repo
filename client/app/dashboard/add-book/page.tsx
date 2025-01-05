@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumb, ErrorSummary } from "@/components";
+import { Breadcrumb, ErrorSummary, PageTitle } from "@/components";
 import { useBookWizard } from "@/hooks";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button, RadioGroup } from "@jecfe/react-design-system";
@@ -13,12 +13,8 @@ type FormValues = {
 };
 
 export default withPageAuthRequired(function AddBook() {
-  const { updateBook } = useBookWizard();
   const router = useRouter();
 
-  useEffect(() => {
-    updateBook({ type: "default" });
-  }, []);
   const {
     register,
     handleSubmit,
@@ -46,9 +42,7 @@ export default withPageAuthRequired(function AddBook() {
         ]}
       />
 
-      <h1 className="mb-8 flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        Add a book
-      </h1>
+      <PageTitle>Add a book</PageTitle>
 
       {errors.radio && (
         <ErrorSummary
@@ -81,14 +75,13 @@ export default withPageAuthRequired(function AddBook() {
         />
         <div className="mt-10 flex flex-col-reverse gap-y-4 md:flex-row md:gap-y-0 md:space-x-4">
           <Button
-            size="large"
             variant="secondary"
             type="button"
             onClick={() => router.push("/dashboard")}
           >
             Return to dashboard
           </Button>
-          <Button size="large" type="submit" disabled={!!errors.radio}>
+          <Button type="submit" disabled={!!errors.radio}>
             Continue
           </Button>
         </div>

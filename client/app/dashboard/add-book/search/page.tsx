@@ -1,116 +1,75 @@
 "use client";
 
-import { ProposedBooks } from "@/components";
-import { SetupBook, useBookWizard } from "@/hooks";
-import { addBookshelfBook } from "@/services";
+import { Breadcrumb, ErrorSummary, PageTitle } from "@/components";
+
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Anchor, Button } from "@jecfe/react-design-system";
+import { Button, Input } from "@jecfe/react-design-system";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useMemo } from "react";
+import { useForm } from "react-hook-form";
+
+type FormValues = {
+  search: "string";
+};
 
 export default withPageAuthRequired(function AddBook({ user }) {
-  const { books, updateBook } = useBookWizard();
   const router = useRouter();
-  const [setupBooks, setSetupBooks] = useState<SetupBook[]>([]);
-  const [currentSearch, setCurrentSearch] = useState<string | undefined>();
-  const [isSavingBooks, setIsSavingBooks] = useState<boolean>(false);
 
-  useEffect(() => {
-    setSetupBooks(books ?? []);
-  }, [books]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>();
 
-  const removeBook = (isbn: string) => {
-    updateBook({ type: "remove-book", isbn });
+  const onSubmit = (data: FormValues) => {
+    router.push(
+      `/dashboard/add-book/search/${encodeURIComponent(data.search)}`,
+    );
   };
 
-  const saveBooks = async () => {
-    setIsSavingBooks(true);
-    for (const book of setupBooks) {
-      await toast.promise(
-        addBookshelfBook({ id: user.sub!, bookshelfId: [], isbn: book.isbn }),
-        {
-          loading: `Adding ${book.name}`,
-          success: `Added ${book.name}`,
-          error: `There was an error adding ${book.name}`,
-        },
-      );
-    }
-    router.push("/dashboard/add-book");
-    setIsSavingBooks(false);
-  };
+  const mappedErrors = useMemo(
+    () =>
+      errors.search && errors.search.message
+        ? [{ message: errors.search.message }]
+        : undefined,
+    [errors],
+  );
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row space-x-2 pb-6">
-        <Anchor href="/dashboard">{`< Dashboard`}</Anchor>
-        <Anchor href="/dashboard/add-book"> {"< Choose how to add"}</Anchor>
-        <div className="text-slate-400 underline underline-offset-4">
-          {"< Search"}
-        </div>
-      </div>
-      <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        Search
-      </h1>
-      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        {`Search for the book you wish to add - these books will be added to your homeless bookshelf`}
-      </div>
+      <Breadcrumb
+        crumbs={[
+          { href: "/dashboard", display: "Dashboard" },
+          { display: "Choose how to add", href: "/dashboard/add-book" },
+          { display: "Search" },
+        ]}
+      />
+      <PageTitle>Search</PageTitle>
 
-      <div className="mt-10">
-        <div className="mb-4 text-xl text-slate-300">{`Search for book by name and author`}</div>
-        <div className="flex flex-col space-x-0 space-y-4 md:flex-row md:items-center md:space-x-4 md:space-y-0">
-          <input
-            type="text"
-            value={currentSearch ?? ""}
-            onChange={(e) => {
-              setCurrentSearch(e.target.value);
-            }}
-            placeholder="Enter search criteria"
-            className="flex w-full max-w-sm space-y-2 rounded-lg border border-black bg-slate-100 p-2.5 text-slate-900 md:max-w-xl"
-          />
+      {errors.search && <ErrorSummary errors={mappedErrors} />}
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          {...register("search", {
+            required: "You must give content to search",
+          })}
+          legend="Search for a book by title or author"
+          hint="These books will be added to your homeless bookshelf"
+          errors={mappedErrors}
+        />
+        <div className="mt-10 flex flex-col-reverse gap-y-4 md:flex-row md:gap-y-0 md:space-x-4">
           <Button
-            size="large"
-            variant="primary"
-            onClick={() =>
-              router.push(
-                `/dashboard/add-book/search/${encodeURIComponent(currentSearch!)}`,
-              )
-            }
             type="button"
-            disabled={currentSearch === undefined || currentSearch === ""}
+            variant="secondary"
+            onClick={() => router.push("/dashboard/add-book")}
           >
-            Lookup Book
+            Back
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Search
           </Button>
         </div>
-      </div>
-
-      {setupBooks && setupBooks.length > 0 && (
-        <ProposedBooks
-          setSetupBooks={setSetupBooks}
-          setupBooks={setupBooks}
-          removeBook={removeBook}
-        />
-      )}
-
-      <div className="mb-10 mt-20 flex flex-row space-x-6">
-        <Button
-          type="button"
-          size="large"
-          variant="secondary"
-          onClick={() => router.push("/dashboard")}
-        >
-          Back
-        </Button>
-        <Button
-          type="button"
-          size="large"
-          disabled={setupBooks.length === 0}
-          isLoading={isSavingBooks}
-          onClick={() => saveBooks()}
-        >
-          Add books
-        </Button>
-      </div>
+      </form>
     </div>
   );
 });

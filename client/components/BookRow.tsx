@@ -4,10 +4,15 @@ import { SetupBook, useBookWizard, Works } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";
 import { useState } from "react";
 
-export function BookRow({ work, index }: { work: Works; index: number }) {
+type Props = {
+  work: Works;
+  index: number;
+  saveBook?: (isbn: string) => void;
+};
+
+export function BookRow({ work, index, saveBook = () => {} }: Props) {
   const [passingIsbn, setPassingIsbn] = useState<string | undefined>();
   const [open, setOpen] = useState<boolean>(false);
-  const { updateBook } = useBookWizard();
 
   const viewBook = (isbn: string) => {
     setPassingIsbn(isbn);
@@ -15,7 +20,7 @@ export function BookRow({ work, index }: { work: Works; index: number }) {
   };
 
   const addBook = async (book: SetupBook) => {
-    updateBook({ type: "add-books", setupBook: book });
+    saveBook(book.isbn);
   };
 
   return (
@@ -29,7 +34,7 @@ export function BookRow({ work, index }: { work: Works; index: number }) {
       />
       {work.editions.docs.map((edition) => (
         <>
-          {edition.isbn !== undefined && (
+          {edition.isbn !== undefined && edition.isbn.length !== 0 && (
             <tr key={`${work.key}-${edition.isbn}-${index}`}>
               <td>{index}</td>
               <td>{work.title}</td>
@@ -46,7 +51,6 @@ export function BookRow({ work, index }: { work: Works; index: number }) {
                   onChange={(x) => {
                     setPassingIsbn(x?.value);
                   }}
-                  isDisabled={edition.isbn.length === 0}
                 />
               </td>
               <td>
