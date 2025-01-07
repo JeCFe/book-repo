@@ -1,6 +1,6 @@
 import { ErrorSummary, PageTitle } from "@/components";
 import { Button, RadioGroup } from "@jecfe/react-design-system";
-import router from "next/router";
+import router, { useRouter } from "next/navigation";
 import { useFormContext } from "react-hook-form";
 
 export type ChooseFormValues = {
@@ -12,6 +12,7 @@ export function ChooseHowToAdd({
 }: {
   onSubmit: (data: ChooseFormValues) => void;
 }) {
+  const router = useRouter();
   const {
     formState: { errors },
     register,

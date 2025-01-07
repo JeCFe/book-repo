@@ -1,7 +1,7 @@
 import { ErrorSummary, PageTitle } from "@/components";
 import { Button, Input } from "@jecfe/react-design-system";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useFormContext, Validate } from "react-hook-form";
 
 export type FormValues = {
