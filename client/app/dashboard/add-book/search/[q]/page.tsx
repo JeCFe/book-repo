@@ -10,13 +10,15 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import toast from "react-hot-toast";
 
+type Props = {
+  user: UserProfile;
+  params: { q: string };
+};
+
 export default withPageAuthRequired(function SearchBookByQuery({
   user,
   params,
-}: {
-  user: UserProfile;
-  params: { q: string };
-}) {
+}: Props) {
   const { q } = params;
   const { data, isLoading } = useSearchForBooks(q);
   const {
@@ -30,7 +32,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
     if (isLoading || isCustomerBooksLoading || data === undefined) {
       return;
     }
-    var bookOrEmptyArray = books ?? [];
+    const bookOrEmptyArray = books ?? [];
     return filterBooks(
       data,
       new Set(bookOrEmptyArray.map((book) => book.book.isbn ?? "")),

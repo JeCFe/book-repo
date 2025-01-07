@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 import { FormProvider, useForm } from "react-hook-form";
 
-export default withPageAuthRequired(function AddBook({ user }) {
+export default withPageAuthRequired(function AddBook() {
   const router = useRouter();
 
   const methods = useForm<FormValues>();
