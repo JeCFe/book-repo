@@ -22,6 +22,7 @@ export default withPageAuthRequired(function SetupPath() {
       </div>
 
       <Button
+        className="mt-10"
         onClick={() => {
           updateCustomer({
             type: "set-config-option",
