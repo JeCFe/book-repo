@@ -11,17 +11,12 @@ import Trophies from "./Trophies";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
   const { isLoading, data, error } = useGetCustomerSummary();
-  const { updateBook } = useBookWizard();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [passingCustomerBookId, setPassingCustomerBookId] = useState<
     string | undefined
   >();
 
   const router = useRouter();
-
-  useEffect(() => {
-    updateBook({ type: "default" });
-  }, [updateBook]);
 
   useEffect(() => {
     if (!isLoading && !data) {

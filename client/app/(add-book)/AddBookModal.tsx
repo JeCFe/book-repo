@@ -3,7 +3,7 @@ import { SetupBook } from "@/hooks";
 import { useGetBook } from "@/hooks/useGetBook";
 import { Spinner } from "@jecfe/react-design-system";
 import { Dispatch, ReactNode, SetStateAction, useMemo } from "react";
-import { Picture } from "../../../components/Picture";
+import { Picture } from "../../components/Picture";
 
 type Props = {
   isbn?: string;

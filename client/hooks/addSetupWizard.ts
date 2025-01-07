@@ -16,30 +16,17 @@ type Action =
   | {
       type: "set-config-option";
       option: Config;
-    }
-  | {
-      type: "add-bookshelves";
-      bookshelves?: SetupBookshelf;
-      defaults: IncludeDefaultShelves;
-    }
-  | {
-      type: "add-books";
-      setupBooks: SetupBook[];
     };
 
 export type NewCustomer = {
   nickname?: Nickname;
   config?: Config;
-  bookshelves?: SetupBookshelf;
-  books?: SetupBook[];
   includeDefaults: IncludeDefaultShelves;
 };
 
 export const getDefaultState = (): NewCustomer => ({
   nickname: undefined,
   config: undefined,
-  bookshelves: undefined,
-  books: undefined,
   includeDefaults: false,
 });
 
@@ -67,20 +54,6 @@ export const reducer = ({
         config: action.option,
       };
     }
-    case "add-bookshelves": {
-      return {
-        ...state,
-        bookshelves: action.bookshelves,
-        includeDefaults: action.defaults,
-      };
-    }
-
-    case "add-books": {
-      return {
-        ...state,
-        books: action.setupBooks,
-      };
-    }
   }
 };
 
@@ -95,13 +68,7 @@ export const useSetupWizard = () => {
   };
 
   const complete = (customer: NewCustomer) => {
-    if (
-      (customer.nickname !== undefined &&
-        customer.config === "advanced" &&
-        customer.books !== undefined &&
-        customer.bookshelves !== undefined) ||
-      (customer.nickname !== undefined && customer.config === "express")
-    ) {
+    if (customer.nickname !== undefined && customer.config === "express") {
       return true;
     }
 
@@ -114,8 +81,6 @@ export const useSetupWizard = () => {
   return {
     nickname: newSetupCustomerData.nickname,
     config: newSetupCustomerData.config,
-    books: newSetupCustomerData.books,
-    bookshelves: newSetupCustomerData.bookshelves,
     includeDefaults: newSetupCustomerData.includeDefaults,
     updateCustomer,
     complete,

@@ -1,4 +1,4 @@
-import { AddBookModal } from "@/app/setup/books/AddBookModal";
+import { AddBookModal } from "@/app/(add-book)";
 import { Selector } from "@/components";
 import { SetupBook, Works } from "@/hooks";
 import { Button } from "@jecfe/react-design-system";

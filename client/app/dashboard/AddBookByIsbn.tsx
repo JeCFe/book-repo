@@ -3,7 +3,7 @@ import { SetupBook } from "@/hooks";
 import { Button, Input } from "@jecfe/react-design-system";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AddBookModal } from "../setup/books/AddBookModal";
+import { AddBookModal } from "../(add-book)/AddBookModal";
 
 type FormValues = {
   search: string;
