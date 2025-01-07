@@ -11,14 +11,13 @@ import { useMemo } from "react";
 import toast from "react-hot-toast";
 
 type Props = {
-  user: UserProfile;
   params: { bookshelfId: string; q: string };
 };
 
 export default withPageAuthRequired(function SearchBookByQuery({
-  user,
   params,
-}: Props) {
+  user,
+}: Props & { user: UserProfile }) {
   const { q, bookshelfId } = params;
   const {
     data: books,
