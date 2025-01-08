@@ -66,7 +66,7 @@ export function SetupModal() {
           <div className="pt-8 md:pt-12">
             <Checkbox
               size="small"
-              hint="Remove authetnication account"
+              hint="Remove authentication account"
               theme="standard"
               checked={deleteAuth}
               onChange={(e) => setDeleteAuth(e.currentTarget.checked)}
