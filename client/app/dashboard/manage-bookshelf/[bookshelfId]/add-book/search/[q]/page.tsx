@@ -32,7 +32,7 @@ export default withPageAuthRequired(function SearchBookByQuery({
     if (isLoading || isBookshelfLoading || data === undefined) {
       return;
     }
-    var bookOrEmptyArray = books?.books ?? [];
+    const bookOrEmptyArray = books?.books ?? [];
     return filterBooks(
       data,
       new Set(bookOrEmptyArray.map((book) => book.book.isbn ?? "")),
