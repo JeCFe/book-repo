@@ -40,14 +40,17 @@ export default withPageAuthRequired(function SearchBookByQuery({
   }, [data, isLoading, books]);
 
   const saveBook = async (isbn: string) => {
-    toast.promise(addBookshelfBook({ id: user.sub!, bookshelfId: [], isbn }), {
-      success: () => {
-        mutate();
-        return "Book added successfully";
+    toast.promise(
+      addBookshelfBook({ id: user.sub!, bookshelfId: [bookshelfId], isbn }),
+      {
+        success: () => {
+          mutate();
+          return "Book added successfully";
+        },
+        loading: "Adding new book",
+        error: "There was an issue adding book",
       },
-      loading: "Adding new book",
-      error: "There was an issue adding book",
-    });
+    );
   };
 
   return (
