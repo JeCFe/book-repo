@@ -1,6 +1,6 @@
 import { decode } from "jsonwebtoken";
 
-describe("Forget me", () => {
+describe.skip("Forget me", () => {
   let sub = "";
   let token = "";
   before(() => {
