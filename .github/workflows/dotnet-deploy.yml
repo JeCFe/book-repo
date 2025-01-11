@@ -1,11 +1,10 @@
 name: Dotnet Azure Deployment
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "server/**"
-      - ".github/workflows/dotnet-deploy.yml"
+  workflow_run:
+    workflows: [Dotnet Server]
+    types:
+      - completed
 
   workflow_dispatch:
 
@@ -39,11 +38,11 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}/server
-          registryUrl: jecfeacr.azurecr.io
+          registryUrl: ${{ secrets.REGISTRY_URL }}
           registryUsername: ${{ secrets.REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
-          containerAppName: jecfe-dotnet-template-container
-          resourceGroup: rg-shared-resources
-          imageToBuild: jecfeacr.azurecr.io/jecfe-dotnet-template-container:latest
+          containerAppName: ${{ secrets.SERVER_CONTAINER_APP_NAME }}
+          resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+          imageToBuild: ${{ secrets.REGISTRY_URL }}/${{ secrets.SERVER_CONTAINER_APP_NAME }}:latest
           _buildArgumentsKey_: |
             _buildArgumentsValues_

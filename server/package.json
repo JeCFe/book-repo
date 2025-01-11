@@ -1,18 +1,16 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Simple Dotnet mininal API backed boilerplate.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "Jessica Fealy",
-  "license": "ISC",
   "dependencies": {
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "cypress": "13.8.1"
+    "@types/jsonwebtoken": "^9.0.6",
+    "cypress": "13.8.1",
+    "jsonwebtoken": "^9.0.2"
   }
 }
