@@ -15,14 +15,14 @@ public class RemoveShareableCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        var dbCustomer = await dbContext.Customer.FindAsync([ CustomerId ], cancellationToken);
+        var dbCustomer = await dbContext.Customer.FindAsync([CustomerId], cancellationToken);
 
         if (dbCustomer is not { } customer)
         {
             throw new UserNotFoundException();
         }
 
-        if ((await dbContext.Shareables.FindAsync([ Id ], cancellationToken)) is not { } shareable)
+        if ((await dbContext.Shareables.FindAsync([Id], cancellationToken)) is not { } shareable)
         {
             return;
         }

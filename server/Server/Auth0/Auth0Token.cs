@@ -1,6 +1,5 @@
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 
@@ -19,18 +18,20 @@ public class Auth0Token : IAuth0Token
 
     public async Task<string> GetAccessToken(CancellationToken cancellationToken)
     {
-        HttpRequestMessage request =
-            new(HttpMethod.Post, $"https://{_options.Value.Domain}/oauth/token");
+        HttpRequestMessage request = new(
+            HttpMethod.Post,
+            $"https://{_options.Value.Domain}/oauth/token"
+        );
         var contentHeader = new MediaTypeHeaderValue("application/json")
         {
-            CharSet = Encoding.UTF8.WebName
+            CharSet = Encoding.UTF8.WebName,
         };
         var content = new ManagementTokenRequestContent()
         {
             client_id = _options.Value.ClientId,
             client_secret = _options.Value.ClientSecret,
             audience = _options.Value.Audience,
-            grant_type = _options.Value.GrantType
+            grant_type = _options.Value.GrantType,
         };
         request.Content = JsonContent.Create(content, contentHeader);
         var response = await _httpClient.SendAsync(request, cancellationToken);

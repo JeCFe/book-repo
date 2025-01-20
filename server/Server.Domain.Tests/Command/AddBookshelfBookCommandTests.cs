@@ -11,16 +11,16 @@ public class AddBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<DbF
     {
         var id = Guid.NewGuid();
 
-        var customer = new Customer() { Id = id.ToString(), CreationDate = DateTimeOffset.UtcNow, };
+        var customer = new Customer() { Id = id.ToString(), CreationDate = DateTimeOffset.UtcNow };
 
         var bookshelf = new Bookshelf()
         {
             Id = id,
             Name = "Homeless books",
-            CreationDate = DateTimeOffset.UtcNow
+            CreationDate = DateTimeOffset.UtcNow,
         };
 
-        customer.Bookshelves =  [ bookshelf ];
+        customer.Bookshelves = [bookshelf];
 
         var book = new Book() { Isbn = id.ToString(), Name = "This is a test" };
 
@@ -35,14 +35,13 @@ public class AddBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<DbF
             {
                 Id = id.ToString(),
                 Isbn = id.ToString(),
-                BookshelfId =  [ id ]
+                BookshelfId = [id],
             }
         );
 
         using var context2 = fixture.CreateContext();
         var bookshelfBooks = context2
-            .BookshelfBook
-            .Where(x => x.BookshelfId == id && x.Isbn == id.ToString())
+            .BookshelfBook.Where(x => x.BookshelfId == id && x.Isbn == id.ToString())
             .ToList();
 
         Assert.NotNull(bookshelfBooks);
@@ -55,23 +54,23 @@ public class AddBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<DbF
         var id = Guid.NewGuid();
         var idB = Guid.NewGuid();
 
-        var customer = new Customer() { Id = id.ToString(), CreationDate = DateTimeOffset.UtcNow, };
+        var customer = new Customer() { Id = id.ToString(), CreationDate = DateTimeOffset.UtcNow };
 
         var bookshelfA = new Bookshelf()
         {
             Id = id,
             Name = "Homeless books",
-            CreationDate = DateTimeOffset.UtcNow
+            CreationDate = DateTimeOffset.UtcNow,
         };
 
         var bookshelfB = new Bookshelf()
         {
             Id = idB,
             Name = "Beautiful books",
-            CreationDate = DateTimeOffset.UtcNow
+            CreationDate = DateTimeOffset.UtcNow,
         };
 
-        customer.Bookshelves =  [ bookshelfA, bookshelfB ];
+        customer.Bookshelves = [bookshelfA, bookshelfB];
 
         var book = new Book() { Isbn = id.ToString(), Name = "This is a test" };
 
@@ -86,22 +85,20 @@ public class AddBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<DbF
             {
                 Id = id.ToString(),
                 Isbn = id.ToString(),
-                BookshelfId =  [ id, idB ]
+                BookshelfId = [id, idB],
             }
         );
 
         using var context2 = fixture.CreateContext();
         var bookshelfBooksA = context2
-            .BookshelfBook
-            .Where(x => x.BookshelfId == id && x.Isbn == id.ToString())
+            .BookshelfBook.Where(x => x.BookshelfId == id && x.Isbn == id.ToString())
             .ToList();
 
         Assert.NotNull(bookshelfBooksA);
         Assert.Single(bookshelfBooksA);
 
         var bookshelfBooksB = context2
-            .BookshelfBook
-            .Where(x => x.BookshelfId == idB && x.Isbn == id.ToString())
+            .BookshelfBook.Where(x => x.BookshelfId == idB && x.Isbn == id.ToString())
             .ToList();
 
         Assert.NotNull(bookshelfBooksB);

@@ -20,22 +20,19 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
     )
     {
         var customer = await dbContext
-            .Customer
-            .Include(x => x.Bookshelves)
+            .Customer.Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.Id == Id, cancellationToken);
-        var book = await dbContext.Books.FindAsync([ Isbn ], cancellationToken);
+        var book = await dbContext.Books.FindAsync([Isbn], cancellationToken);
 
         if (customer == null || book == null)
         {
             return; // Handle missing customer or book
         }
 
-        var customerBook = await dbContext
-            .CustomerBooks
-            .SingleOrDefaultAsync(
-                x => x.Isbn == Isbn && x.CustomerId == customer.Id,
-                cancellationToken
-            );
+        var customerBook = await dbContext.CustomerBooks.SingleOrDefaultAsync(
+            x => x.Isbn == Isbn && x.CustomerId == customer.Id,
+            cancellationToken
+        );
 
         if (customerBook is not { })
         {
@@ -45,7 +42,7 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
                 Isbn = Isbn,
                 Book = book,
                 CustomerId = customer.Id,
-                Customer = customer
+                Customer = customer,
             };
             dbContext.CustomerBooks.Add(customerBook);
         }
@@ -55,68 +52,60 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
             if (customer.Bookshelves.SingleOrDefault(x => x.HomelessBooks == true) is not { })
             {
                 var newHomeless = StaticBookshelf.Homeless();
-                customer.Bookshelves =  [ ..customer.Bookshelves, newHomeless ];
-                dbContext
-                    .BookshelfBook
-                    .Add(
-                        new()
-                        {
-                            CustomerBook = customerBook,
-                            CustomerBookId = customerBook.Id,
-                            Isbn = book.Isbn,
-                            Bookshelf = newHomeless,
-                            BookshelfId = newHomeless.Id,
-                            Order = 0
-                        }
-                    );
-                await dbContext.SaveChangesAsync(cancellationToken);
-                return;
-            }
-            var homeless = customer.Bookshelves.Single(x => x.HomelessBooks == true);
-            dbContext
-                .BookshelfBook
-                .Add(
+                customer.Bookshelves = [.. customer.Bookshelves, newHomeless];
+                dbContext.BookshelfBook.Add(
                     new()
                     {
                         CustomerBook = customerBook,
                         CustomerBookId = customerBook.Id,
                         Isbn = book.Isbn,
-                        Bookshelf = homeless,
-                        BookshelfId = homeless.Id,
-                        Order =
-                            dbContext.BookshelfBook.Where(x => x.BookshelfId == homeless.Id).Count()
-                            + 1
+                        Bookshelf = newHomeless,
+                        BookshelfId = newHomeless.Id,
+                        Order = 0,
                     }
                 );
+                await dbContext.SaveChangesAsync(cancellationToken);
+                return;
+            }
+            var homeless = customer.Bookshelves.Single(x => x.HomelessBooks == true);
+            dbContext.BookshelfBook.Add(
+                new()
+                {
+                    CustomerBook = customerBook,
+                    CustomerBookId = customerBook.Id,
+                    Isbn = book.Isbn,
+                    Bookshelf = homeless,
+                    BookshelfId = homeless.Id,
+                    Order =
+                        dbContext.BookshelfBook.Where(x => x.BookshelfId == homeless.Id).Count()
+                        + 1,
+                }
+            );
             await dbContext.SaveChangesAsync(cancellationToken);
             return;
         }
 
         var selectedBookshelves = customer
-            .Bookshelves
-            .Where(b => BookshelfId.Contains(b.Id))
+            .Bookshelves.Where(b => BookshelfId.Contains(b.Id))
             .ToList();
 
         foreach (var bookshelf in selectedBookshelves)
         {
             var bookshelfCount = dbContext
-                .BookshelfBook
-                .Where(x => x.BookshelfId == bookshelf.Id)
+                .BookshelfBook.Where(x => x.BookshelfId == bookshelf.Id)
                 .Count();
 
-            dbContext
-                .BookshelfBook
-                .Add(
-                    new()
-                    {
-                        CustomerBook = customerBook,
-                        CustomerBookId = customerBook.Id,
-                        Isbn = book.Isbn,
-                        Bookshelf = bookshelf,
-                        BookshelfId = bookshelf.Id,
-                        Order = bookshelfCount + 1
-                    }
-                );
+            dbContext.BookshelfBook.Add(
+                new()
+                {
+                    CustomerBook = customerBook,
+                    CustomerBookId = customerBook.Id,
+                    Isbn = book.Isbn,
+                    Bookshelf = bookshelf,
+                    BookshelfId = bookshelf.Id,
+                    Order = bookshelfCount + 1,
+                }
+            );
         }
 
         await ctx.Publish(
@@ -124,8 +113,7 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
                 Id,
                 new BookAddict(
                     await dbContext
-                        .CustomerBooks
-                        .Where(x => x.Customer.Id == Id)
+                        .CustomerBooks.Where(x => x.Customer.Id == Id)
                         .CountAsync(cancellationToken)
                 )
             ),

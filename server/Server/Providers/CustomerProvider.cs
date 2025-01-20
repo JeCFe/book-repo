@@ -19,8 +19,7 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
     {
         var customer =
             await dbContext
-                .Customer
-                .Include(x => x.Bookshelves)
+                .Customer.Include(x => x.Bookshelves)
                 .Include(x => x.Trophies)
                 .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken)
             ?? throw new UserNotFoundException();
@@ -37,44 +36,47 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
             CreatedOn = customer.CreationDate,
             Bookshelves =
             [
-                ..customer.Bookshelves.Select(x => new Models.CustomerBookshelf() {
-                        Name = x.Name,
-                        Id = x.Id,
-                        CreationDate = x.CreationDate,
-                        UpdatedDate = x.UpdatedDate,
-                        HomelessBooks = x.HomelessBooks,
-                        Books = [..dbContext.BookshelfBook.Where(y => y.Bookshelf.Id == x.Id).Select(z => new BooktoShelf(){
-                            Order = z.Order,
-                            Book = z.CustomerBook.Book,
-                            Ranking = z.CustomerBook.Ranking,
-                            Id = z.CustomerBook.Id,
-                    })]
-                })
+                .. customer.Bookshelves.Select(x => new Models.CustomerBookshelf()
+                {
+                    Name = x.Name,
+                    Id = x.Id,
+                    CreationDate = x.CreationDate,
+                    UpdatedDate = x.UpdatedDate,
+                    HomelessBooks = x.HomelessBooks,
+                    Books =
+                    [
+                        .. dbContext
+                            .BookshelfBook.Where(y => y.Bookshelf.Id == x.Id)
+                            .Select(z => new BooktoShelf()
+                            {
+                                Order = z.Order,
+                                Book = z.CustomerBook.Book,
+                                Ranking = z.CustomerBook.Ranking,
+                                Id = z.CustomerBook.Id,
+                            }),
+                    ],
+                }),
             ],
             Trophies = customer
-                .Trophies
-                .Select(
-                    x =>
-                        new TrophyData()
-                        {
-                            Trophy = x,
-                            Type = x switch
-                            {
-                                BetaTester => TrophyType.BetaTester,
-                                Alerter => TrophyType.Alerter,
-                                Contributor => TrophyType.Contributor,
-                                BookAddict => TrophyType.BookAddict,
-                                Sponsor => TrophyType.Sponsor,
-                                SharingIsCaring => TrophyType.SharingIsCaring,
-                                AvidReviewer => TrophyType.AvidReviewer,
-                                Commentator => TrophyType.Commentator,
-                                GoalScored => TrophyType.GoalScored,
-                                GoalSetter => TrophyType.GoalSetter,
-                                _ => throw new NotImplementedException()
-                            }
-                        }
-                )
-                .ToList()
+                .Trophies.Select(x => new TrophyData()
+                {
+                    Trophy = x,
+                    Type = x switch
+                    {
+                        BetaTester => TrophyType.BetaTester,
+                        Alerter => TrophyType.Alerter,
+                        Contributor => TrophyType.Contributor,
+                        BookAddict => TrophyType.BookAddict,
+                        Sponsor => TrophyType.Sponsor,
+                        SharingIsCaring => TrophyType.SharingIsCaring,
+                        AvidReviewer => TrophyType.AvidReviewer,
+                        Commentator => TrophyType.Commentator,
+                        GoalScored => TrophyType.GoalScored,
+                        GoalSetter => TrophyType.GoalSetter,
+                        _ => throw new NotImplementedException(),
+                    },
+                })
+                .ToList(),
         };
     }
 
@@ -85,18 +87,14 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
     )
     {
         var customerBook = await dbContext
-            .CustomerBooks
-            .Include(cb => cb.Book)
-            .Select(
-                x =>
-                    new Models.ResponseCustomerBook()
-                    {
-                        Comment = x.Comment,
-                        Book = x.Book,
-                        Id = x.Id,
-                        Ranking = x.Ranking
-                    }
-            )
+            .CustomerBooks.Include(cb => cb.Book)
+            .Select(x => new Models.ResponseCustomerBook()
+            {
+                Comment = x.Comment,
+                Book = x.Book,
+                Id = x.Id,
+                Ranking = x.Ranking,
+            })
             .SingleOrDefaultAsync(cb => cb.Id == customerBookId, cancellationToken);
 
         if (customerBook == null)
@@ -105,17 +103,13 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
         }
 
         customerBook.BookshelfSummaries = await dbContext
-            .BookshelfBook
-            .Where(x => x.CustomerBookId == customerBook.Id)
-            .Select(
-                y =>
-                    new BookshelfSummary
-                    {
-                        Id = y.BookshelfId,
-                        Name = y.Bookshelf.Name,
-                        ContainsBook = true
-                    }
-            )
+            .BookshelfBook.Where(x => x.CustomerBookId == customerBook.Id)
+            .Select(y => new BookshelfSummary
+            {
+                Id = y.BookshelfId,
+                Name = y.Bookshelf.Name,
+                ContainsBook = true,
+            })
             .ToListAsync(cancellationToken);
 
         foreach (var bookshelf in dbContext.Bookshelves.Where(x => x.CustomerId == customerId))
@@ -124,9 +118,9 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
             {
                 continue;
             }
-            customerBook
-                .BookshelfSummaries
-                .Add(new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name, });
+            customerBook.BookshelfSummaries.Add(
+                new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name }
+            );
         }
 
         return customerBook;
@@ -137,17 +131,13 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
         CancellationToken cancellationToken
     ) =>
         await dbContext
-            .CustomerBooks
-            .Where(x => x.CustomerId == customerId)
-            .Select(
-                x =>
-                    new Models.ResponseCustomerBook()
-                    {
-                        Comment = x.Comment,
-                        Book = x.Book,
-                        Id = x.Id,
-                        Ranking = x.Ranking
-                    }
-            )
+            .CustomerBooks.Where(x => x.CustomerId == customerId)
+            .Select(x => new Models.ResponseCustomerBook()
+            {
+                Comment = x.Comment,
+                Book = x.Book,
+                Id = x.Id,
+                Ranking = x.Ranking,
+            })
             .ToListAsync(cancellationToken);
 }

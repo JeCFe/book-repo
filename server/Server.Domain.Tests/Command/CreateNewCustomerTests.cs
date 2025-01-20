@@ -20,7 +20,7 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         using var context2 = fixture.CreateContext();
 
-        Assert.NotNull(context2.Customer.Find([ id ]));
+        Assert.NotNull(context2.Customer.Find([id]));
         Assert.Equal(3, context2.Bookshelves.Where(x => x.CustomerId == id).ToList().Count);
     }
 
@@ -35,7 +35,7 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         using var context2 = fixture.CreateContext();
 
-        Assert.NotNull(context2.Customer.Find([ id ]));
+        Assert.NotNull(context2.Customer.Find([id]));
         Assert.Empty(context2.Bookshelves.Where(x => x.CustomerId == id));
     }
 
@@ -46,46 +46,43 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         using var context = fixture.CreateContext();
 
-        Book bookOne =
-            new()
-            {
-                Isbn = Guid.NewGuid().ToString(),
-                Name = "Jess' Adventure",
-                Authors =  [ "Jess" ],
-                Release = "Today",
-                Picture = "None"
-            };
+        Book bookOne = new()
+        {
+            Isbn = Guid.NewGuid().ToString(),
+            Name = "Jess' Adventure",
+            Authors = ["Jess"],
+            Release = "Today",
+            Picture = "None",
+        };
 
-        Book bookTwo =
-            new()
-            {
-                Isbn = Guid.NewGuid().ToString(),
-                Name = "Jess' Adventure",
-                Authors =  [ "Jess" ],
-                Release = "Today",
-                Picture = "None"
-            };
-        context.Books.AddRange([ bookOne, bookTwo ]);
+        Book bookTwo = new()
+        {
+            Isbn = Guid.NewGuid().ToString(),
+            Name = "Jess' Adventure",
+            Authors = ["Jess"],
+            Release = "Today",
+            Picture = "None",
+        };
+        context.Books.AddRange([bookOne, bookTwo]);
         context.SaveChanges();
 
         using var contextAct = fixture.CreateContext();
 
         await fixture.Execute(
             contextAct,
-            new SetupCustomerCommand() { Id = id, Isbns =  [ bookOne.Isbn, bookTwo.Isbn ] }
+            new SetupCustomerCommand() { Id = id, Isbns = [bookOne.Isbn, bookTwo.Isbn] }
         );
 
         using var contextAssert = fixture.CreateContext();
 
-        var homelessBookShelf = contextAssert
-            .Bookshelves
-            .SingleOrDefault(x => x.CustomerId == id && x.Name == "Homeless Books");
+        var homelessBookShelf = contextAssert.Bookshelves.SingleOrDefault(x =>
+            x.CustomerId == id && x.Name == "Homeless Books"
+        );
 
         Assert.NotNull(homelessBookShelf);
 
         var bookshelfBooks = contextAssert
-            .BookshelfBook
-            .Where(x => x.BookshelfId == homelessBookShelf.Id)
+            .BookshelfBook.Where(x => x.BookshelfId == homelessBookShelf.Id)
             .ToList();
 
         Assert.NotNull(bookshelfBooks);

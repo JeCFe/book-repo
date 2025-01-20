@@ -1,6 +1,5 @@
 namespace Server.Providers;
 
-using Microsoft.Extensions.Options;
 using Server.Models;
 
 public interface ICustomerProvider

@@ -9,7 +9,7 @@ public class OpenLibraryClientDecorator(BookRepoContext context, OpenLibraryClie
 {
     public async Task<Book?> GetBook(string isbn, CancellationToken cancellationToken)
     {
-        if ((await context.Books.FindAsync([ isbn ], cancellationToken)) is { } book)
+        if ((await context.Books.FindAsync([isbn], cancellationToken)) is { } book)
         {
             return book;
         }

@@ -20,7 +20,7 @@ public class Auth0ClientTests
             Domain = "Domain",
             Audience = "Audience",
             ClientSecret = "ClientSecret",
-            GrantType = "GrantType"
+            GrantType = "GrantType",
         }
     );
 
@@ -36,8 +36,8 @@ public class Auth0ClientTests
     {
         _mockApiClient.Setup(x => x.Users.DeleteAsync(It.IsAny<string>())).Verifiable();
         _mockApiClient
-            .Setup(
-                x => x.Users.GetAsync(It.IsAny<string>(), null, true, It.IsAny<CancellationToken>())
+            .Setup(x =>
+                x.Users.GetAsync(It.IsAny<string>(), null, true, It.IsAny<CancellationToken>())
             )
             .ThrowsAsync(new ErrorApiException()) // Counter intuitive - throws this when deleting has been succesful as this means no user was returned
             .Verifiable();
@@ -54,8 +54,8 @@ public class Auth0ClientTests
     {
         _mockApiClient.Setup(x => x.Users.DeleteAsync(It.IsAny<string>())).Verifiable();
         _mockApiClient
-            .Setup(
-                x => x.Users.GetAsync(It.IsAny<string>(), null, true, It.IsAny<CancellationToken>())
+            .Setup(x =>
+                x.Users.GetAsync(It.IsAny<string>(), null, true, It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(new User() { })
             .Verifiable();
@@ -75,16 +75,15 @@ public class Auth0ClientTests
         var request = new CustomerUpdateRequest()
         {
             Id = Guid.NewGuid().ToString(),
-            Nickname = "Bob"
+            Nickname = "Bob",
         };
         _mockApiClient
-            .Setup(
-                x =>
-                    x.Users.UpdateAsync(
-                        It.IsAny<string>(),
-                        It.IsAny<UserUpdateRequest>(),
-                        It.IsAny<CancellationToken>()
-                    )
+            .Setup(x =>
+                x.Users.UpdateAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<UserUpdateRequest>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(new User() { })
             .Verifiable();
@@ -101,16 +100,15 @@ public class Auth0ClientTests
         var request = new CustomerUpdateRequest()
         {
             Id = Guid.NewGuid().ToString(),
-            Nickname = "Bob"
+            Nickname = "Bob",
         };
         _mockApiClient
-            .Setup(
-                x =>
-                    x.Users.UpdateAsync(
-                        It.IsAny<string>(),
-                        It.IsAny<UserUpdateRequest>(),
-                        It.IsAny<CancellationToken>()
-                    )
+            .Setup(x =>
+                x.Users.UpdateAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<UserUpdateRequest>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ThrowsAsync(new ErrorApiException(System.Net.HttpStatusCode.NotFound))
             .Verifiable();
@@ -129,16 +127,15 @@ public class Auth0ClientTests
         var request = new CustomerUpdateRequest()
         {
             Id = Guid.NewGuid().ToString(),
-            Nickname = "Bob"
+            Nickname = "Bob",
         };
         _mockApiClient
-            .Setup(
-                x =>
-                    x.Users.UpdateAsync(
-                        It.IsAny<string>(),
-                        It.IsAny<UserUpdateRequest>(),
-                        It.IsAny<CancellationToken>()
-                    )
+            .Setup(x =>
+                x.Users.UpdateAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<UserUpdateRequest>(),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ThrowsAsync(new ErrorApiException(System.Net.HttpStatusCode.BadRequest))
             .Verifiable();

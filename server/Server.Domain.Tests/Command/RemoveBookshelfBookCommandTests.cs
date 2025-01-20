@@ -11,16 +11,16 @@ public class RemoveBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<
     {
         var id = Guid.NewGuid();
 
-        var customer = new Customer() { Id = id.ToString(), CreationDate = DateTimeOffset.UtcNow, };
+        var customer = new Customer() { Id = id.ToString(), CreationDate = DateTimeOffset.UtcNow };
 
         var bookshelf = new Bookshelf()
         {
             Id = id,
             Name = "Homeless books",
-            CreationDate = DateTimeOffset.UtcNow
+            CreationDate = DateTimeOffset.UtcNow,
         };
 
-        customer.Bookshelves =  [ bookshelf ];
+        customer.Bookshelves = [bookshelf];
 
         var book = new Book() { Isbn = id.ToString(), Name = "This is a test" };
         var customerBook = new CustomerBook()
@@ -29,7 +29,7 @@ public class RemoveBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<
             Book = book,
             Isbn = book.Isbn,
             CustomerId = customer.Id,
-            Customer = customer
+            Customer = customer,
         };
         var bookshelfBook = new BookshelfBook()
         {
@@ -38,7 +38,7 @@ public class RemoveBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<
             Bookshelf = bookshelf,
             Isbn = book.Isbn,
             BookshelfId = bookshelf.Id,
-            Order = 0
+            Order = 0,
         };
 
         using var context = fixture.CreateContext();
@@ -53,14 +53,13 @@ public class RemoveBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<
             {
                 CustomerId = id.ToString(),
                 Isbn = id.ToString(),
-                BookshelfId = id
+                BookshelfId = id,
             }
         );
 
         using var context2 = fixture.CreateContext();
         var bookshelfBooks = context2
-            .BookshelfBook
-            .Where(x => x.BookshelfId == id && x.Isbn == id.ToString())
+            .BookshelfBook.Where(x => x.BookshelfId == id && x.Isbn == id.ToString())
             .ToList();
 
         Assert.Empty(bookshelfBooks);

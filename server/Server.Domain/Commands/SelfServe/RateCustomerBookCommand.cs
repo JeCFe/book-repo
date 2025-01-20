@@ -19,13 +19,13 @@ public class RateCustomerBookCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if (await dbContext.Customer.FindAsync([ CustomerId ], cancellationToken) is not { })
+        if (await dbContext.Customer.FindAsync([CustomerId], cancellationToken) is not { })
         {
             throw new UserNotFoundException();
         }
 
         if (
-            await dbContext.CustomerBooks.FindAsync([ CustomerBookId ], cancellationToken)
+            await dbContext.CustomerBooks.FindAsync([CustomerBookId], cancellationToken)
             is not { } customerBook
         )
         {
@@ -37,12 +37,10 @@ public class RateCustomerBookCommand : ICommand<BookRepoContext>
                 CustomerId,
                 new AvidReviewer(
                     await dbContext
-                        .CustomerBooks
-                        .Where(cb => cb.CustomerId == CustomerId)
+                        .CustomerBooks.Where(cb => cb.CustomerId == CustomerId)
                         .CountAsync(cancellationToken)
                 )
-                {
-                    }
+                { }
             ),
             cancellationToken
         );

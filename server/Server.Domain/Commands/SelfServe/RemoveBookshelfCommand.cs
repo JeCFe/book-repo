@@ -16,12 +16,10 @@ public class RemoveBookshelfCommand : ICommand<BookRepoContext>
     )
     {
         await dbContext
-            .BookshelfBook
-            .Where(x => x.BookshelfId == BookshelfId)
+            .BookshelfBook.Where(x => x.BookshelfId == BookshelfId)
             .ExecuteDeleteAsync(cancellationToken);
         await dbContext
-            .Bookshelves
-            .Where(x => x.CustomerId == Id && x.Id == BookshelfId)
+            .Bookshelves.Where(x => x.CustomerId == Id && x.Id == BookshelfId)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }

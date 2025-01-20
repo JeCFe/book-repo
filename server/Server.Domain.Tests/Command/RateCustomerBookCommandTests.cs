@@ -1,7 +1,6 @@
 namespace Server.Domain.Tests.Commands;
 
 using Common.Exceptions;
-using Microsoft.Identity.Client;
 using Server.Domain.Commands;
 using Server.Domain.Models;
 using Server.Domain.Tests.Fixtures;
@@ -21,7 +20,7 @@ public class RateCustomrBooksCommandTests(DbFixture fixture) : IClassFixture<DbF
                     {
                         CustomerBookId = Guid.NewGuid(),
                         CustomerId = Guid.NewGuid().ToString(),
-                        Ranking = 1
+                        Ranking = 1,
                     }
                 )
         );
@@ -43,7 +42,7 @@ public class RateCustomrBooksCommandTests(DbFixture fixture) : IClassFixture<DbF
                     {
                         CustomerBookId = Guid.NewGuid(),
                         CustomerId = id,
-                        Ranking = 1
+                        Ranking = 1,
                     }
                 )
         );
@@ -55,24 +54,25 @@ public class RateCustomrBooksCommandTests(DbFixture fixture) : IClassFixture<DbF
         using var context = fixture.CreateContext();
         var ranking = 5;
         var customerBookId = Guid.NewGuid();
-        Customer customer =
-            new() { Id = Guid.NewGuid().ToString(), CreationDate = DateTime.UtcNow };
+        Customer customer = new()
+        {
+            Id = Guid.NewGuid().ToString(),
+            CreationDate = DateTime.UtcNow,
+        };
         Book book = new() { Isbn = Guid.NewGuid().ToString(), Name = "Test book" };
 
         context.Customer.Add(customer);
         context.Books.Add(book);
-        context
-            .CustomerBooks
-            .Add(
-                new()
-                {
-                    Id = customerBookId,
-                    Book = book,
-                    Isbn = book.Isbn,
-                    Customer = customer,
-                    CustomerId = customer.Id
-                }
-            );
+        context.CustomerBooks.Add(
+            new()
+            {
+                Id = customerBookId,
+                Book = book,
+                Isbn = book.Isbn,
+                Customer = customer,
+                CustomerId = customer.Id,
+            }
+        );
         await context.SaveChangesAsync();
 
         await fixture.Execute(
@@ -81,7 +81,7 @@ public class RateCustomrBooksCommandTests(DbFixture fixture) : IClassFixture<DbF
             {
                 CustomerBookId = customerBookId,
                 CustomerId = customer.Id,
-                Ranking = ranking
+                Ranking = ranking,
             }
         );
 

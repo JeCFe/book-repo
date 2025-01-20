@@ -1,4 +1,4 @@
-using Server.Models;
+namespace Server.Models;
 
 public record ShareableSummary
 {

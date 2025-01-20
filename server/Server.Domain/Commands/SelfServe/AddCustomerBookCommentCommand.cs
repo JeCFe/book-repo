@@ -19,13 +19,13 @@ public class AddCustomerBookCommentCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if (await dbContext.Customer.FindAsync([ CustomerId ], cancellationToken) is not { })
+        if (await dbContext.Customer.FindAsync([CustomerId], cancellationToken) is not { })
         {
             throw new UserNotFoundException();
         }
 
         if (
-            await dbContext.CustomerBooks.FindAsync([ CustomerBookId ], cancellationToken)
+            await dbContext.CustomerBooks.FindAsync([CustomerBookId], cancellationToken)
             is not { } customerBook
         )
         {
@@ -37,12 +37,12 @@ public class AddCustomerBookCommentCommand : ICommand<BookRepoContext>
                 CustomerId,
                 new Commentator(
                     await dbContext
-                        .CustomerBooks
-                        .Where(cb => cb.CustomerId == CustomerId && cb.Comment != null)
+                        .CustomerBooks.Where(cb =>
+                            cb.CustomerId == CustomerId && cb.Comment != null
+                        )
                         .CountAsync(cancellationToken)
                 )
-                {
-                    }
+                { }
             ),
             cancellationToken
         );

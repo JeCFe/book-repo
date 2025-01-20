@@ -22,7 +22,7 @@ public class Auth0Client : IAuth0Client
         _client = client switch
         {
             { } => client,
-            _ => new ManagementApiClient(accessToken, options.Value.Domain)
+            _ => new ManagementApiClient(accessToken, options.Value.Domain),
         };
     }
 
@@ -45,9 +45,11 @@ public class Auth0Client : IAuth0Client
     {
         try
         {
-            return await _client
-                .Users
-                .UpdateAsync(request.Id, new() { NickName = request.Nickname }, cancellationToken);
+            return await _client.Users.UpdateAsync(
+                request.Id,
+                new() { NickName = request.Nickname },
+                cancellationToken
+            );
         }
         catch (ErrorApiException ex)
         {

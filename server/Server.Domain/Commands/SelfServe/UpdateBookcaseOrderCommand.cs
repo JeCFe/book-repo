@@ -20,8 +20,7 @@ public class UpdateBookcaseOrderCommand : ICommand<BookRepoContext>
         foreach (var book in Books)
         {
             await dbContext
-                .BookshelfBook
-                .Where(x => x.BookshelfId == BookshelfId && x.Isbn == book.Isbn)
+                .BookshelfBook.Where(x => x.BookshelfId == BookshelfId && x.Isbn == book.Isbn)
                 .ExecuteUpdateAsync(
                     setters => setters.SetProperty(y => y.Order, book.Order),
                     cancellationToken

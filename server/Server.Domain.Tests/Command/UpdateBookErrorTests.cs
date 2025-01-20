@@ -27,7 +27,7 @@ public class UpdateBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
             {
                 Isbn = isbn,
                 Comment = comment,
-                Type = BookErrorType.Title
+                Type = BookErrorType.Title,
             },
             "Test Jess"
         );
@@ -53,7 +53,7 @@ public class UpdateBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
                     {
                         Isbn = isbn,
                         Type = BookErrorType.Title,
-                        Comment = "Test"
+                        Comment = "Test",
                     }
                 )
         );
