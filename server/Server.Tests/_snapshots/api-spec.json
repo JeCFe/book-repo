@@ -1,0 +1,2050 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Backend Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/action/forget-me": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgetMeCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/action/add-bookshelf": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookshelfCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/action/setup-customer": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupCustomerCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/action/raise-book-error": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookErrorCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/action/remove-bookshelf": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBookshelfCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/action/rate-customer-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RateCustomerBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/action/add-book-shelf-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddBookshelfBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/action/comment-customer-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCustomerBookCommentCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/action/remove-bookshelf-book": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBookshelfBookCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/action/update-bookshelf-order": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBookcaseOrderCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/action/add-customer-book-bookshelf": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCustomerBookToBookshelfCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/action/shareable/add": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddShareableCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/action/shareable/remove": {
+      "post": {
+        "tags": [
+          "Actions"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveShareableCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/book/{isbn}": {
+      "get": {
+        "tags": [
+          "Book"
+        ],
+        "parameters": [
+          {
+            "name": "isbn",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/bookshelf/{bookshelfId}": {
+      "get": {
+        "tags": [
+          "Bookshelf"
+        ],
+        "parameters": [
+          {
+            "name": "bookshelfId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerBookshelf"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/bookshelf/summary/{customerId}": {
+      "get": {
+        "tags": [
+          "Bookshelf"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookshelfSummary"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/bookshelf/homeless/{customerId}": {
+      "get": {
+        "tags": [
+          "Bookshelf"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/delete": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/customer/update": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customer/books": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseCustomerBook"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/get-customer-summary": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerSummary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/customer/{customerId}/{customerBookId}": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerBookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCustomerBook"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/shareable/{ShareId}": {
+      "get": {
+        "tags": [
+          "Shareable"
+        ],
+        "parameters": [
+          {
+            "name": "ShareId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shareable"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/shareable/all/{CustomerId}": {
+      "get": {
+        "tags": [
+          "Shareable"
+        ],
+        "parameters": [
+          {
+            "name": "CustomerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShareableSummary"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddBookErrorCommand": {
+        "required": [
+          "isbn",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/BookErrorType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddBookshelfBookCommand": {
+        "required": [
+          "bookshelfId",
+          "id",
+          "isbn"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddBookshelfCommand": {
+        "required": [
+          "bookshelves",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddCustomerBookCommentCommand": {
+        "required": [
+          "comment",
+          "customerBookId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddCustomerBookToBookshelfCommand": {
+        "required": [
+          "bookshelfId",
+          "customerBookId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AddShareableCommand": {
+        "required": [
+          "shareable"
+        ],
+        "type": "object",
+        "properties": {
+          "shareable": {
+            "$ref": "#/components/schemas/CommandShareable"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AdminComment": {
+        "required": [
+          "adminUsername",
+          "comment",
+          "created"
+        ],
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "adminUsername": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Alerter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "AvidReviewer": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "BetaTester": {
+        "required": [
+          "dateJoined"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "properties": {
+          "dateJoined": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Book": {
+        "required": [
+          "bookErrors",
+          "isbn",
+          "name",
+          "pageCount",
+          "subjects"
+        ],
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "subjects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "release": {
+            "type": "string"
+          },
+          "picture": {
+            "type": "string"
+          },
+          "pageCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bookErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookError"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BookAddict": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "BookError": {
+        "required": [
+          "adminComment",
+          "book",
+          "createdAt",
+          "error",
+          "isbn",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "additionalCustomerComment": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "error": {
+            "$ref": "#/components/schemas/BookErrorType"
+          },
+          "adminComment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminComment"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/BookErrorStatus"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BookErrorStatus": {
+        "enum": [
+          "pending",
+          "closed",
+          "completed"
+        ],
+        "type": "string"
+      },
+      "BookErrorType": {
+        "enum": [
+          "title",
+          "picture",
+          "author",
+          "release",
+          "subjects",
+          "pages"
+        ],
+        "type": "string"
+      },
+      "Bookshelf": {
+        "required": [
+          "creationDate",
+          "homelessBooks",
+          "id",
+          "name",
+          "updatedDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "homelessBooks": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BookshelfSummary": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "containsBook": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BooktoShelf": {
+        "required": [
+          "book",
+          "id",
+          "order",
+          "ranking"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ranking": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandBookShowcase": {
+        "required": [
+          "customerBookId",
+          "showComment",
+          "showRanking"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "showRanking": {
+            "type": "boolean"
+          },
+          "showComment": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandBookshelf": {
+        "required": [
+          "bookshelfId",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandShareable": {
+        "required": [
+          "bookshelves",
+          "customerId",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommandBookshelf"
+            },
+            "nullable": true
+          },
+          "showcase": {
+            "$ref": "#/components/schemas/CommandBookShowcase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Commentator": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Contributor": {
+        "required": [
+          "prContributed"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "properties": {
+          "prContributed": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Customer": {
+        "required": [
+          "bookshelves",
+          "creationDate",
+          "id",
+          "trophies"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bookshelf"
+            },
+            "nullable": true
+          },
+          "shareables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Shareable"
+            }
+          },
+          "trophies": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/BetaTester"
+                },
+                {
+                  "$ref": "#/components/schemas/Contributor"
+                },
+                {
+                  "$ref": "#/components/schemas/BookAddict"
+                },
+                {
+                  "$ref": "#/components/schemas/Sponsor"
+                },
+                {
+                  "$ref": "#/components/schemas/SharingIsCaring"
+                },
+                {
+                  "$ref": "#/components/schemas/AvidReviewer"
+                },
+                {
+                  "$ref": "#/components/schemas/Commentator"
+                },
+                {
+                  "$ref": "#/components/schemas/GoalScored"
+                },
+                {
+                  "$ref": "#/components/schemas/GoalSetter"
+                },
+                {
+                  "$ref": "#/components/schemas/Alerter"
+                }
+              ]
+            },
+            "nullable": true
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerBook": {
+        "required": [
+          "book",
+          "customer",
+          "customerId",
+          "id",
+          "isbn",
+          "ranking"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "ranking": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerBookshelf": {
+        "required": [
+          "books",
+          "creationDate",
+          "homelessBooks",
+          "id",
+          "name",
+          "updatedDate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "books": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BooktoShelf"
+            },
+            "nullable": true
+          },
+          "creationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "homelessBooks": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerSummary": {
+        "required": [
+          "bookshelves",
+          "createdOn",
+          "id",
+          "trophies"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerBookshelf"
+            },
+            "nullable": true
+          },
+          "trophies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrophyData"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerUpdateRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "nickname": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeleteRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgetMeCommand": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GoalScored": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "GoalSetter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Identity": {
+        "required": [
+          "expiresIn"
+        ],
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "accessTokenSecret": {
+            "type": "string"
+          },
+          "connection": {
+            "type": "string"
+          },
+          "expiresIn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isSocial": {
+            "type": "boolean"
+          },
+          "profileData": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "provider": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JToken": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/JToken"
+        }
+      },
+      "RateCustomerBookCommand": {
+        "required": [
+          "customerBookId",
+          "customerId",
+          "ranking"
+        ],
+        "type": "object",
+        "properties": {
+          "customerBookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "ranking": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemoveBookshelfBookCommand": {
+        "required": [
+          "bookshelfId",
+          "customerId",
+          "isbn"
+        ],
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemoveBookshelfCommand": {
+        "required": [
+          "bookshelfId",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RemoveShareableCommand": {
+        "required": [
+          "customerId",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseCustomerBook": {
+        "required": [
+          "book",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ranking": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "bookshelfSummaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookshelfSummary"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "SetupCustomerCommand": {
+        "required": [
+          "id",
+          "includeDefaultBookshelves"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelvesNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isbns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "includeDefaultBookshelves": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Shareable": {
+        "required": [
+          "bookshelves",
+          "createdAt",
+          "customer",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "bookshelves": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShareableBookshelf"
+            },
+            "nullable": true
+          },
+          "showcase": {
+            "$ref": "#/components/schemas/ShareableBookShowcase"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShareableBookShowcase": {
+        "required": [
+          "customerBook",
+          "showComment",
+          "showRanking"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "customerBook": {
+            "$ref": "#/components/schemas/CustomerBook"
+          },
+          "showRanking": {
+            "type": "boolean"
+          },
+          "showComment": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShareableBookshelf": {
+        "required": [
+          "bookshelf",
+          "createdAt",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bookshelf": {
+            "$ref": "#/components/schemas/Bookshelf"
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ShareableSummary": {
+        "required": [
+          "created",
+          "id",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SharingIsCaring": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Sponsor": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Trophy"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "Trophy": {
+        "required": [
+          "dateAchieved",
+          "description",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateAchieved": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrophyData": {
+        "required": [
+          "trophy",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "trophy": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BetaTester"
+              },
+              {
+                "$ref": "#/components/schemas/Contributor"
+              },
+              {
+                "$ref": "#/components/schemas/BookAddict"
+              },
+              {
+                "$ref": "#/components/schemas/Sponsor"
+              },
+              {
+                "$ref": "#/components/schemas/SharingIsCaring"
+              },
+              {
+                "$ref": "#/components/schemas/AvidReviewer"
+              },
+              {
+                "$ref": "#/components/schemas/Commentator"
+              },
+              {
+                "$ref": "#/components/schemas/GoalScored"
+              },
+              {
+                "$ref": "#/components/schemas/GoalSetter"
+              },
+              {
+                "$ref": "#/components/schemas/Alerter"
+              }
+            ],
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/TrophyType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrophyType": {
+        "enum": [
+          "alerter",
+          "basic",
+          "beta-tester",
+          "contributor",
+          "book-addict",
+          "sponsor",
+          "sharing-is-caring",
+          "avid-reviewer",
+          "commentator",
+          "goal-scored",
+          "goal-setter"
+        ],
+        "type": "string"
+      },
+      "UpdateBook": {
+        "required": [
+          "isbn",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateBookcaseOrderCommand": {
+        "required": [
+          "books",
+          "bookshelfId",
+          "customerId"
+        ],
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookshelfId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "books": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdateBook"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "User": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          }
+        ],
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "identities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Identity"
+            }
+          },
+          "lastIpAddress": {
+            "type": "string"
+          },
+          "lastLogin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastPasswordReset": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "loginsCount": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "providerAttributes": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JToken"
+            }
+          },
+          "multifactor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserBase": {
+        "type": "object",
+        "properties": {
+          "appMetadata": {},
+          "email": {
+            "type": "string"
+          },
+          "emailVerified": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "phoneVerified": {
+            "type": "boolean"
+          },
+          "userMetadata": {},
+          "userName": {
+            "type": "string"
+          },
+          "nickName": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "picture": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserCreateRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          }
+        ],
+        "properties": {
+          "connection": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "verifyEmail": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          }
+        ],
+        "properties": {
+          "connection": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "verifyEmail": {
+            "type": "boolean"
+          },
+          "verifyPassword": {
+            "type": "boolean"
+          },
+          "verifyPhoneNumber": {
+            "type": "boolean"
+          },
+          "clientId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "JWT Authorization header using the Bearer scheme",
+        "scheme": "bearer"
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://dev-yf34hkokp08w5btt.uk.auth0.com/authorize?audience=/auth",
+            "tokenUrl": "https://dev-yf34hkokp08w5btt.uk.auth0.com/oauth/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    },
+    {
+      "oauth2": []
+    }
+  ]
+}

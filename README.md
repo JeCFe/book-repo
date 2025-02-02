@@ -1,37 +1,42 @@
-# Next-dotnet-auth0
+<div align="center">
+<img width="200" alt="Book Repo logo" src="https://github.com/JeCFe/book-repo/assets/38367384/225023c4-8d80-4a84-9a88-18402563fa19">
+</div>
 
-A basic implementation of Auth0 using Next.js and dotnet minimal APIs that can be used as a template for future projects.
+# The Book Repository
 
-Once this repo is cloned / forked / used setup as below, once completed either locally or via Azure visit the Next.js web client. Clicking the `Ping Api` button should result in a return message of `Woo Authed` this will mean that the backend and frontend have an authenticated API using Auth0 credentials connected.
+A service to allow for the visualisation and management of you physical bookshelf in the digital world. Persistant user storage and secure user accounts with Auth0 being the authentication provider. Deploying to Azure Container Registries / Apps, using OpenLibrary public APIs for inital data injection when searching for book. Caching the book data onto Azure SQL Server and the book covers onto Azure Blob Storage. 
 
-Forking / using this template will require some setup for Auth0, Azure, and Github environment secret setup, the following is required: 
+## Features
 
-### Azure
-Set up the following via Azure Portal 
-- Resource Group
-- Azure Container Registry
-- 2x Azure Container Apps
-- Azure Key Vault
-
-### Github Environment
-<img width="189" alt="Screenshot 2024-05-05 at 23 39 36" src="https://github.com/JeCFe/next-dotnet-auth0/assets/38367384/3d12c1a8-3b0c-4a51-bca0-3ae3b2956931">
+- Ability to create and manage user account (following GDPR principles)
+- Create and manage numourous bookshelves
+- Add books to these bookshelves with unique ordering per shelf
+- Ability to add books by ISBN and fuzzy searching
+- Allow to rate books
+- Allow to add comments onto books
+- Trophy / achievements that display on user profiles
 
 
-## Deployment
-CICD pipelines have been setup to run unit and cypress testing for both client and server. Automatic deployment to Azure Container Registry and Azure Container Apps has been configured, you can view the template next app here [Next Template](https://next-template.jessicafealy.dev)
+## Roadmap
 
-## Frontend
+- Shareable uneditable links to bookshelves / account
+- Favourite / "Wish list" book from a shareable link
+- Allow importing library from Good Read
+- Set reading goals 
+- Be able to see a global catalogue of book other customers use with averaged reviews and anonymous reviews
+- Add books into a series and filter by series 
+- Add different filtering per bookshelf 
+- AI driven book recommendations based of what's in your bookshelf or what has been recently read  
+- Be able to raise errors with the book data / cover
+- Admin portal to allow the management of users and errors raised about books
+- Split out the user self service into a dedicated service and app so it's reusable by other apps in the future
+- ~~Trophy / achievements that display on user profiles~~, and are shareable on the shared pages
 
-Read the frontend README
 
-```Basb
-cd client
-```
+## Third Party Providers
 
-## Backend
+Azure -> used for deployments, SQL servers, and blob storage 
 
-Read the backend README
+Auth0 -> used as authentication provider 
 
-```Basb
-cd server
-```
+OpenLibrary -> used to get book data and book covers
