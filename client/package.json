@@ -10,7 +10,8 @@
     "build:client": "openapi-typescript ../server/Server.Tests/_snapshots/api-spec.json -o server-client.d.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "cypress:e2e": "cypress run --browser chrome"
+    "cypress:e2e": "cypress run --browser chrome",
+    "install": "npm run build:client"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.2.0",
