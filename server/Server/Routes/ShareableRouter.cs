@@ -3,6 +3,7 @@ namespace Server.Routes;
 using Common.Context;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Server.Domain.Models;
+using Server.Models;
 using Server.Providers;
 
 public static class ShareableRouter
