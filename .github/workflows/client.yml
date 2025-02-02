@@ -67,10 +67,10 @@ jobs:
           working-directory: ./client
 
       - name: Upload screenshots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-${{ matrix.runs-on }}
           path: ./client/cypress/screenshots
 
       - name: Docker container
