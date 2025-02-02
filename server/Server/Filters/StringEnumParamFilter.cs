@@ -12,9 +12,7 @@ public class StringEnumParamFilter : IParameterFilter
         var getStringValues =
             GetStringValuesMethod(context.ApiParameterDescription.Type)
             ?? context
-                .ApiParameterDescription
-                .Type
-                .GetInterfaces()
+                .ApiParameterDescription.Type.GetInterfaces()
                 .Select(GetStringValuesMethod)
                 .FirstOrDefault();
 

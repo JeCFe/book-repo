@@ -17,8 +17,7 @@ public class RemoveBookshelfBookCommand : ICommand<BookRepoContext, int>
     )
     {
         return await dbContext
-            .BookshelfBook
-            .Where(x => x.BookshelfId == BookshelfId && x.Isbn == Isbn)
+            .BookshelfBook.Where(x => x.BookshelfId == BookshelfId && x.Isbn == Isbn)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }

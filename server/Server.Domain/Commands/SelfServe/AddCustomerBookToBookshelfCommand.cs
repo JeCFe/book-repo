@@ -20,12 +20,10 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
     )
     {
         if (
-            await dbContext
-                .BookshelfBook
-                .SingleOrDefaultAsync(
-                    x => x.CustomerBookId == CustomerBookId && x.BookshelfId == BookshelfId,
-                    cancellationToken
-                ) is
+            await dbContext.BookshelfBook.SingleOrDefaultAsync(
+                x => x.CustomerBookId == CustomerBookId && x.BookshelfId == BookshelfId,
+                cancellationToken
+            ) is
             { }
         )
         {
@@ -33,11 +31,10 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
         }
 
         var customerBook = await dbContext
-            .CustomerBooks
-            .Include(x => x.Book)
+            .CustomerBooks.Include(x => x.Book)
             .SingleOrDefaultAsync(x => x.Id == CustomerBookId, cancellationToken);
 
-        var bookshelf = await dbContext.Bookshelves.FindAsync([ BookshelfId ], cancellationToken);
+        var bookshelf = await dbContext.Bookshelves.FindAsync([BookshelfId], cancellationToken);
 
         if (customerBook == null)
         {
@@ -49,12 +46,10 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
             throw new BookshelfNotFound();
         }
 
-        var bookshelfBook = await dbContext
-            .BookshelfBook
-            .SingleOrDefaultAsync(
-                x => x.CustomerBookId == CustomerBookId && x.BookshelfId == bookshelf.Id,
-                cancellationToken
-            );
+        var bookshelfBook = await dbContext.BookshelfBook.SingleOrDefaultAsync(
+            x => x.CustomerBookId == CustomerBookId && x.BookshelfId == bookshelf.Id,
+            cancellationToken
+        );
 
         bookshelfBook = new BookshelfBook()
         {
@@ -63,7 +58,7 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
             BookshelfId = bookshelf.Id,
             CustomerBook = customerBook,
             Bookshelf = bookshelf,
-            Order = dbContext.BookshelfBook.Where(x => x.BookshelfId == BookshelfId).Count() + 1
+            Order = dbContext.BookshelfBook.Where(x => x.BookshelfId == BookshelfId).Count() + 1,
         };
         dbContext.BookshelfBook.Add(bookshelfBook);
 

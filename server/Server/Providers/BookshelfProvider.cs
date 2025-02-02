@@ -33,7 +33,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
                         Ranking = book.CustomerBook.Ranking,
                         Id = book.CustomerBook.Id,
                     }
-                ).ToList()
+                ).ToList(),
             };
         return await customerBookshelf.FirstOrDefaultAsync(cancellationToken);
     }
@@ -43,8 +43,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
         CancellationToken cancellationToken
     ) =>
         await context
-            .Bookshelves
-            .Where(x => x.CustomerId == customerId)
+            .Bookshelves.Where(x => x.CustomerId == customerId)
             .Select(bookshelf => new BookshelfSummary { Id = bookshelf.Id, Name = bookshelf.Name })
             .ToListAsync(cancellationToken);
 
@@ -54,19 +53,17 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
     )
     {
         if (
-            await context
-                .Bookshelves
-                .SingleOrDefaultAsync(
-                    x => x.CustomerId == customerId && x.HomelessBooks,
-                    cancellationToken
-                ) is
+            await context.Bookshelves.SingleOrDefaultAsync(
+                x => x.CustomerId == customerId && x.HomelessBooks,
+                cancellationToken
+            ) is
             { } homeless
         )
         {
             return homeless.Id;
         }
 
-        if (await context.Customer.FindAsync([ customerId ], cancellationToken) is not { } customer)
+        if (await context.Customer.FindAsync([customerId], cancellationToken) is not { } customer)
         {
             throw new UserNotFoundException();
         }

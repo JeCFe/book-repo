@@ -17,14 +17,13 @@ public class AddShareableCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if ((await dbContext.Shareables.FindAsync([ Shareable.Id ], cancellationToken)) is { })
+        if ((await dbContext.Shareables.FindAsync([Shareable.Id], cancellationToken)) is { })
         {
             return;
         }
 
         var dbCustomer = await dbContext
-            .Customer
-            .Include(x => x.Bookshelves)
+            .Customer.Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.Id == Shareable.CustomerId, cancellationToken);
 
         if (dbCustomer is not { } customer)
@@ -32,13 +31,12 @@ public class AddShareableCommand : ICommand<BookRepoContext>
             throw new UserNotFoundException();
         }
 
-        Shareable shareable =
-            new()
-            {
-                Id = Shareable.Id,
-                Title = Shareable.Title,
-                Customer = customer
-            };
+        Shareable shareable = new()
+        {
+            Id = Shareable.Id,
+            Title = Shareable.Title,
+            Customer = customer,
+        };
 
         if (Shareable.Bookshelves is { })
         {
@@ -51,15 +49,9 @@ public class AddShareableCommand : ICommand<BookRepoContext>
                 {
                     throw new BookshelfNotFound();
                 }
-                shareable
-                    .Bookshelves
-                    .Add(
-                        new ShareableBookshelf()
-                        {
-                            Bookshelf = validBookshelf,
-                            Order = bookshelf.Order
-                        }
-                    );
+                shareable.Bookshelves.Add(
+                    new ShareableBookshelf() { Bookshelf = validBookshelf, Order = bookshelf.Order }
+                );
             }
         }
 
@@ -67,9 +59,10 @@ public class AddShareableCommand : ICommand<BookRepoContext>
         {
             if (
                 (
-                    await dbContext
-                        .CustomerBooks
-                        .FindAsync([ Shareable.Showcase.CustomerBookId ], cancellationToken)
+                    await dbContext.CustomerBooks.FindAsync(
+                        [Shareable.Showcase.CustomerBookId],
+                        cancellationToken
+                    )
                 )
                 is not { } customerBook
             )
@@ -81,7 +74,7 @@ public class AddShareableCommand : ICommand<BookRepoContext>
             {
                 CustomerBook = customerBook,
                 ShowRanking = Shareable.Showcase.ShowRanking,
-                ShowComment = Shareable.Showcase.ShowComment
+                ShowComment = Shareable.Showcase.ShowComment,
             };
         }
 
@@ -90,12 +83,10 @@ public class AddShareableCommand : ICommand<BookRepoContext>
                 Shareable.CustomerId,
                 new SharingIsCaring(
                     await dbContext
-                        .Shareables
-                        .Where(s => s.Customer.Id == Shareable.CustomerId)
+                        .Shareables.Where(s => s.Customer.Id == Shareable.CustomerId)
                         .CountAsync(cancellationToken)
                 )
-                {
-                    }
+                { }
             ),
             cancellationToken
         );
@@ -110,7 +101,7 @@ public record CommandShareable
     public required Guid Id { get; init; }
     public required string Title { get; init; }
     public required string CustomerId { get; init; }
-    public List<CommandBookshelf> Bookshelves { get; set; } = [ ];
+    public List<CommandBookshelf> Bookshelves { get; set; } = [];
     public CommandBookShowcase? Showcase { get; set; } = null;
 }
 

@@ -43,7 +43,7 @@ public class OpenLibraryClient : IOpenLibraryCient
 
     public async Task<List<string>?> GetAuthors(List<string> authorKeys)
     {
-        List<string> authors =  [ ];
+        List<string> authors = [];
         foreach (var i in authorKeys)
         {
             var author = await _client.Author.GetDataAsync(i);
@@ -68,9 +68,9 @@ public class OpenLibraryClient : IOpenLibraryCient
             Name = book.Title,
             Release = GetReleaseDate(book),
             Picture = await GetBookCover(isbn),
-            Subjects =  [ .. book.Subjects ],
+            Subjects = [.. book.Subjects],
             PageCount = book.PageCount,
-            Authors = await GetAuthors([ .. book.AuthorKeys ])
+            Authors = await GetAuthors([.. book.AuthorKeys]),
         };
     }
 }

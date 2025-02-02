@@ -21,8 +21,7 @@ public class AddBookErrorCommand : ICommand<BookRepoContext>
     {
         if (
             await dbContext
-                .Books
-                .Include(x => x.BookErrors)
+                .Books.Include(x => x.BookErrors)
                 .SingleOrDefaultAsync(x => x.Isbn == Isbn, cancellationToken)
             is not { } book
         )

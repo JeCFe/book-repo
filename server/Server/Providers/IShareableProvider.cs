@@ -1,6 +1,7 @@
 namespace Server.Providers;
 
 using Server.Domain.Models;
+using Server.Models;
 
 public interface IShareableProvider
 {

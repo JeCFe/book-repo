@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 namespace Server.OpenLibrary.Blob;
 
 public record BlobOptions

@@ -9,10 +9,9 @@ public class BlobClient(IOptions<BlobOptions> options, BlobContainerClient? cont
     private readonly BlobContainerClient _containerClient = containerClient switch
     {
         { } => containerClient,
-        _
-            => new BlobServiceClient(options.Value.ConnectionString).GetBlobContainerClient(
-                options.Value.ContainerName
-            )
+        _ => new BlobServiceClient(options.Value.ConnectionString).GetBlobContainerClient(
+            options.Value.ContainerName
+        ),
     };
 
     public async Task<string> UploadImageToBlobStorage(byte[] imageBytes, string isbn)

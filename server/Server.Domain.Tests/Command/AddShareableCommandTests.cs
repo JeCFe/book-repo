@@ -1,7 +1,6 @@
 namespace Server.Domain.Tests.Commands;
 
 using Common.Exceptions;
-using Microsoft.Identity.Client;
 using Server.Domain.Commands;
 using Server.Domain.Models;
 using Server.Domain.Tests.Fixtures;
@@ -23,8 +22,8 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
                         {
                             Id = Guid.NewGuid(),
                             Title = "Test",
-                            CustomerId = Guid.NewGuid().ToString()
-                        }
+                            CustomerId = Guid.NewGuid().ToString(),
+                        },
                     }
                 )
         );
@@ -52,9 +51,9 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
                             CustomerId = id,
                             Bookshelves = new()
                             {
-                                new CommandBookshelf() { BookshelfId = Guid.NewGuid(), Order = 1 }
-                            }
-                        }
+                                new CommandBookshelf() { BookshelfId = Guid.NewGuid(), Order = 1 },
+                            },
+                        },
                     }
                 )
         );
@@ -83,8 +82,8 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
                             Showcase = new CommandBookShowcase()
                             {
                                 CustomerBookId = Guid.NewGuid(),
-                            }
-                        }
+                            },
+                        },
                     }
                 )
         );
@@ -108,7 +107,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
                     CustomerId = id,
                     Title = "Test",
                     Id = shareId,
-                }
+                },
             }
         );
 
@@ -124,16 +123,14 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
         var shareId = Guid.NewGuid();
         var bookshelfId = Guid.NewGuid();
         context.Customer.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
-        context
-            .Bookshelves
-            .Add(
-                new()
-                {
-                    Id = bookshelfId,
-                    Name = "Test",
-                    CustomerId = id
-                }
-            );
+        context.Bookshelves.Add(
+            new()
+            {
+                Id = bookshelfId,
+                Name = "Test",
+                CustomerId = id,
+            }
+        );
         context.SaveChanges();
 
         await fixture.Execute(
@@ -145,8 +142,8 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
                     CustomerId = id,
                     Title = "Test",
                     Id = shareId,
-                    Bookshelves =  [ new() {BookshelfId = bookshelfId, Order = 1 } ]
-                }
+                    Bookshelves = [new() { BookshelfId = bookshelfId, Order = 1 }],
+                },
             }
         );
 
@@ -170,7 +167,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
             Customer = customer,
             Id = customerBookId,
             Isbn = book.Isbn,
-            CustomerId = customer.Id
+            CustomerId = customer.Id,
         };
         using var context = fixture.CreateContext();
         context.Customer.Add(customer);
@@ -187,8 +184,8 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
                     CustomerId = id,
                     Title = "Test",
                     Id = shareId,
-                    Showcase = new() { CustomerBookId = customerBookId }
-                }
+                    Showcase = new() { CustomerBookId = customerBookId },
+                },
             }
         );
 

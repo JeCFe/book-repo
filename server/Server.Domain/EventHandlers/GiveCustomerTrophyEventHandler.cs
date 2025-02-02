@@ -12,7 +12,7 @@ public class GiveCustomerTrophyEventHandler(BookRepoContext context)
     )
     {
         if (
-            (await context.Customer.FindAsync([ notification.CustomerId ], cancellationToken))
+            (await context.Customer.FindAsync([notification.CustomerId], cancellationToken))
             is not { } customer
         )
         {

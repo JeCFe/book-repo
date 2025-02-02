@@ -11,7 +11,7 @@ public record BookError
     public Book Book { get; private set; }
     public string Isbn { get; private set; }
     public BookErrorType Error { get; private set; }
-    public List<AdminComment> AdminComment { get; private set; } = [ ];
+    public List<AdminComment> AdminComment { get; private set; } = [];
     public BookErrorStatus Status { get; private set; } = BookErrorStatus.Pending;
     public DateTimeOffset? UpdatedAt { get; private set; } = DateTimeOffset.UtcNow;
 

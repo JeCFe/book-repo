@@ -17,8 +17,7 @@ public class AddBookshelfCommand : ICommand<BookRepoContext>
     )
     {
         var customer = await dbContext
-            .Customer
-            .Include(x => x.Bookshelves)
+            .Customer.Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.Id == Id, cancellationToken);
 
         if (customer == null)
@@ -28,16 +27,14 @@ public class AddBookshelfCommand : ICommand<BookRepoContext>
 
         foreach (var name in Bookshelves)
         {
-            dbContext
-                .Bookshelves
-                .Add(
-                    new Bookshelf()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = name,
-                        CustomerId = customer.Id
-                    }
-                );
+            dbContext.Bookshelves.Add(
+                new Bookshelf()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    CustomerId = customer.Id,
+                }
+            );
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);

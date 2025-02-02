@@ -19,7 +19,7 @@ public class CompletedBookErrorCommand : ICommand<BookRepoContext>
     )
     {
         if (
-            await dbContext.BookErrors.FindAsync([ Isbn, Type ], cancellationToken)
+            await dbContext.BookErrors.FindAsync([Isbn, Type], cancellationToken)
             is not { } bookError
         )
         {

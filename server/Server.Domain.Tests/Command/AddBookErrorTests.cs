@@ -23,15 +23,14 @@ public class AddBookErrorTests(DbFixture fixture) : IClassFixture<DbFixture>
             {
                 Isbn = isbn,
                 Comment = comment,
-                Type = BookErrorType.Title
+                Type = BookErrorType.Title,
             }
         );
 
         using var context2 = fixture.CreateContext();
 
         var booksErrors = context2
-            .Books
-            .Include(x => x.BookErrors)
+            .Books.Include(x => x.BookErrors)
             .Single(x => x.Isbn == isbn)
             .BookErrors;
 

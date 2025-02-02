@@ -26,25 +26,23 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
             return;
         }
 
-        Customer customer = new() { Id = Id, CreationDate = ctx.Time.GetUtcNow(), };
+        Customer customer = new() { Id = Id, CreationDate = ctx.Time.GetUtcNow() };
 
         if (Isbns is { } isbns)
         {
             var homelessBookBookshelf = StaticBookshelf.Homeless();
-            customer.Bookshelves =  [ ..customer.Bookshelves, homelessBookBookshelf ];
+            customer.Bookshelves = [.. customer.Bookshelves, homelessBookBookshelf];
 
-            List<BookshelfBook> bookshelfBooks =  [ ];
+            List<BookshelfBook> bookshelfBooks = [];
             foreach (var isbn in isbns)
             {
                 //Note: For the UI to display a book that book must already exist in our db
-                var book = await dbContext.Books.FindAsync([ isbn ], cancellationToken);
+                var book = await dbContext.Books.FindAsync([isbn], cancellationToken);
 
-                var customerBook = await dbContext
-                    .CustomerBooks
-                    .SingleOrDefaultAsync(
-                        x => x.Isbn == isbn && x.CustomerId == customer.Id,
-                        cancellationToken
-                    );
+                var customerBook = await dbContext.CustomerBooks.SingleOrDefaultAsync(
+                    x => x.Isbn == isbn && x.CustomerId == customer.Id,
+                    cancellationToken
+                );
 
                 if (book is null)
                 {
@@ -59,7 +57,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
                         Isbn = isbn,
                         Book = book,
                         CustomerId = customer.Id,
-                        Customer = customer
+                        Customer = customer,
                     };
                     dbContext.CustomerBooks.Add(customerBook);
                 }
@@ -72,7 +70,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
                         Order = bookshelfBooks.Count(),
                         CustomerBookId = customerBook.Id,
                         Bookshelf = homelessBookBookshelf,
-                        Isbn = isbn
+                        Isbn = isbn,
                     }
                 );
             }
@@ -84,7 +82,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
         {
             customer.Bookshelves =
             [
-                ..customer.Bookshelves,
+                .. customer.Bookshelves,
                 StaticBookshelf.WantingToRead(),
                 StaticBookshelf.CurrentlyRead(),
                 StaticBookshelf.Read(),
@@ -93,7 +91,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
 
         if (BookshelvesNames is { } names)
         {
-            List<Bookshelf> customBookshelves =  [ ];
+            List<Bookshelf> customBookshelves = [];
             foreach (var name in names)
             {
                 customBookshelves.Add(
@@ -101,11 +99,11 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
                     {
                         Id = Guid.NewGuid(),
                         Name = name,
-                        CreationDate = DateTimeOffset.UtcNow
+                        CreationDate = DateTimeOffset.UtcNow,
                     }
                 );
             }
-            customer.Bookshelves =  [ ..customer.Bookshelves, ..customBookshelves ];
+            customer.Bookshelves = [.. customer.Bookshelves, .. customBookshelves];
         }
 
         // TOOO: Come back to use options to handle whether in beta

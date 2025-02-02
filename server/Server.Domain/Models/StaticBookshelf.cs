@@ -9,7 +9,7 @@ public static class StaticBookshelf
         {
             Name = "Homeless Books",
             Id = Guid.NewGuid(),
-            HomelessBooks = true
+            HomelessBooks = true,
         };
 
     public static Bookshelf CurrentlyRead() =>

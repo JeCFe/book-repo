@@ -2,8 +2,6 @@ namespace Server.Domain.Tests.Commands;
 
 using Common.Exceptions;
 using Common.Scalars.Types;
-using Microsoft.EntityFrameworkCore;
-using Server.Domain.Commands;
 using Server.Domain.Commands.Admin;
 using Server.Domain.Models;
 using Server.Domain.Tests.Fixtures;
@@ -27,7 +25,7 @@ public class CloseBookErrorCommandTests(DbFixture fixture) : IClassFixture<DbFix
             {
                 Isbn = isbn,
                 Comment = comment,
-                Type = BookErrorType.Title
+                Type = BookErrorType.Title,
             }
         );
 
