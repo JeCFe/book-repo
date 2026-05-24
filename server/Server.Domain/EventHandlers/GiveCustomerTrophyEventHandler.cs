@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Server.Domain.Events;
 
 namespace Server.Domain.EventHandlers;
@@ -11,15 +12,21 @@ public class GiveCustomerTrophyEventHandler(BookRepoContext context)
         CancellationToken cancellationToken
     )
     {
-        if (
-            (await context.Customer.FindAsync([notification.CustomerId], cancellationToken))
-            is not { } customer
-        )
+        var customer = await context.Customer
+            .Include(x => x.Trophies)
+            .SingleOrDefaultAsync(x => x.Id == notification.CustomerId, cancellationToken);
+
+        if (customer is null)
         {
             return;
         }
 
         if (!notification.Trophy.CheckApproval())
+        {
+            return;
+        }
+
+        if (customer.Trophies.Any(t => t.GetType() == notification.Trophy.GetType()))
         {
             return;
         }

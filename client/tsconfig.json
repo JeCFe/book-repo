@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["cypress", "@testing-library/cypress", "jest"],
+    "types": ["jest"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -33,5 +33,5 @@
     "next.config.js",
     "tailwind.config.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "cypress"]
 }

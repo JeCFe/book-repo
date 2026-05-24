@@ -67,7 +67,10 @@ export default withPageAuthRequired(function Dashboard({ user }) {
             </>
           </SideNav>
           <div className="flex w-full flex-col space-y-10 overflow-x-auto px-12 py-24 text-slate-500">
-            <Trophies trophies={data.trophies} />
+            {/* 
+            * TODO: Add these back in later
+            <Trophies trophies={data.trophies} /> 
+            */}
             {data.bookshelves &&
               data.bookshelves?.map((bookshelf) => (
                 <div key={bookshelf.id}>

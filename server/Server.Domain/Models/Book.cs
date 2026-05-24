@@ -13,7 +13,7 @@ public record Book
 
     public bool AddError(BookError error)
     {
-        if (BookErrors.Where(x => x.Error == error.Error) is not { })
+        if (BookErrors.Any(x => x.Error == error.Error))
         {
             return false;
         }

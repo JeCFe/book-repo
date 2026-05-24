@@ -76,6 +76,9 @@ public class BookRepoContext : DbContext
             .HasValue<Sponsor>("Sponsor")
             .HasValue<SharingIsCaring>("SharingIsCaring")
             .HasValue<AvidReviewer>("AvidReviewer")
-            .HasValue<Commentator>("Commentator");
+            .HasValue<Commentator>("Commentator")
+            .HasValue<GoalScored>("GoalScored")
+            .HasValue<GoalSetter>("GoalSetter")
+            .HasValue<Alerter>("Alerter");
     }
 }

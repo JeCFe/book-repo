@@ -76,7 +76,7 @@ export const useSetupWizard = () => {
   };
 
   const completeNewRegistration = complete(newSetupCustomerData);
-  const isComplete = completeNewRegistration != null;
+  const isComplete = completeNewRegistration === true;
 
   return {
     nickname: newSetupCustomerData.nickname,

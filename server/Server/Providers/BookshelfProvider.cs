@@ -70,6 +70,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
 
         var newHomeless = StaticBookshelf.Homeless();
         context.Bookshelves.Add(newHomeless with { CustomerId = customerId });
+        await context.SaveChangesAsync(cancellationToken);
         return newHomeless.Id;
     }
 }

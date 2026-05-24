@@ -47,7 +47,6 @@ export const useSearchForBooks = (search: string) => {
       },
     },
   );
-  console.log(url(search).replaceAll("%20", "\\+").replaceAll("%2520", "+"));
   return {
     data: data as SearchResponse, // Will need schema validation for patter / type matching
     error,

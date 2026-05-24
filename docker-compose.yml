@@ -32,7 +32,7 @@ services:
       - BASE_URL
 
   db:
-    image: mcr.microsoft.com/azure-sql-edge
+    image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sql
     environment:
       ACCEPT_EULA: Y
