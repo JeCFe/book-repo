@@ -1,5 +1,5 @@
 "use client";
-import { Modal, SummaryTable } from "@/components";
+import { Modal, PageTitle, SummaryTable } from "@/components";
 import { useGetCustomerSummary } from "@/hooks";
 import { getApiClient } from "@/services";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
@@ -84,24 +84,25 @@ export default withPageAuthRequired(function ManageUser({ user }) {
         }}
         disabled={isDeleting}
       >
-        <div className="flex flex-col items-center justify-center p-8 text-center align-middle">
-          <h1 className="flex flex-col text-center text-5xl font-bold tracking-tight text-slate-700">
-            Are you sure?
-          </h1>
-          <div className="max-w-sm pt-10 text-xl tracking-tight text-slate-500">
-            This action is non reversible and will remove your Auth0 account and
-            delete any data we hold for you in our databases.
-          </div>
-        </div>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-800">
+          Are you sure?
+        </h1>
+        <p className="mt-2 max-w-sm text-base font-bold tracking-tight text-slate-600">
+          This action is irreversible and will remove your Auth0 account and
+          delete all data we hold for you.
+        </p>
       </Modal>
-      <h1 className="flex flex-col text-5xl font-bold tracking-tight text-slate-200 md:text-8xl">
-        {`Manage ${user.nickname}`}
-      </h1>
-      <div className="mt-4 flex max-w-sm flex-row pb-10 text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        {`Here you can view and manage the customer details we have about you. Both authentication account detail and details held in our databases.`}
+
+      <div className="mb-6 w-fit">
+        <Anchor href="/dashboard">← Back to dashboard</Anchor>
       </div>
 
-      <div className="flex max-w-3xl flex-row space-x-4 py-4">
+      <PageTitle>{`Manage ${user.nickname}`}</PageTitle>
+      <div className="mt-4 max-w-xl pb-10 text-xl font-bold tracking-tight text-slate-400">
+        View and manage the data we hold about you.
+      </div>
+
+      <div className="py-4">
         <Button
           variant="primary"
           size="large"
@@ -110,18 +111,8 @@ export default withPageAuthRequired(function ManageUser({ user }) {
         >
           Edit nickname
         </Button>
-        <div className="flex flex-grow" />
-        <Button
-          variant="destructive"
-          size="large"
-          isLoading={isDeleting}
-          onClick={() => {
-            setIsOpen(true);
-          }}
-        >
-          Forget me
-        </Button>
       </div>
+
       <SummaryTable
         title="Authorisation details we know about you:"
         rows={[
@@ -143,36 +134,51 @@ export default withPageAuthRequired(function ManageUser({ user }) {
           },
         ]}
       />
+
       <form
-        className="flex flex-col space-y-4 py-8"
+        className="flex flex-col space-y-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <legend className="text-xl text-slate-200">
-          Choose what data you would want to download
-        </legend>
-        <Checkbox theme="dark" size="large" {...register("auth0")}>
-          Authorisation data
-        </Checkbox>
-        <Checkbox theme="dark" size="large" {...register("db")}>
-          Database data
-        </Checkbox>
-
-        <Button
-          type="submit"
-          size="large"
-          disabled={isDeleting || (!watch("auth0") && !watch("db"))}
-        >
-          Download
-        </Button>
+        <fieldset className="flex flex-col space-y-4">
+          <legend className="text-xl text-slate-200">
+            Choose what data you would want to download
+          </legend>
+          <Checkbox theme="dark" size="large" {...register("auth0")}>
+            Authorisation data
+          </Checkbox>
+          <Checkbox theme="dark" size="large" {...register("db")}>
+            Database data
+          </Checkbox>
+        </fieldset>
+        <div>
+          <Button
+            type="submit"
+            size="large"
+            disabled={isDeleting || (!watch("auth0") && !watch("db"))}
+          >
+            Download
+          </Button>
+        </div>
       </form>
 
-      <div className="flex w-fit flex-col space-y-2 pb-20 text-lg">
-        <Anchor aria-disabled={isDeleting} href="/dashboard">
-          Go to Dashboard
-        </Anchor>
-        <Anchor aria-disabled={isDeleting} href="/">
-          Go to Home
-        </Anchor>
+      <div className="my-8 border-t border-red-900/50" />
+
+      <div className="pb-20">
+        <h2 className="text-lg font-semibold text-red-400">Danger zone</h2>
+        <p className="mt-1 max-w-xl text-sm text-slate-400">
+          Permanently delete your account and all associated data. This cannot
+          be undone.
+        </p>
+        <div className="mt-4">
+          <Button
+            variant="destructive"
+            size="large"
+            isLoading={isDeleting}
+            onClick={() => setIsOpen(true)}
+          >
+            Forget me
+          </Button>
+        </div>
       </div>
     </>
   );
