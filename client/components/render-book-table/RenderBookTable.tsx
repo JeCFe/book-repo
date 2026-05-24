@@ -4,7 +4,7 @@ import { Book } from "@/types";
 import { Anchor, Button, Table } from "@jecfe/react-design-system";
 import { DragEvent } from "react";
 import toast from "react-hot-toast";
-import { RenderStar } from ".";
+import { RenderStar } from "@/components";
 
 type Props = {
   books: Book[];

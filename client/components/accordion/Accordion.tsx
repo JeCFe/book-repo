@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import { ManagedAccordion } from ".";
+import { ManagedAccordion } from "@/components";
 
 export type AccordionProps = {
   title: string;
