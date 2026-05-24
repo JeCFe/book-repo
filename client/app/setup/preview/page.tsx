@@ -1,11 +1,6 @@
 "use client";
-import { AccordionManager, PageTitle } from "@/components";
-import {
-  SetupBook,
-  SetupBookshelf,
-  useGetCustomerSummary,
-  useSetupWizard,
-} from "@/hooks";
+import { PageTitle } from "@/components";
+import { useGetCustomerSummary, useSetupWizard } from "@/hooks";
 import { getApiClient } from "@/services";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { Button } from "@jecfe/react-design-system";
@@ -13,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SetupModal } from "../SetupModal";
+import { SetupProgress } from "../SetupProgress";
 import { ReviewOption } from "./ReviewOptions";
 
 const setupCustomer = getApiClient()
@@ -33,7 +29,6 @@ export default withPageAuthRequired(function Preview() {
   const [customerNickname, setCustomerNickname] = useState<
     string | undefined
   >();
-  useState<SetupBookshelf>([]);
 
   useEffect(() => {
     if (nickname === undefined) {
@@ -59,7 +54,7 @@ export default withPageAuthRequired(function Preview() {
           nickname: customerNickname,
         }),
         {
-          loading: "Upading nickname",
+          loading: "Updating nickname",
           success: "Nickname updated successfully",
           error:
             "Something went wrong with updating your username, you will be able to update this later",
@@ -91,31 +86,34 @@ export default withPageAuthRequired(function Preview() {
 
   return (
     <div className="flex flex-col">
-      <SetupModal />
-      <PageTitle>Review account setup</PageTitle>
+      <SetupProgress currentStep={3} />
+      <PageTitle>Review your setup</PageTitle>
 
-      <div className="mt-4 flex max-w-sm flex-row text-xl font-bold tracking-tight text-slate-400 md:max-w-4xl md:text-3xl">
-        This will be how we setup your account, make any changes necessary. You
-        are able to change any of these at a later point also.
+      <div className="mt-4 max-w-xl text-xl font-bold tracking-tight text-slate-400">
+        Review the details below before we create your account. Everything can
+        be changed later.
       </div>
 
-      <div className="mt-10 flex flex-col space-y-10">
-        <ReviewOption title="Review nickname" href="/setup/nickname">
+      <div className="mt-10 flex flex-col space-y-4">
+        <ReviewOption title="Nickname" href="/setup/nickname">
           {customerNickname}
         </ReviewOption>
       </div>
-      <div className="mb-10 mt-20 flex flex-row space-x-6">
-        <Button
-          size="large"
-          variant="secondary"
-          onClick={() => router.push("/setup/nickname")}
-          disabled={isLoading}
-        >
-          Back
-        </Button>
-        <Button size="large" isLoading={isLoading} onClick={onContinue}>
-          Continue
-        </Button>
+      <div className="mb-10 mt-16 flex flex-col gap-y-4">
+        <div className="flex flex-row gap-x-4">
+          <Button
+            size="large"
+            variant="secondary"
+            onClick={() => router.push("/setup/nickname")}
+            disabled={isLoading}
+          >
+            Back
+          </Button>
+          <Button size="large" isLoading={isLoading} onClick={onContinue}>
+            Confirm &amp; create account
+          </Button>
+        </div>
+        <SetupModal />
       </div>
     </div>
   );
