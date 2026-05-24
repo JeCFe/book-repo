@@ -22,8 +22,8 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
         using var context2 = fixture.CreateContext();
         // Handler returns early if no customer found — verified by no exception being thrown above
         // We can't check total trophies due to shared DB; this test verifies no exception is thrown
-        var nonExistentCustomerTrophies = context2.Customer
-            .Include(x => x.Trophies)
+        var nonExistentCustomerTrophies = context2
+            .Customer.Include(x => x.Trophies)
             .Where(x => x.Id == "non-existent-id")
             .SelectMany(x => x.Trophies)
             .ToList();

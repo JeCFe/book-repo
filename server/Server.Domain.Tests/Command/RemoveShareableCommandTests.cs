@@ -49,7 +49,12 @@ public class RemoveShareableCommandTests(DbFixture fixture) : IClassFixture<DbFi
         var customerId = Guid.NewGuid().ToString();
         var customer = new Customer { Id = customerId, CreationDate = DateTimeOffset.UtcNow };
         var shareableId = Guid.NewGuid();
-        var shareable = new Shareable { Id = shareableId, Title = "My List", Customer = customer };
+        var shareable = new Shareable
+        {
+            Id = shareableId,
+            Title = "My List",
+            Customer = customer,
+        };
         context.Customer.Add(customer);
         context.Shareables.Add(shareable);
         await context.SaveChangesAsync();

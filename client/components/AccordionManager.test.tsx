@@ -15,7 +15,11 @@ jest.mock("@/components", () => ({
     setIsOpen: () => void;
   }) => (
     <div>
-      <button onClick={setIsOpen} data-testid={`toggle-${title}`} aria-expanded={isOpen}>
+      <button
+        onClick={setIsOpen}
+        data-testid={`toggle-${title}`}
+        aria-expanded={isOpen}
+      >
         {title}
       </button>
       {isOpen && <div>{children}</div>}
@@ -37,14 +41,23 @@ describe("AccordionManager", () => {
 
   it("all accordions start closed", () => {
     render(<AccordionManager accordions={accordions} />);
-    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByTestId("toggle-Section B")).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    expect(screen.getByTestId("toggle-Section B")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
   });
 
   it("opens an accordion when its toggle is clicked", () => {
     render(<AccordionManager accordions={accordions} />);
     fireEvent.click(screen.getByTestId("toggle-Section A"));
-    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     expect(screen.getByText("Content A")).toBeInTheDocument();
   });
 
@@ -53,8 +66,14 @@ describe("AccordionManager", () => {
     fireEvent.click(screen.getByTestId("toggle-Section A"));
     fireEvent.click(screen.getByTestId("toggle-Section B"));
 
-    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByTestId("toggle-Section B")).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    expect(screen.getByTestId("toggle-Section B")).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     expect(screen.queryByText("Content A")).not.toBeInTheDocument();
     expect(screen.getByText("Content B")).toBeInTheDocument();
   });
@@ -64,7 +83,10 @@ describe("AccordionManager", () => {
     fireEvent.click(screen.getByTestId("toggle-Section A"));
     fireEvent.click(screen.getByTestId("toggle-Section A"));
 
-    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByTestId("toggle-Section A")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
     expect(screen.queryByText("Content A")).not.toBeInTheDocument();
   });
 });

@@ -7,11 +7,18 @@ using Server.Domain.Tests.Fixtures;
 
 public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 {
-    private static (Customer customer, Book book, Bookshelf bookshelf, CustomerBook customerBook) Seed(
-        BookRepoContext context
-    )
+    private static (
+        Customer customer,
+        Book book,
+        Bookshelf bookshelf,
+        CustomerBook customerBook
+    ) Seed(BookRepoContext context)
     {
-        var customer = new Customer { Id = Guid.NewGuid().ToString(), CreationDate = DateTimeOffset.UtcNow };
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid().ToString(),
+            CreationDate = DateTimeOffset.UtcNow,
+        };
         var book = new Book { Isbn = Guid.NewGuid().ToString(), Name = "Test Book" };
         var bookshelf = new Bookshelf
         {
@@ -40,8 +47,18 @@ public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassF
     public async Task Throws_CustomerBookNotFoundException_when_customer_book_not_found()
     {
         using var context = fixture.CreateContext();
-        var customer = new Customer { Id = Guid.NewGuid().ToString(), CreationDate = DateTimeOffset.UtcNow };
-        var bookshelf = new Bookshelf { Id = Guid.NewGuid(), Name = "Reading", CustomerId = customer.Id, CreationDate = DateTimeOffset.UtcNow };
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid().ToString(),
+            CreationDate = DateTimeOffset.UtcNow,
+        };
+        var bookshelf = new Bookshelf
+        {
+            Id = Guid.NewGuid(),
+            Name = "Reading",
+            CustomerId = customer.Id,
+            CreationDate = DateTimeOffset.UtcNow,
+        };
         customer.Bookshelves = [bookshelf];
         context.Customer.Add(customer);
         await context.SaveChangesAsync();
@@ -64,9 +81,20 @@ public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassF
     public async Task Throws_BookshelfNotFound_when_bookshelf_not_found()
     {
         using var context = fixture.CreateContext();
-        var customer = new Customer { Id = Guid.NewGuid().ToString(), CreationDate = DateTimeOffset.UtcNow };
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid().ToString(),
+            CreationDate = DateTimeOffset.UtcNow,
+        };
         var book = new Book { Isbn = Guid.NewGuid().ToString(), Name = "Test Book" };
-        var customerBook = new CustomerBook { Id = Guid.NewGuid(), Isbn = book.Isbn, Book = book, Customer = customer, CustomerId = customer.Id };
+        var customerBook = new CustomerBook
+        {
+            Id = Guid.NewGuid(),
+            Isbn = book.Isbn,
+            Book = book,
+            Customer = customer,
+            CustomerId = customer.Id,
+        };
         context.Customer.Add(customer);
         context.Books.Add(book);
         context.CustomerBooks.Add(customerBook);
@@ -115,15 +143,17 @@ public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassF
     {
         using var context = fixture.CreateContext();
         var (customer, book, bookshelf, customerBook) = Seed(context);
-        context.BookshelfBook.Add(new BookshelfBook
-        {
-            BookshelfId = bookshelf.Id,
-            CustomerBookId = customerBook.Id,
-            Isbn = book.Isbn,
-            Order = 0,
-            Bookshelf = bookshelf,
-            CustomerBook = customerBook,
-        });
+        context.BookshelfBook.Add(
+            new BookshelfBook
+            {
+                BookshelfId = bookshelf.Id,
+                CustomerBookId = customerBook.Id,
+                Isbn = book.Isbn,
+                Order = 0,
+                Bookshelf = bookshelf,
+                CustomerBook = customerBook,
+            }
+        );
         await context.SaveChangesAsync();
 
         await fixture.Execute(

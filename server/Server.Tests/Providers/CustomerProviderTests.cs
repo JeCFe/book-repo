@@ -35,22 +35,21 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
     {
         var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        Customer customer =
-            new()
-            {
-                Id = customerId,
-                CreationDate = DateTimeOffset.UtcNow,
-                Bookshelves =
-                [
-                    new (){
+        Customer customer = new()
+        {
+            Id = customerId,
+            CreationDate = DateTimeOffset.UtcNow,
+            Bookshelves =
+            [
+                new()
+                {
                     Id = Guid.NewGuid(),
                     Name = "Wanting to read",
                     CreationDate = DateTimeOffset.UtcNow,
                     UpdatedDate = DateTimeOffset.UtcNow,
-                    
                 },
-                ]
-            };
+            ],
+        };
         context.Customer.Add(customer);
         context.SaveChanges();
 
@@ -87,8 +86,22 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         context.Customer.Add(customer);
         context.Books.AddRange(bookA, bookB);
         context.CustomerBooks.AddRange(
-            new CustomerBook { Id = Guid.NewGuid(), Isbn = bookA.Isbn, Book = bookA, Customer = customer, CustomerId = customerId },
-            new CustomerBook { Id = Guid.NewGuid(), Isbn = bookB.Isbn, Book = bookB, Customer = customer, CustomerId = customerId }
+            new CustomerBook
+            {
+                Id = Guid.NewGuid(),
+                Isbn = bookA.Isbn,
+                Book = bookA,
+                Customer = customer,
+                CustomerId = customerId,
+            },
+            new CustomerBook
+            {
+                Id = Guid.NewGuid(),
+                Isbn = bookB.Isbn,
+                Book = bookB,
+                Customer = customer,
+                CustomerId = customerId,
+            }
         );
         context.SaveChanges();
 
@@ -106,7 +119,11 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         var context = fixture.CreateContext();
 
         var provider = new CustomerProvider(context, _options);
-        var result = await provider.GetCustomerBook(Guid.NewGuid(), Guid.NewGuid().ToString(), CancellationToken.None);
+        var result = await provider.GetCustomerBook(
+            Guid.NewGuid(),
+            Guid.NewGuid().ToString(),
+            CancellationToken.None
+        );
 
         Assert.Null(result);
     }
@@ -121,20 +138,26 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         var book = new Book { Isbn = "ISBN-1", Name = "My Book" };
         context.Customer.Add(customer);
         context.Books.Add(book);
-        context.CustomerBooks.Add(new CustomerBook
-        {
-            Id = customerBookId,
-            Isbn = book.Isbn,
-            Book = book,
-            Customer = customer,
-            CustomerId = customerId,
-            Ranking = 4,
-            Comment = "Great read",
-        });
+        context.CustomerBooks.Add(
+            new CustomerBook
+            {
+                Id = customerBookId,
+                Isbn = book.Isbn,
+                Book = book,
+                Customer = customer,
+                CustomerId = customerId,
+                Ranking = 4,
+                Comment = "Great read",
+            }
+        );
         context.SaveChanges();
 
         var provider = new CustomerProvider(context, _options);
-        var result = await provider.GetCustomerBook(customerBookId, customerId, CancellationToken.None);
+        var result = await provider.GetCustomerBook(
+            customerBookId,
+            customerId,
+            CancellationToken.None
+        );
 
         Assert.NotNull(result);
         Assert.Equal(customerBookId, result.Id);

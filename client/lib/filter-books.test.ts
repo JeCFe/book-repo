@@ -1,5 +1,5 @@
-import { filterBooks } from "./filter-books";
 import type { SearchResponse } from "@/hooks";
+import { filterBooks } from "./filter-books";
 
 const makeSearchResponse = (
   overrides: Partial<SearchResponse> = {},
@@ -25,7 +25,9 @@ describe("filterBooks", () => {
             numFound: 1,
             start: 0,
             numFoundExact: true,
-            docs: [{ key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222"] }],
+            docs: [
+              { key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222"] },
+            ],
           },
         },
       ],
@@ -46,7 +48,13 @@ describe("filterBooks", () => {
             numFound: 1,
             start: 0,
             numFoundExact: true,
-            docs: [{ key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222", "333"] }],
+            docs: [
+              {
+                key: "/books/OL1M",
+                title: "Edition 1",
+                isbn: ["111", "222", "333"],
+              },
+            ],
           },
         },
       ],
@@ -67,7 +75,9 @@ describe("filterBooks", () => {
             numFound: 1,
             start: 0,
             numFoundExact: true,
-            docs: [{ key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222"] }],
+            docs: [
+              { key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222"] },
+            ],
           },
         },
       ],
@@ -109,7 +119,9 @@ describe("filterBooks", () => {
             numFound: 1,
             start: 0,
             numFoundExact: true,
-            docs: [{ key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222"] }],
+            docs: [
+              { key: "/books/OL1M", title: "Edition 1", isbn: ["111", "222"] },
+            ],
           },
         },
       ],

@@ -159,10 +159,10 @@ To return a value, implement `ICommand<BookRepoContext, TResult>` and change `Ex
 
 Throw custom exceptions inside commands; catch them in the route handler (or `CommandExecutor.Execute` for the standard `Ok / BadRequest / Forbid` shape):
 
-| Exception | HTTP result |
-|---|---|
+| Exception                      | HTTP result                   |
+| ------------------------------ | ----------------------------- |
 | `NotFoundException` / subclass | `400 BadRequest` with message |
-| `InvalidUserException` | `403 Forbid` |
+| `InvalidUserException`         | `403 Forbid`                  |
 
 ## Build & Test
 

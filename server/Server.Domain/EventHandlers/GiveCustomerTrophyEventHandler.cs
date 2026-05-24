@@ -12,8 +12,8 @@ public class GiveCustomerTrophyEventHandler(BookRepoContext context)
         CancellationToken cancellationToken
     )
     {
-        var customer = await context.Customer
-            .Include(x => x.Trophies)
+        var customer = await context
+            .Customer.Include(x => x.Trophies)
             .SingleOrDefaultAsync(x => x.Id == notification.CustomerId, cancellationToken);
 
         if (customer is null)

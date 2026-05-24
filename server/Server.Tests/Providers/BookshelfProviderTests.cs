@@ -74,7 +74,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
             Book = domainBook,
             Isbn = domainBook.Isbn,
             CustomerId = customer.Id,
-            Customer = customer
+            Customer = customer,
         };
 
         var bookshelfBook = new BookshelfBook()
@@ -84,7 +84,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
             Isbn = domainBook.Isbn,
             Bookshelf = domainBookshelf,
             BookshelfId = domainBookshelf.Id,
-            Order = 0
+            Order = 0,
         };
         context.Customer.Add(customer);
         context.Bookshelves.Add(domainBookshelf);
@@ -125,8 +125,20 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         var idB = Guid.NewGuid();
         context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         context.Bookshelves.AddRange(
-            new() { Id = idA, CustomerId = customerId, Name = "Reading", CreationDate = DateTimeOffset.UtcNow },
-            new() { Id = idB, CustomerId = customerId, Name = "Finished", CreationDate = DateTimeOffset.UtcNow }
+            new()
+            {
+                Id = idA,
+                CustomerId = customerId,
+                Name = "Reading",
+                CreationDate = DateTimeOffset.UtcNow,
+            },
+            new()
+            {
+                Id = idB,
+                CustomerId = customerId,
+                Name = "Finished",
+                CreationDate = DateTimeOffset.UtcNow,
+            }
         );
         context.SaveChanges();
 

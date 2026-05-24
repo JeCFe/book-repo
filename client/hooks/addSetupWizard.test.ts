@@ -37,7 +37,11 @@ describe("addSetupWizard reducer", () => {
 
   it("set-config-option resets other fields when switching to express", () => {
     const state = reducer({
-      state: { nickname: "jessica", config: "advanced", includeDefaults: false },
+      state: {
+        nickname: "jessica",
+        config: "advanced",
+        includeDefaults: false,
+      },
       action: { type: "set-config-option", option: "express" },
     });
     // express resets to default state with config and includeDefaults set
@@ -61,15 +65,24 @@ describe("useSetupWizard", () => {
     const { result } = renderHook(() => useSetupWizard());
 
     act(() => {
-      result.current.updateCustomer({ type: "set-nickanme", nickname: "jessica" });
+      result.current.updateCustomer({
+        type: "set-nickanme",
+        nickname: "jessica",
+      });
     });
     act(() => {
-      result.current.updateCustomer({ type: "set-config-option", option: "express" });
+      result.current.updateCustomer({
+        type: "set-config-option",
+        option: "express",
+      });
     });
 
     // express resets nickname, so we need to set it after selecting express
     act(() => {
-      result.current.updateCustomer({ type: "set-nickanme", nickname: "jessica" });
+      result.current.updateCustomer({
+        type: "set-nickanme",
+        nickname: "jessica",
+      });
     });
 
     expect(result.current.isComplete).toBe(true);
@@ -79,7 +92,10 @@ describe("useSetupWizard", () => {
     const { result } = renderHook(() => useSetupWizard());
 
     act(() => {
-      result.current.updateCustomer({ type: "set-nickanme", nickname: "jessica" });
+      result.current.updateCustomer({
+        type: "set-nickanme",
+        nickname: "jessica",
+      });
     });
 
     expect(result.current.isComplete).toBe(false);
@@ -89,10 +105,16 @@ describe("useSetupWizard", () => {
     const { result } = renderHook(() => useSetupWizard());
 
     act(() => {
-      result.current.updateCustomer({ type: "set-nickanme", nickname: "jessica" });
+      result.current.updateCustomer({
+        type: "set-nickanme",
+        nickname: "jessica",
+      });
     });
     act(() => {
-      result.current.updateCustomer({ type: "set-config-option", option: "advanced" });
+      result.current.updateCustomer({
+        type: "set-config-option",
+        option: "advanced",
+      });
     });
 
     expect(result.current.isComplete).toBe(false);
