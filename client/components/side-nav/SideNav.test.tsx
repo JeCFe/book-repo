@@ -24,12 +24,20 @@ describe("SideNav", () => {
   });
 
   it("renders The Book Repository branding", () => {
-    render(<SideNav><span>Item</span></SideNav>);
+    render(
+      <SideNav>
+        <span>Item</span>
+      </SideNav>,
+    );
     expect(screen.getAllByText("The Book Repository")).toHaveLength(2);
   });
 
   it("renders the menu icon for mobile navigation", () => {
-    render(<SideNav><span>Item</span></SideNav>);
+    render(
+      <SideNav>
+        <span>Item</span>
+      </SideNav>,
+    );
     expect(screen.getByTestId("menu-icon")).toBeInTheDocument();
   });
 });

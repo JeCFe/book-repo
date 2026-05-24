@@ -1,6 +1,6 @@
+import { Book } from "@/types";
 import { render, screen } from "@testing-library/react";
 import { RenderBookTable } from "./RenderBookTable";
-import { Book } from "@/types";
 
 jest.mock("@/hooks", () => ({
   useGetCustomerBooks: () => ({ mutate: jest.fn() }),

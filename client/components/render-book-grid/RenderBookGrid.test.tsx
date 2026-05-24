@@ -1,6 +1,6 @@
+import { Book } from "@/types";
 import { render, screen } from "@testing-library/react";
 import { RenderBookGrid } from "./RenderBookGrid";
-import { Book } from "@/types";
 
 jest.mock("@/components", () => ({
   Picture: ({ title }: { title: string }) => <img alt={title} />,

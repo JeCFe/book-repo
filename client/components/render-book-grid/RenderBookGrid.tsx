@@ -1,6 +1,6 @@
+import { Picture } from "@/components";
 import { Book } from "@/types";
 import { DragEvent } from "react";
-import { Picture } from "@/components";
 
 type Props = {
   books: Book[];

@@ -1,15 +1,9 @@
+import { Works } from "@/hooks";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { BookRow } from "./BookRow";
-import { Works } from "@/hooks";
 
 jest.mock("@/app/(add-book)", () => ({
-  AddBookModal: ({
-    showModal,
-    isbn,
-  }: {
-    showModal: boolean;
-    isbn: string;
-  }) =>
+  AddBookModal: ({ showModal, isbn }: { showModal: boolean; isbn: string }) =>
     showModal ? <div data-testid="add-book-modal">Modal for {isbn}</div> : null,
 }));
 

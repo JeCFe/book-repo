@@ -36,7 +36,11 @@ describe("Picture", () => {
 
   it("does not show the spinner when loading is false", () => {
     render(
-      <Picture title="My Book" loading={false} pictureUrl="https://example.com/cover.jpg" />,
+      <Picture
+        title="My Book"
+        loading={false}
+        pictureUrl="https://example.com/cover.jpg"
+      />,
     );
     expect(screen.queryByTestId("spinner")).not.toBeInTheDocument();
   });

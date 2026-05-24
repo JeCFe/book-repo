@@ -28,7 +28,11 @@ describe("RadioButton", () => {
   });
 
   it("forwards extra input attributes", () => {
-    render(<RadioButton name="group" value="a">Option A</RadioButton>);
+    render(
+      <RadioButton name="group" value="a">
+        Option A
+      </RadioButton>,
+    );
     expect(screen.getByRole("radio")).toHaveAttribute("name", "group");
     expect(screen.getByRole("radio")).toHaveAttribute("value", "a");
   });
