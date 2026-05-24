@@ -52,7 +52,7 @@ public sealed record Sponsor() : Trophy("Thank you for sponsoring, our infra bil
 
 public sealed record SharingIsCaring : Trophy
 {
-    private const int _sharedThreshold = 1000;
+    private const int _sharedThreshold = 10;
     private readonly int _amount;
 
     public SharingIsCaring() { }

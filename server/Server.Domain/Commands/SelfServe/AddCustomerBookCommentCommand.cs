@@ -19,7 +19,7 @@ public class AddCustomerBookCommentCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if (await dbContext.Customer.FindAsync([CustomerId], cancellationToken) is not { })
+        if (await dbContext.Customers.FindAsync([CustomerId], cancellationToken) is not { })
         {
             throw new UserNotFoundException();
         }

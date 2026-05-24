@@ -25,7 +25,7 @@ public class AddBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<DbF
         var book = new Book() { Isbn = id.ToString(), Name = "This is a test" };
 
         using var context = fixture.CreateContext();
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.SaveChanges();
 
@@ -75,7 +75,7 @@ public class AddBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<DbF
         var book = new Book() { Isbn = id.ToString(), Name = "This is a test" };
 
         using var context = fixture.CreateContext();
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.SaveChanges();
 

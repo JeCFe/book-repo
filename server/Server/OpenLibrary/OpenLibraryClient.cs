@@ -5,7 +5,7 @@ using OpenLibraryNET.Utility;
 using Server.Domain.Models;
 using Server.OpenLibrary.Blob;
 
-public class OpenLibraryClient : IOpenLibraryCient
+public class OpenLibraryClient : IOpenLibraryClient
 {
     private OpenLibraryNET.OpenLibraryClient _client;
     private IBlobClient _blobClient;
@@ -43,16 +43,9 @@ public class OpenLibraryClient : IOpenLibraryCient
 
     public async Task<List<string>?> GetAuthors(List<string> authorKeys)
     {
-        List<string> authors = [];
-        foreach (var i in authorKeys)
-        {
-            var author = await _client.Author.GetDataAsync(i);
-            if (author is not null)
-            {
-                authors.Add(author.Name);
-            }
-        }
-        return authors;
+        var authorTasks = authorKeys.Select(k => _client.Author.GetDataAsync(k));
+        var results = await Task.WhenAll(authorTasks);
+        return results.Where(a => a is not null).Select(a => a!.Name).ToList();
     }
 
     public async Task<Book?> GetBook(string isbn, CancellationToken cancellationToken)

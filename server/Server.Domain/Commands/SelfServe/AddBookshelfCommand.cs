@@ -17,7 +17,7 @@ public class AddBookshelfCommand : ICommand<BookRepoContext>
     )
     {
         var customer = await dbContext
-            .Customer.Include(x => x.Bookshelves)
+            .Customers.Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.Id == Id, cancellationToken);
 
         if (customer == null)

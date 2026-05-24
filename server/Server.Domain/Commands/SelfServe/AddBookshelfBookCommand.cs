@@ -20,7 +20,7 @@ public class AddBookshelfBookCommand : ICommand<BookRepoContext>
     )
     {
         var customer = await dbContext
-            .Customer.Include(x => x.Bookshelves)
+            .Customers.Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.Id == Id, cancellationToken);
         var book = await dbContext.Books.FindAsync([Isbn], cancellationToken);
 

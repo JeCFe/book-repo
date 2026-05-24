@@ -12,7 +12,7 @@ export type SetupBook = {
 };
 export type Nickname = string;
 type Action =
-  | { type: "set-nickanme"; nickname: Nickname }
+  | { type: "set-nickname"; nickname: Nickname }
   | {
       type: "set-config-option";
       option: Config;
@@ -38,7 +38,7 @@ export const reducer = ({
   action: Action;
 }): NewCustomer => {
   switch (action.type) {
-    case "set-nickanme": {
+    case "set-nickname": {
       return { ...state, nickname: action.nickname };
     }
     case "set-config-option": {
@@ -76,7 +76,7 @@ export const useSetupWizard = () => {
   };
 
   const completeNewRegistration = complete(newSetupCustomerData);
-  const isComplete = completeNewRegistration === true;
+  const isComplete = completeNewRegistration;
 
   return {
     nickname: newSetupCustomerData.nickname,

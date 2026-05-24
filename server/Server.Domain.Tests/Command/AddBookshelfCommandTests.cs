@@ -25,7 +25,7 @@ public class AddBookshelfCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
     {
         using var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         await context.SaveChangesAsync();
 
         await fixture.Execute(
@@ -44,7 +44,7 @@ public class AddBookshelfCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
     {
         using var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         await context.SaveChangesAsync();
 
         await fixture.Execute(

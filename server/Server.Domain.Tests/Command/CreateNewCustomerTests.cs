@@ -20,7 +20,7 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         using var context2 = fixture.CreateContext();
 
-        Assert.NotNull(context2.Customer.Find([id]));
+        Assert.NotNull(context2.Customers.Find([id]));
         Assert.Equal(3, context2.Bookshelves.Where(x => x.CustomerId == id).ToList().Count);
     }
 
@@ -35,7 +35,7 @@ public class CreateNewCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         using var context2 = fixture.CreateContext();
 
-        Assert.NotNull(context2.Customer.Find([id]));
+        Assert.NotNull(context2.Customers.Find([id]));
         Assert.Empty(context2.Bookshelves.Where(x => x.CustomerId == id));
     }
 

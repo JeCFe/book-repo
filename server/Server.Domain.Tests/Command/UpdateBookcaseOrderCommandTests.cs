@@ -44,7 +44,7 @@ public class UpdateBookcaseOrderCommandTests(DbFixture fixture) : IClassFixture<
             CustomerId = customer.Id,
         };
 
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.AddRange(bookA, bookB);
         context.CustomerBooks.AddRange(customerBookA, customerBookB);
         context.BookshelfBook.AddRange(

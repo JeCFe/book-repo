@@ -23,7 +23,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
         // Handler returns early if no customer found — verified by no exception being thrown above
         // We can't check total trophies due to shared DB; this test verifies no exception is thrown
         var nonExistentCustomerTrophies = context2
-            .Customer.Include(x => x.Trophies)
+            .Customers.Include(x => x.Trophies)
             .Where(x => x.Id == "non-existent-id")
             .SelectMany(x => x.Trophies)
             .ToList();
@@ -35,7 +35,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
     {
         using var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         await context.SaveChangesAsync();
 
         var handler = new GiveCustomerTrophyEventHandler(context);
@@ -47,7 +47,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
         );
 
         using var context2 = fixture.CreateContext();
-        var customer2 = context2.Customer.Include(x => x.Trophies).Single(x => x.Id == customerId);
+        var customer2 = context2.Customers.Include(x => x.Trophies).Single(x => x.Id == customerId);
         Assert.Empty(customer2.Trophies.OfType<AvidReviewer>());
     }
 
@@ -56,7 +56,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
     {
         using var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         await context.SaveChangesAsync();
 
         var handler = new GiveCustomerTrophyEventHandler(context);
@@ -66,7 +66,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
         );
 
         using var context2 = fixture.CreateContext();
-        var customer2 = context2.Customer.Include(x => x.Trophies).Single(x => x.Id == customerId);
+        var customer2 = context2.Customers.Include(x => x.Trophies).Single(x => x.Id == customerId);
         Assert.Single(customer2.Trophies.OfType<AvidReviewer>());
     }
 
@@ -75,7 +75,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
     {
         using var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         await context.SaveChangesAsync();
 
         var handler = new GiveCustomerTrophyEventHandler(context);
@@ -92,7 +92,7 @@ public class GiveCustomerTrophyEventHandlerTests(DbFixture fixture) : IClassFixt
         );
 
         using var context3 = fixture.CreateContext();
-        var customer3 = context3.Customer.Include(x => x.Trophies).Single(x => x.Id == customerId);
+        var customer3 = context3.Customers.Include(x => x.Trophies).Single(x => x.Id == customerId);
         Assert.Single(customer3.Trophies.OfType<AvidReviewer>());
     }
 }

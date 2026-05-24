@@ -23,7 +23,7 @@ public class AddShareableCommand : ICommand<BookRepoContext>
         }
 
         var dbCustomer = await dbContext
-            .Customer.Include(x => x.Bookshelves)
+            .Customers.Include(x => x.Bookshelves)
             .SingleOrDefaultAsync(x => x.Id == Shareable.CustomerId, cancellationToken);
 
         if (dbCustomer is not { } customer)

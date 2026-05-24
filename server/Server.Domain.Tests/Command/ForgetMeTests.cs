@@ -27,16 +27,16 @@ public class ForgetMeCommandTests(DbFixture fixture) : IClassFixture<DbFixture>
         };
 
         using var context = fixture.CreateContext();
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.SaveChanges();
 
-        Assert.Equivalent(customer, context.Customer.Find([customer.Id]));
+        Assert.Equivalent(customer, context.Customers.Find([customer.Id]));
 
         await fixture.Execute(context, new ForgetMeCommand() { Id = id });
 
         using var context2 = fixture.CreateContext();
 
-        Assert.Null(context2.Customer.Find([customer.Id]));
+        Assert.Null(context2.Customers.Find([customer.Id]));
         Assert.Empty(context2.Bookshelves.Where(x => x.CustomerId == customer.Id));
     }
 }

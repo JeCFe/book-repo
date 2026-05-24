@@ -8,17 +8,12 @@ const getBookshelfSummary = getApiClient()
 
 export const useGetBookshelfSummary = (customerId: string) => {
   const { data, error, isLoading, mutate } = useSWR(
-    "getCustomerSummary",
-    async () => {
-      try {
-        return (await getBookshelfSummary({ customerId })).data as unknown as {
-          id: string;
-          name: string;
-        }[];
-      } catch (error) {
-        throw error;
-      }
-    },
+    `getBookshelfSummary/${customerId}`,
+    async () =>
+      (await getBookshelfSummary({ customerId })).data as unknown as {
+        id: string;
+        name: string;
+      }[],
     {
       refreshInterval: 60000,
       revalidateOnFocus: false,

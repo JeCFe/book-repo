@@ -9,13 +9,7 @@ const getCustomerSummary = getApiClient()
 export const useGetCustomerSummary = () => {
   const { data, error, isLoading, mutate, isValidating } = useSWR(
     "getCustomerSummary",
-    async () => {
-      try {
-        return (await getCustomerSummary({})).data;
-      } catch (error) {
-        throw error;
-      }
-    },
+    async () => (await getCustomerSummary({})).data,
     {
       refreshInterval: 60000,
       revalidateOnFocus: false,

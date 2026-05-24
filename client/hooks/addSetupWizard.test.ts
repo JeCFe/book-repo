@@ -9,10 +9,10 @@ describe("addSetupWizard reducer", () => {
     expect(state.includeDefaults).toBe(false);
   });
 
-  it("set-nickanme sets the nickname", () => {
+  it("set-nickname sets the nickname", () => {
     const state = reducer({
       state: getDefaultState(),
-      action: { type: "set-nickanme", nickname: "jessica" },
+      action: { type: "set-nickname", nickname: "jessica" },
     });
     expect(state.nickname).toBe("jessica");
   });
@@ -66,7 +66,7 @@ describe("useSetupWizard", () => {
 
     act(() => {
       result.current.updateCustomer({
-        type: "set-nickanme",
+        type: "set-nickname",
         nickname: "jessica",
       });
     });
@@ -80,7 +80,7 @@ describe("useSetupWizard", () => {
     // express resets nickname, so we need to set it after selecting express
     act(() => {
       result.current.updateCustomer({
-        type: "set-nickanme",
+        type: "set-nickname",
         nickname: "jessica",
       });
     });
@@ -93,7 +93,7 @@ describe("useSetupWizard", () => {
 
     act(() => {
       result.current.updateCustomer({
-        type: "set-nickanme",
+        type: "set-nickname",
         nickname: "jessica",
       });
     });
@@ -106,7 +106,7 @@ describe("useSetupWizard", () => {
 
     act(() => {
       result.current.updateCustomer({
-        type: "set-nickanme",
+        type: "set-nickname",
         nickname: "jessica",
       });
     });

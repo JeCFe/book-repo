@@ -42,7 +42,7 @@ public class RemoveBookshelfBookCommandTests(DbFixture fixture) : IClassFixture<
         };
 
         using var context = fixture.CreateContext();
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.BookshelfBook.Add(bookshelfBook);
         context.SaveChanges();

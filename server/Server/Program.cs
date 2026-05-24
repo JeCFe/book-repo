@@ -165,8 +165,8 @@ public class Program
         builder.Services.AddTransient<IAuth0Token, Auth0Token>();
         builder.Services.AddTransient<IAuth0Client, Auth0Client>();
 
-        builder.Services.AddTransient<IOpenLibraryCient, OpenLibraryClient>();
-        builder.Services.Decorate<IOpenLibraryCient, OpenLibraryClientDecorator>();
+        builder.Services.AddTransient<IOpenLibraryClient, OpenLibraryClient>();
+        builder.Services.Decorate<IOpenLibraryClient, OpenLibraryClientDecorator>();
 
         builder.Services.Configure<BlobOptions>(builder.Configuration.GetSection("Blob"));
         builder.Services.AddSingleton<IBlobClient, BlobClient>();

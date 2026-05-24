@@ -36,7 +36,7 @@ public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassF
             CustomerId = customer.Id,
         };
         customer.Bookshelves = [bookshelf];
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.CustomerBooks.Add(customerBook);
         context.SaveChanges();
@@ -60,7 +60,7 @@ public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassF
             CreationDate = DateTimeOffset.UtcNow,
         };
         customer.Bookshelves = [bookshelf];
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         await context.SaveChangesAsync();
 
         await Assert.ThrowsAsync<CustomerBookNotFoundException>(
@@ -95,7 +95,7 @@ public class AddCustomerBookToBookshelfCommandTests(DbFixture fixture) : IClassF
             Customer = customer,
             CustomerId = customer.Id,
         };
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.CustomerBooks.Add(customerBook);
         await context.SaveChangesAsync();

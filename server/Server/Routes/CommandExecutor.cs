@@ -9,7 +9,7 @@ namespace Server.Routes;
 
 public static class CommandExecutor
 {
-    public static async Task<Results<Ok, BadRequest<string>, ForbidHttpResult>> Execute<T>(
+    public static async Task<Results<Ok, NotFound<string>, ForbidHttpResult>> Execute<T>(
         T cmd,
         IMediator mediator,
         CancellationToken cancellationToken
@@ -23,7 +23,7 @@ public static class CommandExecutor
         }
         catch (NotFoundException ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.NotFound(ex.Message);
         }
         catch (InvalidUserException)
         {

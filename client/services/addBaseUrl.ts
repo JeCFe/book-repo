@@ -1,7 +1,11 @@
 import { Middleware } from "openapi-typescript-fetch";
 import { getEndpoint } from "./getEndpoints";
 
+let cachedBaseUrl: string | null = null;
+
 export const addBaseUrl = (): Middleware => async (url, init, next) => {
-  const baseurl = await getEndpoint();
-  return next(baseurl.concat(url), init);
+  if (!cachedBaseUrl) {
+    cachedBaseUrl = await getEndpoint();
+  }
+  return next(cachedBaseUrl.concat(url), init);
 };

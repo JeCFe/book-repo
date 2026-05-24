@@ -37,7 +37,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
             Name = "TestBookshelf",
             CreationDate = DateTimeOffset.Now,
         };
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Bookshelves.Add(domainBookshelf);
         context.SaveChanges();
 
@@ -86,7 +86,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
             BookshelfId = domainBookshelf.Id,
             Order = 0,
         };
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Bookshelves.Add(domainBookshelf);
         context.Books.Add(domainBook);
         context.CustomerBooks.Add(customerBook);
@@ -107,7 +107,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
     {
         var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         context.SaveChanges();
 
         var provider = new BookshelfProvider(context);
@@ -123,7 +123,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         var customerId = Guid.NewGuid().ToString();
         var idA = Guid.NewGuid();
         var idB = Guid.NewGuid();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         context.Bookshelves.AddRange(
             new()
             {
@@ -157,7 +157,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         var customerId = Guid.NewGuid().ToString();
         var homelessId = Guid.NewGuid();
 
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         context.Bookshelves.Add(
             new()
             {
@@ -197,7 +197,7 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
     {
         var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         context.SaveChanges();
 
         var provider = new BookshelfProvider(context);

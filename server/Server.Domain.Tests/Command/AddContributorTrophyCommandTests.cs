@@ -29,7 +29,7 @@ public class AddContributorTrophyCommandTests(DbFixture fixture) : IClassFixture
     {
         using var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         await context.SaveChangesAsync();
 
         // Publisher is mocked so the trophy won't be saved, but the command should not throw
@@ -57,7 +57,7 @@ public class AddContributorTrophyCommandTests(DbFixture fixture) : IClassFixture
         customer.Trophies.Add(
             new Contributor { PRContributed = "https://github.com/example/pr/1" }
         );
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         await context.SaveChangesAsync();
 
         // Running the command when a Contributor trophy already exists should return early

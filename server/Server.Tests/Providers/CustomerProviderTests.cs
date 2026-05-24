@@ -20,7 +20,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
 
         var customerId = Guid.NewGuid().ToString();
 
-        var existingCustomer = context.Customer.SingleOrDefault(x => x.Id == customerId);
+        var existingCustomer = context.Customers.SingleOrDefault(x => x.Id == customerId);
         Assert.Null(existingCustomer);
 
         var provider = new CustomerProvider(context, _options);
@@ -50,7 +50,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
                 },
             ],
         };
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.SaveChanges();
 
         var provider = new CustomerProvider(context, _options);
@@ -66,7 +66,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
     {
         var context = fixture.CreateContext();
         var customerId = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Customers.Add(new() { Id = customerId, CreationDate = DateTimeOffset.UtcNow });
         context.SaveChanges();
 
         var provider = new CustomerProvider(context, _options);
@@ -83,7 +83,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         var customer = new Customer { Id = customerId, CreationDate = DateTimeOffset.UtcNow };
         var bookA = new Book { Isbn = "ISBN-A", Name = "Book A" };
         var bookB = new Book { Isbn = "ISBN-B", Name = "Book B" };
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.AddRange(bookA, bookB);
         context.CustomerBooks.AddRange(
             new CustomerBook
@@ -136,7 +136,7 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         var customerBookId = Guid.NewGuid();
         var customer = new Customer { Id = customerId, CreationDate = DateTimeOffset.UtcNow };
         var book = new Book { Isbn = "ISBN-1", Name = "My Book" };
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.CustomerBooks.Add(
             new CustomerBook

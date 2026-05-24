@@ -13,7 +13,7 @@ public class GiveCustomerTrophyEventHandler(BookRepoContext context)
     )
     {
         var customer = await context
-            .Customer.Include(x => x.Trophies)
+            .Customers.Include(x => x.Trophies)
             .SingleOrDefaultAsync(x => x.Id == notification.CustomerId, cancellationToken);
 
         if (customer is null)

@@ -20,7 +20,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
     )
     {
         if (
-            await dbContext.Customer.SingleOrDefaultAsync(x => x.Id == Id, cancellationToken) is { }
+            await dbContext.Customers.SingleOrDefaultAsync(x => x.Id == Id, cancellationToken) is { }
         )
         {
             return;
@@ -115,7 +115,7 @@ public class SetupCustomerCommand() : ICommand<BookRepoContext>
             cancellationToken
         );
 
-        dbContext.Customer.Add(customer);
+        dbContext.Customers.Add(customer);
 
         await dbContext.SaveChangesAsync(cancellationToken);
     }

@@ -34,7 +34,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
     {
         var context = fixture.CreateContext();
         var id = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
+        context.Customers.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
         context.SaveChanges();
 
         var context2 = fixture.CreateContext();
@@ -64,7 +64,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
     {
         using var context = fixture.CreateContext();
         var id = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
+        context.Customers.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
         context.SaveChanges();
         context.SaveChanges();
 
@@ -95,7 +95,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
         using var context = fixture.CreateContext();
         var id = Guid.NewGuid().ToString();
         var shareId = Guid.NewGuid();
-        context.Customer.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
+        context.Customers.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
         context.SaveChanges();
 
         await fixture.Execute(
@@ -122,7 +122,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
         var id = Guid.NewGuid().ToString();
         var shareId = Guid.NewGuid();
         var bookshelfId = Guid.NewGuid();
-        context.Customer.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
+        context.Customers.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
         context.Bookshelves.Add(
             new()
             {
@@ -170,7 +170,7 @@ public class AddShareableCommandTests(DbFixture fixture) : IClassFixture<DbFixtu
             CustomerId = customer.Id,
         };
         using var context = fixture.CreateContext();
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.CustomerBooks.Add(customerBook);
         context.SaveChanges();

@@ -18,7 +18,7 @@ public class AddContributorTrophyCommand : ICommand<BookRepoContext>
     )
     {
         var customer = await dbContext
-            .Customer.Include(x => x.Trophies)
+            .Customers.Include(x => x.Trophies)
             .SingleOrDefaultAsync(x => x.Id == Id, cancellationToken);
 
         if (customer == null)

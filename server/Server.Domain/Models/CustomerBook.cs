@@ -1,6 +1,6 @@
 namespace Server.Domain.Models;
 
-public class CustomerBook()
+public record CustomerBook()
 {
     public required Guid Id { get; init; }
     public required string CustomerId { get; init; }

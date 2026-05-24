@@ -1,6 +1,6 @@
 namespace Server.Domain.Models;
 
-public class BookshelfBook()
+public record BookshelfBook()
 {
     public required Guid BookshelfId { get; init; }
     public required Guid CustomerBookId { get; init; }

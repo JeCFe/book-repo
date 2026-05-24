@@ -8,7 +8,7 @@ public static class BookRouter
 {
     private static async Task<Results<Ok<Book>, NotFound>> GetBook(
         string isbn,
-        IOpenLibraryCient client,
+        IOpenLibraryClient client,
         CancellationToken cancellationToken
     )
     {

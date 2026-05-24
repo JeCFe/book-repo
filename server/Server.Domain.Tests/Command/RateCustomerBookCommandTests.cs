@@ -31,7 +31,7 @@ public class RateCustomrBooksCommandTests(DbFixture fixture) : IClassFixture<DbF
     {
         using var context = fixture.CreateContext();
         var id = Guid.NewGuid().ToString();
-        context.Customer.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
+        context.Customers.Add(new() { Id = id, CreationDate = DateTime.UtcNow });
         await context.SaveChangesAsync();
 
         await Assert.ThrowsAsync<CustomerBookNotFoundException>(
@@ -61,7 +61,7 @@ public class RateCustomrBooksCommandTests(DbFixture fixture) : IClassFixture<DbF
         };
         Book book = new() { Isbn = Guid.NewGuid().ToString(), Name = "Test book" };
 
-        context.Customer.Add(customer);
+        context.Customers.Add(customer);
         context.Books.Add(book);
         context.CustomerBooks.Add(
             new()

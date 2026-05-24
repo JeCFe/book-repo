@@ -63,7 +63,7 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
             return homeless.Id;
         }
 
-        if (await context.Customer.FindAsync([customerId], cancellationToken) is not { } customer)
+        if (await context.Customers.FindAsync([customerId], cancellationToken) is not { } customer)
         {
             throw new UserNotFoundException();
         }

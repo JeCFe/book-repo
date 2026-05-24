@@ -19,7 +19,7 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
     {
         var customer =
             await dbContext
-                .Customer.Include(x => x.Bookshelves)
+                .Customers.Include(x => x.Bookshelves)
                 .Include(x => x.Trophies)
                 .SingleOrDefaultAsync(x => x.Id == userId, cancellationToken)
             ?? throw new UserNotFoundException();

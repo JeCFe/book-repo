@@ -14,17 +14,17 @@ public class ForgetMeCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if (await dbContext.Customer.FindAsync([Id], cancellationToken) is not { } customer)
+        if (await dbContext.Customers.FindAsync([Id], cancellationToken) is not { } customer)
         {
             return;
         }
 
-        var x = await dbContext
+        _ = await dbContext
             .Bookshelves.Where(x => x.CustomerId == Id)
             .ExecuteDeleteAsync(cancellationToken);
 
-        var y = await dbContext
-            .Customer.Where(x => x.Id == customer.Id)
+        _ = await dbContext
+            .Customers.Where(x => x.Id == customer.Id)
             .ExecuteDeleteAsync(cancellationToken);
     }
 }
