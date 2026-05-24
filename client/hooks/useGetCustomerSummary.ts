@@ -13,6 +13,9 @@ export const useGetCustomerSummary = () => {
     {
       refreshInterval: 60000,
       revalidateOnFocus: false,
+      onErrorRetry: (error) => {
+        if (error.status === 404) return;
+      },
     },
   );
 

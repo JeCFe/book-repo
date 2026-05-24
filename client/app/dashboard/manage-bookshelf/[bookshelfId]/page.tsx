@@ -95,12 +95,14 @@ export default withPageAuthRequired(function ManageBookshelf({
         }),
         {
           loading: "Autosaving",
-          success: "Autosave complete",
+          success: () => {
+            mutate();
+            return "Autosave complete";
+          },
           error: "There was an error when autosaving",
         },
         { id: "autosave" },
       );
-      mutate();
     }, 1000),
     [],
   );

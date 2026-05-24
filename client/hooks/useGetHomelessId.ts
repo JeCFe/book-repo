@@ -17,6 +17,9 @@ export const useGetHomelessId = (customerId: string) => {
     {
       refreshInterval: 120000,
       revalidateOnFocus: false,
+      onErrorRetry: (error) => {
+        if (error.status === 404) return;
+      },
     },
   );
 

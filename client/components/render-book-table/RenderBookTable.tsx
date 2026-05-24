@@ -36,12 +36,14 @@ export function RenderBookTable({
       }),
       {
         loading: "Autosaving",
-        success: "Autosave complete",
+        success: () => {
+          mutate();
+          return "Autosave complete";
+        },
         error: "There was an error when autosaving",
       },
       { id: "autosave" },
     );
-    mutate();
   };
   return (
     <div className="flex overflow-x-auto">

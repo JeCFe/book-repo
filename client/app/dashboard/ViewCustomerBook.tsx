@@ -90,8 +90,6 @@ export function ViewCustomerBook({
       },
     );
 
-    console.log(updatedBookshelfSummaries);
-
     toast.promise(
       removeBookshelfBook({
         customerId: user.sub!,
@@ -100,12 +98,15 @@ export function ViewCustomerBook({
       }),
       {
         loading: "Removing book from bookshelf",
-        success: "Removed book from bookshelf",
+        success: () => {
+          mutate();
+          return "Removed book from bookshelf";
+        },
         error: "There was an error when removing book from bookshelf",
       },
       { id: "remove" },
     );
-    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, true);
+    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, false);
   };
 
   const addBookTooBookshelf = async (bookshelfId: string) => {
@@ -130,14 +131,15 @@ export function ViewCustomerBook({
       }),
       {
         loading: "Adding book from bookshelf",
-        success: "Added book from bookshelf",
+        success: () => {
+          mutate();
+          return "Added book from bookshelf";
+        },
         error: "There was an error when adding book from bookshelf",
       },
       { id: "add" },
     );
-
-    console.log(updatedBookshelfSummaries);
-    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, true);
+    mutate({ ...data, bookshelfSummaries: updatedBookshelfSummaries }, false);
   };
 
   return (
