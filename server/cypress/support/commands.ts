@@ -39,3 +39,59 @@ Cypress.Commands.add("login", () => {
     },
   });
 });
+
+Cypress.Commands.add("forgetMe", (token: string, sub: string) => {
+  cy.request({
+    method: "POST",
+    url: "/action/forget-me",
+    headers: {
+      authorization: token,
+    },
+    body: { id: sub },
+  }).then((res) => assert.isTrue(res.isOkStatusCode));
+});
+
+Cypress.Commands.add(
+  "getCustomerSummary",
+  ({
+    token,
+    failOnStatusCode = false,
+  }: {
+    token: string;
+    failOnStatusCode?: boolean;
+  }) => {
+    cy.request({
+      method: "GET",
+      url: "/customer/get-customer-summary",
+      headers: {
+        authorization: token,
+      },
+      failOnStatusCode,
+    });
+  }
+);
+
+Cypress.Commands.add(
+  "setupCustomer",
+  ({
+    token,
+    sub,
+    includeDefaultBookshelves = true,
+  }: {
+    token: string;
+    sub: string;
+    includeDefaultBookshelves?: boolean;
+  }) => {
+    cy.request({
+      method: "POST",
+      url: "/action/setup-customer",
+      headers: {
+        authorization: token,
+      },
+      body: {
+        id: sub,
+        includeDefaultBookshelves,
+      },
+    }).then((res) => assert.isTrue(res.isOkStatusCode));
+  }
+);

@@ -16,15 +16,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: "Echo in file"
-        env:
-          SECRETS_VARS: ${{ toJson(secrets) }}
-        run: echo "$SECRETS_VARS" > "./server/cypress.env.json"
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
+      - name: "Setup Cypress values"
+        env:
+          SECRETS_VARS: ${{ toJson(secrets) }}
+        run: echo "$SECRETS_VARS" > "./server/cypress.env.json"
 
       - name: Install dependencies
         working-directory: ./server
@@ -48,7 +48,10 @@ jobs:
           Auth0__Audience: ${{ secrets.AUTH0_AUDIENCE }}
           Auth0__ClientId: ${{ secrets.AUTH0_CLIENT_ID }}
           Auth0__ClientSecret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-        run: docker-compose up -d server
+        run: docker compose up -d server
+
+      - name: Wait for
+        run: npx wait-on http://localhost:5247/healthz --verbose --timeout 25000
 
       - name: Cypress run with env
         uses: cypress-io/github-action@v6
@@ -56,10 +59,10 @@ jobs:
           working-directory: ./server
 
       - name: Upload screenshots
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-${{ matrix.runs-on }}
           path: ./server/cypress/screenshots
 
       - name: Docker container

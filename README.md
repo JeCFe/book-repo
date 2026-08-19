@@ -1,37 +1,210 @@
-# Next-dotnet-auth0
+<div align="center">
+<img width="200" alt="Book Repo logo" src="https://github.com/JeCFe/book-repo/assets/38367384/225023c4-8d80-4a84-9a88-18402563fa19">
+</div>
 
-A basic implementation of Auth0 using Next.js and dotnet minimal APIs that can be used as a template for future projects.
+# The Book Repository
 
-Once this repo is cloned / forked / used setup as below, once completed either locally or via Azure visit the Next.js web client. Clicking the `Ping Api` button should result in a return message of `Woo Authed` this will mean that the backend and frontend have an authenticated API using Auth0 credentials connected.
+A service to allow for the visualisation and management of you physical bookshelf in the digital world. Persistant user storage and secure user accounts with Auth0 being the authentication provider. Deploying to Azure Container Registries / Apps, using OpenLibrary public APIs for inital data injection when searching for book. Caching the book data onto Azure SQL Server and the book covers onto Azure Blob Storage.
 
-Forking / using this template will require some setup for Auth0, Azure, and Github environment secret setup, the following is required: 
+## Features
 
-### Azure
-Set up the following via Azure Portal 
-- Resource Group
-- Azure Container Registry
-- 2x Azure Container Apps
-- Azure Key Vault
+- Ability to create and manage user account (following GDPR principles)
+- Create and manage numourous bookshelves
+- Add books to these bookshelves with unique ordering per shelf
+- Ability to add books by ISBN and fuzzy searching
+- Allow to rate books
+- Allow to add comments onto books
+- Trophy / achievements that display on user profiles
 
-### Github Environment
-<img width="189" alt="Screenshot 2024-05-05 at 23 39 36" src="https://github.com/JeCFe/next-dotnet-auth0/assets/38367384/3d12c1a8-3b0c-4a51-bca0-3ae3b2956931">
+## Roadmap
 
+- Shareable uneditable links to bookshelves / account
+- Favourite / "Wish list" book from a shareable link
+- Allow importing library from Good Read
+- Set reading goals
+- Be able to see a global catalogue of book other customers use with averaged reviews and anonymous reviews
+- Add books into a series and filter by series
+- Add different filtering per bookshelf
+- AI driven book recommendations based of what's in your bookshelf or what has been recently read
+- Be able to raise errors with the book data / cover
+- Admin portal to allow the management of users and errors raised about books
+- Split out the user self service into a dedicated service and app so it's reusable by other apps in the future
+- ~~Trophy / achievements that display on user profiles~~, and are shareable on the shared pages
 
-## Deployment
-CICD pipelines have been setup to run unit and cypress testing for both client and server. Automatic deployment to Azure Container Registry and Azure Container Apps has been configured, you can view the template next app here [Next Template](https://next-template.jessicafealy.dev)
+## Getting Started
 
-## Frontend
+### Prerequisites
 
-Read the frontend README
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [Docker](https://www.docker.com/) (for the database, or for running the full stack)
 
-```Basb
+### Running with Docker Compose
+
+The easiest way to run the full stack is with Docker Compose. You'll need to build the projects first and supply environment variables.
+
+1. Build the server:
+
+```bash
+cd server
+dotnet publish -c Release
+cd ..
+```
+
+2. Build the client:
+
+```bash
+cd client
+npm install
+npm run build
+cd ..
+```
+
+3. Create a `.env` file in the project root with your Auth0 and service configuration:
+
+```env
+# Server
+Auth0__Domain=<your-auth0-domain>
+Auth0__ClientId=<your-auth0-client-id>
+Auth0__ClientSecret=<your-auth0-client-secret>
+Auth0__Audience=<your-auth0-audience>
+
+# Client
+AUTH0_SECRET=<a-random-secret>
+AUTH0_BASE_URL=http://localhost:3000
+AUTH0_ISSUER_BASE_URL=https://<your-auth0-domain>
+AUTH0_CLIENT_ID=<your-auth0-client-id>
+AUTH0_CLIENT_SECRET=<your-auth0-client-secret>
+BASE_URL=http://localhost:5247
+```
+
+4. Start everything:
+
+```bash
+docker compose up --build
+```
+
+This will start:
+
+- **SQL Server** (Azure SQL Edge) on port `1433`
+- **Server** (.NET API) on port `5247` — migrations run automatically (`migrateDB=true`)
+- **Client** (Next.js) on port `3000`
+
+---
+
+### Running Locally (without Docker)
+
+#### Database
+
+Start the SQL Server database using Docker:
+
+```bash
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Th1sI5&Str0ngPa44w0rd" -p 1433:1433 -d mcr.microsoft.com/azure-sql-edge
+```
+
+#### Server
+
+1. Navigate to the server directory:
+
+```bash
+cd server
+```
+
+2. Apply database migrations using the EF Core CLI:
+
+```bash
+dotnet tool install --global dotnet-ef  # if not already installed
+dotnet ef database update --project Server.Domain --startup-project Server
+```
+
+3. Run the server:
+
+```bash
+dotnet run --project Server
+```
+
+The server will start on `http://localhost:5247` by default. Swagger UI is available at `/swagger`.
+
+> **Note:** The development config (`appsettings.development.json`) has `migrateDB` set to `true`, so migrations will also run automatically on startup when running in the development environment.
+
+#### Client
+
+1. Navigate to the client directory:
+
+```bash
 cd client
 ```
 
-## Backend
+2. Create a `.env.local` file with the required environment variables:
 
-Read the backend README
-
-```Basb
-cd server
+```env
+AUTH0_SECRET=<a-random-secret>
+AUTH0_BASE_URL=http://localhost:3000
+AUTH0_ISSUER_BASE_URL=https://<your-auth0-domain>
+AUTH0_CLIENT_ID=<your-auth0-client-id>
+AUTH0_CLIENT_SECRET=<your-auth0-client-secret>
+BASE_URL=http://localhost:5247
 ```
+
+3. Install dependencies and build the TypeScript API client:
+
+```bash
+npm install
+```
+
+> The `install` script automatically runs `build:client`, which generates a TypeScript client from the server's API spec (`server/Server.Tests/_snapshots/api-spec.json`).
+
+4. Start the development server:
+
+```bash
+npm run dev
+```
+
+The client will be available at `http://localhost:3000`.
+
+---
+
+### Running Tests
+
+#### Server Tests
+
+```bash
+cd server
+dotnet test
+```
+
+#### Client Tests
+
+```bash
+cd client
+npm test
+```
+
+#### Cypress E2E Tests
+
+Create a `cypress.env.json` in the client directory:
+
+```json
+{
+  "CYPRESS_USERNAME": "****",
+  "CYPRESS_PASSWORD": "****",
+  "CYPRESS_DOMAIN": "****"
+}
+```
+
+Then run:
+
+```bash
+cd client
+npx cypress open
+```
+
+---
+
+## Third Party Providers
+
+Azure -> used for deployments, SQL servers, and blob storage
+
+Auth0 -> used as authentication provider
+
+OpenLibrary -> used to get book data and book covers

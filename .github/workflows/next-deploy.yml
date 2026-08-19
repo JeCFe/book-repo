@@ -49,11 +49,11 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}/client
-          registryUrl: jecfeacr.azurecr.io
+          registryUrl: ${{ secrets.REGISTRY_URL }}
           registryUsername: ${{ secrets.REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
-          containerAppName: jecfe-next-template-container
-          resourceGroup: rg-shared-resources
-          imageToBuild: jecfeacr.azurecr.io/jecfe-next-template-container:latest
+          containerAppName: ${{ secrets.CLIENT_CONTAINER_APP_NAME }}
+          resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+          imageToBuild: ${{ secrets.REGISTRY_URL }}/${{ secrets.CLIENT_CONTAINER_APP_NAME }}:latest
           _buildArgumentsKey_: |
             _buildArgumentsValues_
