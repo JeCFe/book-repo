@@ -26,7 +26,9 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
                 HomelessBooks = bookshelf.HomelessBooks,
                 Books = (
                     from book in context.BookshelfBook
-                    where book.BookshelfId == bookshelf.Id
+                    where
+                        book.BookshelfId == bookshelf.Id
+                        && book.CustomerBook.CustomerId == customerId
                     select new BooktoShelf
                     {
                         Book = book.CustomerBook.Book,
