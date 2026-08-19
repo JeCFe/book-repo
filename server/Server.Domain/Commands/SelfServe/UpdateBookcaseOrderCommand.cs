@@ -17,6 +17,16 @@ public class UpdateBookcaseOrderCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
+        if (
+            !await dbContext.Bookshelves.AnyAsync(
+                x => x.Id == BookshelfId && x.CustomerId == CustomerId,
+                cancellationToken
+            )
+        )
+        {
+            return;
+        }
+
         foreach (var book in Books)
         {
             await dbContext

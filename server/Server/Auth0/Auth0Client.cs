@@ -39,6 +39,7 @@ public class Auth0Client : IAuth0Client
     }
 
     public async Task<User> Update(
+        string id,
         CustomerUpdateRequest request,
         CancellationToken cancellationToken
     )
@@ -46,7 +47,7 @@ public class Auth0Client : IAuth0Client
         try
         {
             return await _client.Users.UpdateAsync(
-                request.Id,
+                id,
                 new() { NickName = request.Nickname },
                 cancellationToken
             );

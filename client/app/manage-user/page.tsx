@@ -64,7 +64,7 @@ export default withPageAuthRequired(function ManageUser({ user }) {
       success: "You are forgotten",
       error: "There was an error forgetting you, contact an admin.",
     });
-    await toast.promise(deleteCustomer({ id: user.sub! }), {
+    await toast.promise(deleteCustomer({}), {
       loading: "Deleting auth0 account",
       success: "Auth0 account deleted",
       error: "There was an error deleting auth0 account, contact an admin.",

@@ -15,6 +15,16 @@ public class RemoveBookshelfCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
+        if (
+            !await dbContext.Bookshelves.AnyAsync(
+                x => x.Id == BookshelfId && x.CustomerId == Id,
+                cancellationToken
+            )
+        )
+        {
+            return;
+        }
+
         await dbContext
             .BookshelfBook.Where(x => x.BookshelfId == BookshelfId)
             .ExecuteDeleteAsync(cancellationToken);

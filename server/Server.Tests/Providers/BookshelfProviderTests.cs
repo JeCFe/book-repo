@@ -15,7 +15,11 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         var bookshelfId = Guid.NewGuid();
 
         var provider = new BookshelfProvider(context);
-        var bookshelf = await provider.GetBookshelfById(bookshelfId, CancellationToken.None);
+        var bookshelf = await provider.GetBookshelfById(
+            bookshelfId,
+            Guid.NewGuid().ToString(),
+            CancellationToken.None
+        );
 
         Assert.Null(bookshelf);
     }
@@ -42,11 +46,43 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         context.SaveChanges();
 
         var provider = new BookshelfProvider(context);
-        var bookshelf = await provider.GetBookshelfById(bookshelfId, CancellationToken.None);
+        var bookshelf = await provider.GetBookshelfById(
+            bookshelfId,
+            customerId,
+            CancellationToken.None
+        );
 
         Assert.NotNull(bookshelf);
         Assert.Empty(bookshelf.Books);
         Assert.Equal(domainBookshelf.Name, bookshelf.Name);
+    }
+
+    [Fact]
+    public async Task Will_not_return_another_customers_bookshelf()
+    {
+        var context = fixture.CreateContext();
+        var ownerId = Guid.NewGuid().ToString();
+        var bookshelfId = Guid.NewGuid();
+        context.Customer.Add(new() { Id = ownerId, CreationDate = DateTimeOffset.UtcNow });
+        context.Bookshelves.Add(
+            new()
+            {
+                Id = bookshelfId,
+                CustomerId = ownerId,
+                Name = "Private",
+                CreationDate = DateTimeOffset.UtcNow,
+            }
+        );
+        context.SaveChanges();
+
+        var provider = new BookshelfProvider(context);
+        var bookshelf = await provider.GetBookshelfById(
+            bookshelfId,
+            Guid.NewGuid().ToString(),
+            CancellationToken.None
+        );
+
+        Assert.Null(bookshelf);
     }
 
     [Fact]
@@ -94,7 +130,11 @@ public class BookshelfProviderTests(DbFixture fixture) : IClassFixture<DbFixture
         context.SaveChanges();
 
         var provider = new BookshelfProvider(context);
-        var bookshelf = await provider.GetBookshelfById(bookshelfId, CancellationToken.None);
+        var bookshelf = await provider.GetBookshelfById(
+            bookshelfId,
+            customerId,
+            CancellationToken.None
+        );
 
         Assert.NotNull(bookshelf);
         Assert.Single(bookshelf.Books);

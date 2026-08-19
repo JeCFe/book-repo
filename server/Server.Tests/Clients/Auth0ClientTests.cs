@@ -74,13 +74,12 @@ public class Auth0ClientTests
     {
         var request = new CustomerUpdateRequest()
         {
-            Id = Guid.NewGuid().ToString(),
             Nickname = "Bob",
         };
         _mockApiClient
             .Setup(x =>
                 x.Users.UpdateAsync(
-                    It.IsAny<string>(),
+                    "123",
                     It.IsAny<UserUpdateRequest>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -89,7 +88,7 @@ public class Auth0ClientTests
             .Verifiable();
         var client = new Auth0Client(_options, _mockToken.Object, _mockApiClient.Object);
 
-        await client.Update(request, CancellationToken.None);
+        await client.Update("123", request, CancellationToken.None);
 
         _mockApiClient.VerifyAll();
     }
@@ -99,13 +98,12 @@ public class Auth0ClientTests
     {
         var request = new CustomerUpdateRequest()
         {
-            Id = Guid.NewGuid().ToString(),
             Nickname = "Bob",
         };
         _mockApiClient
             .Setup(x =>
                 x.Users.UpdateAsync(
-                    It.IsAny<string>(),
+                    "123",
                     It.IsAny<UserUpdateRequest>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -115,7 +113,7 @@ public class Auth0ClientTests
         var client = new Auth0Client(_options, _mockToken.Object, _mockApiClient.Object);
 
         await Assert.ThrowsAsync<UserNotFoundException>(
-            async () => await client.Update(request, CancellationToken.None)
+            async () => await client.Update("123", request, CancellationToken.None)
         );
 
         _mockApiClient.VerifyAll();
@@ -126,13 +124,12 @@ public class Auth0ClientTests
     {
         var request = new CustomerUpdateRequest()
         {
-            Id = Guid.NewGuid().ToString(),
             Nickname = "Bob",
         };
         _mockApiClient
             .Setup(x =>
                 x.Users.UpdateAsync(
-                    It.IsAny<string>(),
+                    "123",
                     It.IsAny<UserUpdateRequest>(),
                     It.IsAny<CancellationToken>()
                 )
@@ -142,7 +139,7 @@ public class Auth0ClientTests
         var client = new Auth0Client(_options, _mockToken.Object, _mockApiClient.Object);
 
         await Assert.ThrowsAsync<BadRequestException>(
-            async () => await client.Update(request, CancellationToken.None)
+            async () => await client.Update("123", request, CancellationToken.None)
         );
 
         _mockApiClient.VerifyAll();

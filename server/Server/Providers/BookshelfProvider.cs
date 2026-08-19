@@ -10,12 +10,13 @@ public class BookshelfProvider(BookRepoContext context) : IBookshelfProvider
 {
     public async Task<Models.CustomerBookshelf?> GetBookshelfById(
         Guid id,
+        string customerId,
         CancellationToken cancellationToken
     )
     {
         var customerBookshelf =
             from bookshelf in context.Bookshelves
-            where bookshelf.Id == id
+            where bookshelf.Id == id && bookshelf.CustomerId == customerId
             select new Models.CustomerBookshelf
             {
                 Id = bookshelf.Id,

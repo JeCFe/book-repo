@@ -59,8 +59,10 @@ public class AddShareableCommand : ICommand<BookRepoContext>
         {
             if (
                 (
-                    await dbContext.CustomerBooks.FindAsync(
-                        [Shareable.Showcase.CustomerBookId],
+                    await dbContext.CustomerBooks.SingleOrDefaultAsync(
+                        x =>
+                            x.Id == Shareable.Showcase.CustomerBookId
+                            && x.CustomerId == Shareable.CustomerId,
                         cancellationToken
                     )
                 )

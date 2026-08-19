@@ -9,14 +9,23 @@ using Server.Providers;
 
 public static class BookshelfRouter
 {
-    private static async Task<Results<Ok<CustomerBookshelf>, NotFound>> GetBookshelf(
+    private static async Task<Results<Ok<CustomerBookshelf>, NotFound, ForbidHttpResult>> GetBookshelf(
         [FromRoute] Guid bookshelfId,
         [FromServices] IBookshelfProvider bookshelfProvider,
         [FromServices] IUserContext userContext,
         CancellationToken cancellationToken
     )
     {
-        var bookshelf = await bookshelfProvider.GetBookshelfById(bookshelfId, cancellationToken);
+        if (userContext.UserId is not { } userId)
+        {
+            return TypedResults.Forbid();
+        }
+
+        var bookshelf = await bookshelfProvider.GetBookshelfById(
+            bookshelfId,
+            userId,
+            cancellationToken
+        );
         if (bookshelf is not { })
         {
             return TypedResults.NotFound();

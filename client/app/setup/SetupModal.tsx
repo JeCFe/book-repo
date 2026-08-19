@@ -29,7 +29,7 @@ export function SetupModal() {
       return;
     }
 
-    await deleteCustomer({ id: user.sub })
+    await deleteCustomer({})
       .then(() => {
         setActioning(false);
         setError(false);
