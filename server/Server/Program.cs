@@ -117,7 +117,7 @@ public class Program
                     BearerFormat = "JWT",
                     Flows = new OpenApiOAuthFlows
                     {
-                        Implicit = new OpenApiOAuthFlow
+                        AuthorizationCode = new OpenApiOAuthFlow
                         {
                             TokenUrl = new Uri(
                                 $"https://{configuration["Auth0:Domain"]}/oauth/token"
@@ -192,17 +192,19 @@ public class Program
                 await dbContext.Database.MigrateAsync();
             }
         }
-        app.UseSwagger();
-        app.UseSwaggerUI(settings =>
+        if (app.Environment.IsDevelopment())
         {
-            settings.SwaggerEndpoint("/swagger/v1/swagger.json", "self-serve");
-            settings.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
-            settings.DocumentTitle = Assembly.GetExecutingAssembly().GetName().Name;
-            settings.OAuthClientId(configuration["Auth0:ClientId"]);
-            settings.OAuthClientSecret(configuration["Auth0:ClientSecret"]);
-            settings.OAuthUsePkce();
-            settings.OAuthScopeSeparator(" ");
-        });
+            app.UseSwagger();
+            app.UseSwaggerUI(settings =>
+            {
+                settings.SwaggerEndpoint("/swagger/v1/swagger.json", "self-serve");
+                settings.SwaggerEndpoint("/swagger/admin/swagger.json", "admin");
+                settings.DocumentTitle = Assembly.GetExecutingAssembly().GetName().Name;
+                settings.OAuthClientId(configuration["Auth0:ClientId"]);
+                settings.OAuthUsePkce();
+                settings.OAuthScopeSeparator(" ");
+            });
+        }
 
         app.UseCors();
         app.UseAuthentication();

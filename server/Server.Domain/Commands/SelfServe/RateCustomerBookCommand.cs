@@ -25,7 +25,10 @@ public class RateCustomerBookCommand : ICommand<BookRepoContext>
         }
 
         if (
-            await dbContext.CustomerBooks.FindAsync([CustomerBookId], cancellationToken)
+            await dbContext.CustomerBooks.SingleOrDefaultAsync(
+                x => x.Id == CustomerBookId && x.CustomerId == CustomerId,
+                cancellationToken
+            )
             is not { } customerBook
         )
         {

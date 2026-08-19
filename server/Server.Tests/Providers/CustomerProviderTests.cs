@@ -61,4 +61,38 @@ public class CustomerProviderTests(DbFixture fixture) : IClassFixture<DbFixture>
         Assert.Single(actual.Bookshelves);
         Assert.Equal(customerId, actual.Id);
     }
+
+    [Fact]
+    public async Task GetCustomerBook_returns_null_for_a_different_customer()
+    {
+        var context = fixture.CreateContext();
+        var owner = new Customer
+        {
+            Id = Guid.NewGuid().ToString(),
+            CreationDate = DateTimeOffset.UtcNow,
+        };
+        var book = new Book { Isbn = Guid.NewGuid().ToString(), Name = "Private Book" };
+        var customerBookId = Guid.NewGuid();
+        context.CustomerBooks.Add(
+            new()
+            {
+                Id = customerBookId,
+                CustomerId = owner.Id,
+                Customer = owner,
+                Isbn = book.Isbn,
+                Book = book,
+                Comment = "Private comment",
+            }
+        );
+        context.SaveChanges();
+
+        var provider = new CustomerProvider(context, _options);
+        var result = await provider.GetCustomerBook(
+            customerBookId,
+            Guid.NewGuid().ToString(),
+            CancellationToken.None
+        );
+
+        Assert.Null(result);
+    }
 }

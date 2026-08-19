@@ -88,6 +88,7 @@ public class CustomerProvider(BookRepoContext dbContext, IOptions<BetaTestOption
     {
         var customerBook = await dbContext
             .CustomerBooks.Include(cb => cb.Book)
+            .Where(x => x.CustomerId == customerId)
             .Select(x => new Models.ResponseCustomerBook()
             {
                 Comment = x.Comment,

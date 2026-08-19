@@ -2,6 +2,7 @@ namespace Server.Domain.Commands;
 
 using Common.Exceptions;
 using Common.MediatR;
+using Microsoft.EntityFrameworkCore;
 using Server.Domain;
 
 public class RemoveShareableCommand : ICommand<BookRepoContext>
@@ -22,7 +23,12 @@ public class RemoveShareableCommand : ICommand<BookRepoContext>
             throw new UserNotFoundException();
         }
 
-        if ((await dbContext.Shareables.FindAsync([Id], cancellationToken)) is not { } shareable)
+        if (
+            await dbContext.Shareables.SingleOrDefaultAsync(
+                x => x.Id == Id && x.Customer.Id == CustomerId,
+                cancellationToken
+            ) is not { } shareable
+        )
         {
             return;
         }

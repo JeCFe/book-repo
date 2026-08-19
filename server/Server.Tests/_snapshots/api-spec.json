@@ -469,16 +469,6 @@
         "tags": [
           "Customer"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteRequest"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "204": {
             "description": "No Content"
@@ -1365,30 +1355,10 @@
         "additionalProperties": false
       },
       "CustomerUpdateRequest": {
-        "required": [
-          "id"
-        ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
           "nickname": {
             "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "DeleteRequest": {
-        "required": [
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2030,7 +2000,7 @@
       "oauth2": {
         "type": "oauth2",
         "flows": {
-          "implicit": {
+          "authorizationCode": {
             "authorizationUrl": "https://dev-yf34hkokp08w5btt.uk.auth0.com/authorize?audience=/auth",
             "tokenUrl": "https://dev-yf34hkokp08w5btt.uk.auth0.com/oauth/token",
             "scopes": {}

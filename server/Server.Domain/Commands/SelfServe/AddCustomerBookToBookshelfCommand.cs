@@ -19,22 +19,17 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
         CancellationToken cancellationToken
     )
     {
-        if (
-            await dbContext.BookshelfBook.SingleOrDefaultAsync(
-                x => x.CustomerBookId == CustomerBookId && x.BookshelfId == BookshelfId,
-                cancellationToken
-            ) is
-            { }
-        )
-        {
-            return;
-        }
-
         var customerBook = await dbContext
             .CustomerBooks.Include(x => x.Book)
-            .SingleOrDefaultAsync(x => x.Id == CustomerBookId, cancellationToken);
+            .SingleOrDefaultAsync(
+                x => x.Id == CustomerBookId && x.CustomerId == CustomerId,
+                cancellationToken
+            );
 
-        var bookshelf = await dbContext.Bookshelves.FindAsync([BookshelfId], cancellationToken);
+        var bookshelf = await dbContext.Bookshelves.SingleOrDefaultAsync(
+            x => x.Id == BookshelfId && x.CustomerId == CustomerId,
+            cancellationToken
+        );
 
         if (customerBook == null)
         {
@@ -46,12 +41,17 @@ public class AddCustomerBookToBookshelfCommand : ICommand<BookRepoContext>
             throw new BookshelfNotFound();
         }
 
-        var bookshelfBook = await dbContext.BookshelfBook.SingleOrDefaultAsync(
-            x => x.CustomerBookId == CustomerBookId && x.BookshelfId == bookshelf.Id,
-            cancellationToken
-        );
+        if (
+            await dbContext.BookshelfBook.AnyAsync(
+                x => x.CustomerBookId == CustomerBookId && x.BookshelfId == BookshelfId,
+                cancellationToken
+            )
+        )
+        {
+            return;
+        }
 
-        bookshelfBook = new BookshelfBook()
+        var bookshelfBook = new BookshelfBook()
         {
             CustomerBookId = CustomerBookId,
             Isbn = customerBook.Isbn,

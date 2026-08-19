@@ -22,7 +22,6 @@ export default withPageAuthRequired(function Nickname({ user }) {
   const onSubmit = (data: FormValues) => {
     toast.promise(
       updateNickname({
-        id: user?.sub as string,
         nickname: data.nickname,
       }),
       {

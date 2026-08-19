@@ -55,7 +55,6 @@ export default withPageAuthRequired(function Preview() {
     if (user?.nickname !== nickname) {
       await toast.promise(
         updateNickname({
-          id: user?.sub as string,
           nickname: customerNickname,
         }),
         {

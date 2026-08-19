@@ -39,7 +39,6 @@ public static class CustomerRouter
     public static async Task<Results<ForbidHttpResult, NoContent, ProblemHttpResult>> Delete(
         IUserContext userContext,
         IAuth0Client client,
-        DeleteRequest request,
         CancellationToken cancellationToken
     )
     {
@@ -50,7 +49,7 @@ public static class CustomerRouter
         }
         try
         {
-            await client.Delete(request.Id, cancellationToken);
+            await client.Delete(userId, cancellationToken);
         }
         catch (UnableToDeleteUserException)
         {
@@ -77,7 +76,7 @@ public static class CustomerRouter
         }
         try
         {
-            var user = await client.Update(request, cancellationToken);
+            var user = await client.Update(userId, request, cancellationToken);
             return TypedResults.Ok(user);
         }
         catch (BadRequestException ex)
@@ -97,7 +96,7 @@ public static class CustomerRouter
     )
     {
         var userId = userContext.UserId;
-        if (userId is not { })
+        if (userId is not { } || customerId != userId)
         {
             return TypedResults.Forbid();
         }
